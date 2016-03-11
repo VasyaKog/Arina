@@ -1,5 +1,7 @@
 <?php
 @session_start();
+if (count($_SESSION)<=1) header("Location:../index.php");
+if ((!isset($_GET['id']))||(!isset($_GET['sem']))) header("Location:../index.php");
 require_once "classes/func.php";
 $func = new GlobalFunction($_GET['id']);
 ?>
@@ -33,6 +35,7 @@ $table_width = $table_width * 307;
 $teachers = $func->getTeachers($subj);
 $audience = $func->getAudience();
 $arr_audience = $func->getFullAudiences();
+$arr_groups=array();
 
 $arr_data_timetable = $func->getTimetable($_GET["id"], $_GET["sem"]);
 ?>
@@ -87,7 +90,7 @@ $arr_data_timetable = $func->getTimetable($_GET["id"], $_GET["sem"]);
     <th class="number"></th>
     <?php
     foreach ($gr as $kurs)
-        foreach ($kurs as $grupa) {
+        foreach ($kurs as $grupa) { $arr_groups[] = $grupa;
             ?>
             <th id="id_group:<?= $grupa['id'] ?>" class="course:<?= $grupa['course'] ?>"
                 colspan="2"><?= $grupa['title'] ?></th>
@@ -107,6 +110,7 @@ $arr_data_timetable = $func->getTimetable($_GET["id"], $_GET["sem"]);
     var input_sel;
     var prev_input_sel;
     var input_value;
+    var arr_groups = <?=json_encode($arr_groups)?>;
 </script>
 <?php $row = 0;
 $tmp_arr = array();
@@ -640,7 +644,7 @@ for ($i = 0; $i < 5; $i++):
     <div id="teacher_block">
     <center>
     <h3 class="table_type">Чисельник</h3>
-    <table class="table_teacher" id="teacher_numerator">
+    <table class="table_teacher" id="teacher_numerator" style="width: 1275px;">
         <tr>
             <th rowspan="2">Викладач</th>
             <th colspan="4">Понеділок</th>
@@ -662,17 +666,17 @@ for ($i = 0; $i < 5; $i++):
         <tr id="row:<?=$key?>">
             <td class="teacherName"><?=$tmp?></td>
             <?php $c=0; for($i=0; $i<5; $i++):?>
-                <td class="td:<?=$c?>" id="begin_day"></td> <?php $c++?>
-                <td class="td:<?=$c?>"></td> <?php $c++?>
-                <td class="td:<?=$c?>"></td> <?php $c++?>
-                <td class="td:<?=$c?>"></td> <?php $c++?>
+                <td class="td:<?=$c?>" id="begin_day" style="width: 47px;"></td> <?php $c++?>
+                <td class="td:<?=$c?>" style="width: 47px;"></td> <?php $c++?>
+                <td class="td:<?=$c?>" style="width: 47px;"></td> <?php $c++?>
+                <td class="td:<?=$c?>" style="width: 47px;"></td> <?php $c++?>
             <?endfor;?>
         </tr>
 
         <?php endforeach; ?>
     </table>
         <h3 class="table_type">Знаменник</h3>
-        <table class="table_teacher" id="teacher_denumerator">
+        <table class="table_teacher" id="teacher_denumerator" style="width: 1275px;">
             <tr>
                 <th rowspan="2">Викладач</th>
                 <th colspan="4">Понеділок</th>
@@ -694,10 +698,10 @@ for ($i = 0; $i < 5; $i++):
                 <tr id="row:<?=$key?>">
                     <td class="teacherName"><?=$tmp?></td>
                     <?php $c=0; for($i=0; $i<5; $i++):?>
-                        <td class="td:<?=$c?>" id="begin_day"></td> <?php $c++?>
-                        <td class="td:<?=$c?>"></td> <?php $c++?>
-                        <td class="td:<?=$c?>"></td> <?php $c++?>
-                        <td class="td:<?=$c?>"></td> <?php $c++?>
+                        <td class="td:<?=$c?>" id="begin_day" style="width: 47px;"></td> <?php $c++?>
+                        <td class="td:<?=$c?>" style="width: 47px;"></td> <?php $c++?>
+                        <td class="td:<?=$c?>" style="width: 47px;"></td> <?php $c++?>
+                        <td class="td:<?=$c?>" style="width: 47px;"></td> <?php $c++?>
                     <?endfor;?>
                 </tr>
 
@@ -804,7 +808,9 @@ for ($i = 0; $i < 5; $i++):
     jQuery(document).ready(function ($) {
         var $table = $('#numerator'),
             $header = $('#header'),
-            $thead = $('thead');
+            $thead = $('thead'),
+            $btns = $('#buttons_table'),
+            $pos = parseInt($btns.css("margin-left").replace("px", ""));
         $header.hide();
         $thead.find('th').each(function () {
             var $newdiv = $('<div />', {
@@ -824,8 +830,11 @@ for ($i = 0; $i < 5; $i++):
             $header.css({
                 left: -$(this).scrollLeft()
             });
-        });
 
+            $btns.css({
+                marginLeft: $pos+$(this).scrollLeft()
+            });
+        });
     });
 
 </script>

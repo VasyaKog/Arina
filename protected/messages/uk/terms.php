@@ -17,6 +17,7 @@ return array(
     'Group' => 'Група',
     'Student' => 'Студент',
     'Head' => 'Голова',
+    'Name' => 'Назва',
     'Full name' => 'Повне ім’я',
     'Teachers'=>'Викладачі',
     'Male'=>'Чоловіча',

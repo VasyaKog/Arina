@@ -18,12 +18,11 @@ $menu = array(
             array('label' => Yii::t('base', 'List'), 'url' => array('/teacher'),),
             array('label' => Yii::t('base', 'Cyclic commissions'), 'url' => array('/cyclicCommission')),
         )),
-        array('label' => Yii::t('base', 'Settings'), 'url' => array('/settings')),
     )),
     array('label' => Yii::t('base', 'Groups'), 'url' => array('/group')),
     array('label' => Yii::t('base', 'Study plans'), 'url' => array('/studyPlan')),
     array('label' => Yii::t('base', 'Load'), 'url' => array('/load')),
-    array('label' => Yii::t('base', 'Journal'), 'url' => array('/journal')),
+    array('label' => Yii::t('base', 'Journal'), 'url' => array('/jurnal')),
     array('label' => Yii::t('base', 'Human resources'), 'items' => array(
         array('label' => Yii::t('employee', 'Employees'), 'url' => array('/hr')),
         array('label' => Yii::t('base', 'Students'), 'url' => array('/student')),
@@ -32,6 +31,14 @@ $menu = array(
     array('label' => Yii::t('base', 'File Shares'), 'url' => array('/fileShare')),
     array('label' => Yii::t('base', 'Schedule'), 'items' => array(
         array('label' => Yii::t('base', 'Schedule'), 'url' => array('/schedule')),
-        array('label' => Yii::t('student', 'Create document'), 'url' => array('/site/schedule')),
+        array('label' => Yii::t('student', 'Create document'), 'items' => array(
+            array('label' => Yii::t('base', 'Overal'),'url' => array('/site/schedule')),
+            array('label' => Yii::t('base', 'For teachers'),'url' => array('/site/scheduleTeachers')),
+        )),
+        array('label' => Yii::t('base', 'Create a document replacements'), 'url' => array('/site/actualSchedule')),
+    )),
+    array('label' => Yii::t('base', 'Settings'), 'items' => array(
+        array('label' => Yii::t('base', 'Main Settings'), 'url' => array('/settings')),
+        array('label' => Yii::t('base', 'Settings benefits'),'url' =>array('/benefits')),
     )),
 );

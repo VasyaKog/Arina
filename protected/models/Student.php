@@ -289,6 +289,9 @@ class Student extends ActiveRecord implements IDateContainable
         if (!$this->exemptionNames = implode(', ', $names)) {
             $this->exemptionNames = Yii::t('base', 'None');
         }
+        $this->birth_date  = date('m/d/Y', strtotime($this->birth_date));
+        $this->admission_date  = date('m/d/Y', strtotime($this->admission_date));
+        $this->graduation_date  = date('m/d/Y', strtotime($this->graduation_date));
     }
 
     protected function afterSave()
@@ -302,6 +305,19 @@ class Student extends ActiveRecord implements IDateContainable
         }
         return parent::afterSave();
     }
+
+    protected function beforeSave()
+    {
+        if(parent::beforeSave()) {
+            $this->birth_date = date('Y-m-d', strtotime($this->birth_date));
+            $this->admission_date = date('Y-m-d', strtotime($this->admission_date));
+            $this->graduation_date = date('Y-m-d', strtotime($this->graduation_date));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public function getDateFields()
     {

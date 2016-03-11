@@ -54,17 +54,18 @@ function paintHelpCellsTeachers(){
 
             var perevirka_num = false;
             var perevirka_denum = false;
+            var group_title='';
             for (var z = 0; z < data_numerator.getElementsByClassName("row:" + j)[0].getElementsByTagName("select").length; z++) {
-                if(tab_teach.getElementsByClassName("teacherName")[0].innerHTML==teacher1[z*2].innerHTML) perevirka_num=true;
-                if(tab_teach.getElementsByClassName("teacherName")[0].innerHTML==teacher2[z*2].innerHTML) perevirka_num=true;
-                if(tab2_teach.getElementsByClassName("teacherName")[0].innerHTML==denum_teacher1[z*2].innerHTML) perevirka_denum=true;
-                if(tab2_teach.getElementsByClassName("teacherName")[0].innerHTML==denum_teacher2[z*2].innerHTML) perevirka_denum=true;
+                if(tab_teach.getElementsByClassName("teacherName")[0].innerHTML==teacher1[z*2].innerHTML) {perevirka_num=true; arr_groups.forEach(function(dat){if(dat['id']==teacher1[z*2].className.replace(/[^0-9]/g, '')) group_title=dat['title']; });}
+                if(tab_teach.getElementsByClassName("teacherName")[0].innerHTML==teacher2[z*2].innerHTML) {perevirka_num=true; arr_groups.forEach(function(dat){if(dat['id']==teacher2[z*2].className.replace(/[^0-9]/g, '')) group_title=dat['title']; });}
+                if(tab2_teach.getElementsByClassName("teacherName")[0].innerHTML==denum_teacher1[z*2].innerHTML) {perevirka_denum=true; arr_groups.forEach(function(dat){if(dat['id']==denum_teacher1[z*2].className.replace(/[^0-9]/g, '')) group_title=dat['title']; });}
+                if(tab2_teach.getElementsByClassName("teacherName")[0].innerHTML==denum_teacher2[z*2].innerHTML) {perevirka_denum=true; arr_groups.forEach(function(dat){if(dat['id']==denum_teacher2[z*2].className.replace(/[^0-9]/g, '')) group_title=dat['title']; });}
             }
-            if (perevirka_num) tab_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#E76060";
-            else tab_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#F9F9F9";
+            if (perevirka_num) {tab_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#E76060"; tab_teach.getElementsByClassName('td:'+j)[0].innerHTML=group_title; tab_teach.getElementsByClassName('td:'+j)[0].style.fontSize = 'smaller';}
+            else {tab_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#F9F9F9"; tab_teach.getElementsByClassName('td:'+j)[0].innerHTML='';}
 
-            if (perevirka_denum) tab2_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#E76060";
-            else tab2_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#F9F9F9";
+            if (perevirka_denum) {tab2_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#E76060"; tab2_teach.getElementsByClassName('td:'+j)[0].innerHTML=group_title; tab2_teach.getElementsByClassName('td:'+j)[0].style.fontSize = 'smaller';}
+            else {tab2_teach.getElementsByClassName('td:'+j)[0].style.backgroundColor = "#F9F9F9"; tab2_teach.getElementsByClassName('td:'+j)[0].innerHTML='';}
         }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 @session_start();
+if (count($_SESSION)<=1) { header("Location:../index.php");}
 require_once "classes/queries.php";
 
     $select = new Query();
@@ -33,6 +34,8 @@ require_once "classes/queries.php";
 				</tr>
 			<?php } mysql_close(); ?>
 			</table>
+
+		<button id="btn_actual_schedule" onclick="top.location.href='create_actual.php'">Сформувати фактичний розклад</button>
 	</div>
 	</body>
 </html>

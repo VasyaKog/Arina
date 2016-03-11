@@ -339,7 +339,7 @@ class GlobalFunction{
         return $arr;
     }
 
-    function getTimetable($year, $semester){
+    function getTimetable($year, $semester, $day=""){
         $select = new Query();
         $select->openConnect();
         $arr = array();
@@ -363,7 +363,7 @@ class GlobalFunction{
             $arr_audience[] = $tmp;
         }
 
-        $q = $select->selectTimetable($year,$semester);
+        $q = $select->selectTimetable($year,$semester,$day);
         while ($us = mysql_fetch_array($q)){
 
             $tmp = array();
@@ -403,6 +403,60 @@ class GlobalFunction{
         asort($teachers);
         return $teachers;
 
+    }
+
+    function getActualSchedule($date, $day){
+        $select = new Query();
+        $select->openConnect();
+        $arr = array();
+        $arr_teacher = array();
+        $arr_audience = array();
+        $q = $select->selectQuery(array("id","last_name","first_name","middle_name"), "employee");
+        while ($us = mysql_fetch_array($q)) {
+            $tmp=array();
+            $tmp["id"] = $us["id"];
+            $tmp["last_name"] = $us["last_name"];
+            $tmp["first_name"] = $us["first_name"];
+            $tmp["middle_name"] = $us["middle_name"];
+            $arr_teacher[] = $tmp;
+        }
+
+        $q = $select->selectQuery(array("id","number"), "audience");
+        while ($us = mysql_fetch_array($q)) {
+            $tmp = array();
+            $tmp["id"] = $us["id"];
+            $tmp["number"] = $us["number"];
+            $arr_audience[] = $tmp;
+        }
+
+        $arr_date = explode(".", $date);
+        $q = $select->selectActualShedule($arr_date[2]."-".$arr_date[1]."-".$arr_date[0], $day);
+        while ($us = mysql_fetch_array($q)){
+
+            $tmp = array();
+            $tmp["id"] = $us["id"];
+            $tmp["para"] = $us["para"];
+            $tmp["day"] = $us["day"];
+            $tmp["group_id"] = $us["group_id"];
+            $tmp["subject_id"] = $us["subject_id"];
+            $tmp["subject"] = $us["subject"];
+            $tmp["teacher1_id"] = $us["teacher1_id"]; $tmp["teacher1_name"] = '';
+            $tmp["teacher2_id"] = $us["teacher2_id"]; $tmp["teacher2_name"] = '';
+            foreach($arr_teacher as $v){
+                if (($v["id"]==$tmp["teacher1_id"])&&($tmp["teacher1_id"]!='')) $tmp["teacher1_name"] = $v["last_name"]." ".$v["first_name"]." ".$v["middle_name"];
+                if (($v["id"]==$tmp["teacher2_id"])&&($tmp["teacher2_id"]!='')) $tmp["teacher2_name"] = $v["last_name"]." ".$v["first_name"]." ".$v["middle_name"];
+            }
+            $tmp["audience1_id"] = $us["audience1_id"]; $tmp["audience1_number"] = '';
+            $tmp["audience2_id"] = $us["audience2_id"]; $tmp["audience2_number"] = '';
+            foreach($arr_audience as $v){
+                if (($v["id"]==$tmp["audience1_id"])&&($tmp["audience1_id"]!='')) $tmp["audience1_number"] = $v["number"];
+                if (($v["id"]==$tmp["audience2_id"])&&($tmp["audience2_id"]!='')) $tmp["audience2_number"] = $v["number"];
+            }
+            $tmp["type"] = $us["type"];
+            $tmp["type_lesson"] = $us["type_lesson"];
+            $arr[] = $tmp;
+        }
+        return $arr;
     }
 }
 ?>

@@ -33,7 +33,6 @@ return CMap::mergeArray(
         ),
         'modules' => array(
             'studyPlan',
-            'journal',
             'student',
             'hr',
             'dictionaries',
@@ -66,7 +65,6 @@ return CMap::mergeArray(
                 'responsiveCss' => true,
                 'coreCss' => false,
             ),
-
             'urlManager' => array(
                 'urlFormat' => 'path',
                 'showScriptName' => false,
@@ -82,7 +80,7 @@ return CMap::mergeArray(
                     '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
                 ),
             ),
-            'errorHandler' => array(
+      'errorHandler' => array(
                 'errorAction' => 'site/error',
             ),
             'log' => array(
@@ -97,7 +95,7 @@ return CMap::mergeArray(
                         'levels' => CLogger::LEVEL_INFO,
                         'logFile' => 'log',
                         'maxFileSize' => 1,
-                        'maxLogFiles' => 100,
+                        'maxLogFiles' => 10000,
                         'rotateByCopy' => false,
                     ),
                 ),

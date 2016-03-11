@@ -8,7 +8,7 @@
 require_once "classes/queries.php";
 
 $select = new Query();
-$select->openConnect("root","root", "khpk");
+$select->openConnect();
 
 if (!($select->insertTimetable($_POST['arr'],"timetable",$_POST["year"],$_POST["sem"]))) echo 'error';
 ?>

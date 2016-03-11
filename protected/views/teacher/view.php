@@ -5,8 +5,8 @@
  * @var Teacher $model
  */
 $this->breadcrumbs = array(
-    Yii::t('teacher', 'Teachers') => array('index'),
     $model->getFullName(),
+    Yii::t('teacher', 'Teachers') => array('index'),
 );
 
 $this->menu = array(

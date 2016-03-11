@@ -24,7 +24,7 @@
     <div class="form-actions">
         <?php $this->widget(
             'bootstrap.widgets.TbButton',
-            array('buttonType' => 'submit', 'type' => 'primary', 'label' => 'Отправить')
+            array('buttonType' => 'submit', 'type' => 'primary', 'label' => 'Відправити')
         ); ?>
         <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType' => 'reset', 'label' => 'Сбросить')); ?>
     </div>

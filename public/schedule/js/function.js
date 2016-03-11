@@ -290,7 +290,7 @@ function addDualSubjects(id, teacher_name, group, tr, tr2, elem) {
         break;
     }
     if (predmets[index]['count_first'] > 0) {
-        alert(predmets[index]['count_first'] + ' - ' + predmets[index]['subject_title']);
+       // alert(predmets[index]['count_first'] + ' - ' + predmets[index]['subject_title']);
         //console.log(predmets[index]['count_first'] + ' - ' + predmets[index]['subject_title']);
         if (confirm("Якщо це лекційне занняття натисніть 'ОК', практичне - 'Скасувати'")) {
             var conf = true;
@@ -797,8 +797,9 @@ function peintInputs(rows) {
     }
 
     for (i = 0; i < arr_audience1.length; i++) {
+        if (arr_audience1[i].value == '') pochozi.push(arr_audience1[i]);
         for (var j = 0; j < arr_audience1.length; j++)
-            if ((arr_audience1[i] != arr_audience1[j]) && (arr_audience1[i].value == arr_audience1[j].value) && (arr_sub[i].options[arr_sub[i].selectedIndex].value != arr_sub[j].options[arr_sub[j].selectedIndex].value)) {
+            if ((arr_audience1[i] != arr_audience1[j]) && ((arr_audience1[i].value == arr_audience1[j].value)) && (arr_sub[i].options[arr_sub[i].selectedIndex].value != arr_sub[j].options[arr_sub[j].selectedIndex].value)) {
                 pochozi.push(arr_audience1[i]);
                 pochozi.push(arr_audience1[j]);
             }
@@ -842,6 +843,7 @@ function peintInputs(rows) {
         }
     }
 
+    for (i = 0; i < arr_audience1.length; i++) if (arr_audience1[i].value == '') pochozi.push(arr_audience1[i]);
 
     var arr_res = [];
     for (i = 1; i < arr_normal.length; i++) {
@@ -1049,6 +1051,7 @@ function clear_schedule(){
                         }
                     }
                     sel.selectedIndex=0;
+                    sel.options.length=1;
                     teach1.innerHTML = '';
                     teach2.innerHTML = '';
                     tr[1].getElementsByClassName("teacher:" + d)[0].style.backgroundColor = "#F9F9F9";
@@ -1075,6 +1078,7 @@ function clear_schedule(){
                         }
                     }
                     sel.selectedIndex=0;
+                    sel.options.length=1;
                     teach1.innerHTML = '';
                     teach2.innerHTML = '';
                     tr2[1].getElementsByClassName("teacher:" + d)[0].style.backgroundColor = "#F9F9F9";

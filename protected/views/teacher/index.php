@@ -14,7 +14,7 @@ $this->menu = array(
     array(
         'type' => 'primary',
         'label' => Yii::t('teacher', 'Add new teacher'),
-        'url' => $this->createUrl('hr/default/create'),
+        'url' => $this->createUrl('teacher/create'),
     ),
 );
 ?>

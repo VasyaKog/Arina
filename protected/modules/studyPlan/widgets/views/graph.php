@@ -62,13 +62,14 @@
         <tr class="numbers">
             <?php for ($i = 0; $i < $amount; $i++): ?>
                 <th>
-                    <?php echo $i + 1; ?>
+                    <?php echo $i+1; ?>
                 </th>
             <?php endfor; ?>
         </tr>
         </thead>
         <tbody>
         <?php
+
         $j = 0;
         foreach ($rows as $key => $name): ?>
             <tr class="line">
@@ -76,7 +77,7 @@
                     <input
                         name="<?php echo "groups[$name][$j]"; ?>" data-state="<?php echo $key; ?>" type="hidden"/>
                 </td>
-                <?php for ($i = 0; $i < $amount; $i++): ?>
+                <?php for ($i = 0; $i < $amount; $i++):?>
                     <td>
                         <input
                             name="<?php echo "graph[$j][$i]"; ?>"
