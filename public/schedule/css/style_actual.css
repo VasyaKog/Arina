@@ -1,0 +1,59 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #F9F9F9;
+}
+
+fieldset{
+    width: 201px;
+    margin: 0 auto;
+    font-family: Comic Sans MS;
+}
+
+#data{
+    width:80px;
+    font-family: Comic Sans MS;
+}
+
+#type{
+    margin-top: 5px;
+    font-family: Comic Sans MS;
+}
+
+#day{
+    margin-top: 5px;
+    font-family: Comic Sans MS;
+}
+
+#date_wrap{
+    margin: 0 auto;
+    width: 135px;
+}
+
+#btn_shape{
+    margin: 0 auto;
+    font-family: Comic Sans MS;
+    margin-top: 10px;
+    display: block;
+    color: #F51313;
+}
+
+h1 {
+    margin: 20px 0px 12px 10px;
+    font-family: Comic Sans MS;
+    color: #ED783D;
+    text-shadow: 1px 1px 0px black, 0 0 5px black;
+    font-size: 30px;
+}
+
+.rozklad #border_radio {
+    border: none;
+    border-left: 2px solid;
+    border-right: 2px solid;
+}
+
+.rozklad label{
+    color: #ffdabf;
+    font-size: 14px;
+    text-shadow: 1px 1px 2px black, 0 0 1em black;
+}
