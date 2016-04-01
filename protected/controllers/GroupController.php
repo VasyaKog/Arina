@@ -172,8 +172,11 @@ class GroupController extends Controller
 
     public function actionSimpleList($id)
     {
-        /**@var $excel ExcelMaker */
+        /**@var $excel ExcelMaker
+         *@var $group Group
+         */
         $excel = Yii::app()->getComponent('excel');
-        $excel->getDocument(Group::model()->loadContent($id), 'groupList');
+        $group= Group::model()->findByPk($id);
+        $excel->getDocument($group->getStudentArray(), 'groupList');
     }
 }

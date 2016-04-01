@@ -2,8 +2,8 @@
 /**
  *
  * @var GroupController $this
- * @var integer $speciality_id
  * @var \CActiveDataProvider $provider
+ * * @var integer $speciality_id
  */
 ?>
 <?php
@@ -19,12 +19,6 @@ $this->menu = array(
 );
 ?>
 
-<?php echo TbHtml::beginFormTb(TbHtml::FORM_LAYOUT_VERTICAL,$this->createUrl(''),'GET'); ?>
-<?php echo TbHtml::dropDownListControlGroup('Speciality', $speciality_id,
-    CHtml::listData(Speciality::model()->findAll(), 'id', 'title'),
-    array('class'=>'span6','label'=>Yii::t('base','Speciality'),'empty'=>'')); ?>
-<?php echo TbHtml::submitButton(Yii::t('base','Filter')); ?>
-<?php echo TbHtml::endForm(); ?>
 
     <h2><?php echo Yii::t('group', 'Groups list'); ?></h2>
 <?php $this->renderPartial('//tableList',
@@ -36,7 +30,7 @@ $this->menu = array(
                 'header' => Yii::t('teacher', 'Curator'),
                 'type' => 'raw',
                 'name' => 'curator.name',
-                'value' => 'CHtml::link($data->curator->getFullName(), array("teacher/view", "id"=>$data->curator_id))',
+                'value' => '$data->getCuratorLink()',
             ),
             array(
                 'header' => Yii::t('base', 'Speciality'),

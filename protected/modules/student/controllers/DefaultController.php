@@ -60,14 +60,15 @@ class DefaultController extends Controller
          * @var $model Student
          */
         $model = Student::model()->loadContent($id);
-        if (
-            !Yii::app()->user->checkAccess('manageStudent',
+       /** if (
+           !Yii::app()->user->checkAccess('manageStudent',
                 array(
                     'id' => $model->group->curator_id,
                     'type' => User::TYPE_TEACHER,
                 )
             )
             &&
+
             !Yii::app()->user->checkAccess('manageStudent',
                 array(
                     'id' => $model->group->monitor_id,
@@ -75,6 +76,7 @@ class DefaultController extends Controller
                 )
             )
             &&
+
             !Yii::app()->user->checkAccess('manageStudent',
                 array(
                     'id' => $model->group->speciality->department->head_id,
@@ -82,9 +84,11 @@ class DefaultController extends Controller
                 )
             )
         )
+
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
+        * */
         $this->ajaxValidation('student-form', $model);
 
         if (isset($_POST['Student'])) {
@@ -143,17 +147,24 @@ class DefaultController extends Controller
 
     public function actionGroup($id)
     {
+        /**
+         * @var $group Group;
+         */
         $group = Group::model()->findByPk($id);
         $groupName = $group->title;
-        $provider = Student::model()->getProvider(array('criteria' => array('condition' => "group_id=$id")));
+
+        $provider= new CArrayDataProvider($group->getStudentArray(),array(
+            'keyField' => 'id'
+        ));
         $this->render(
             'group',
             array(
                 'provider' => $provider,
                 'groupName' => $groupName,
                 'group' => $group,
-                'id'=>$id,
+                'id' => $id,
             )
         );
     }
+
 }

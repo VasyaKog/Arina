@@ -10,7 +10,6 @@ Yii::import('application.behaviors.dateField.*');
  * @property string $last_name
  * @property string $first_name
  * @property string $middle_name
- * @property integer $group_id
  * @property string $phone_number
  * @property string $mobile_number
  * @property string $mother_name
@@ -54,7 +53,7 @@ Yii::import('application.behaviors.dateField.*');
  * @property string $exemptionNames
  *
  * @property Exemption[] $exemptions
- * @property Group $group
+ * @property Group[] $group
  * @property ClassMark[] $marks
  * @property ClassAbsence[] $absences
  */
@@ -79,6 +78,82 @@ class Student extends ActiveRecord implements IDateContainable
         return $this->gender ? Yii::t('terms', 'Female') : Yii::t('terms', 'Male');
     }
 
+    /*
+     * $date - is date
+     */
+    public function getGroupListArray($date = null) {
+        /**
+         * @var $listRecord StudentGroup[]
+         * @var $group Group;
+         */
+        if($date == null){$date=date('Y-m-d');};
+        $listRecord=StudentGroup::model()->findAllByAttributes(array('student_id'=>$this->id));
+        $listGroup=array();
+       // sort($listRecord,1);
+       $k=0;
+        foreach ($listRecord as $item){
+            if($item->type==1) {
+                if($date<$item->date) continue;
+                $k=0;
+                if(in_array($item->id,$listGroup)) continue;
+                foreach($listRecord as $item2){
+                    if ($item2->date>$date) continue;
+                if($item->group_id==$item2->group_id) {
+                    if ($item != $item2 && $item2->type == 0) {
+                            $k+=1;
+                   }
+                }
+                }
+                if($k%2==0){
+                    array_push($listGroup,$item->group_id)  ;
+                }
+            }
+        }
+       return $listGroup;
+    }
+
+    public function getGroupListLinks($date = null){
+        $listGroup=$this->getGroupListArray($date);
+        if($listGroup==array()) return Yii::t('student','This student have not group');
+        /**
+         * @var $string string
+         */
+        $string="";
+        for ($i=0;$i<count($listGroup);++$i){
+            $string= $string.CHtml::link(Group::getNameGroup($listGroup[$i]),array("../group/view/".$listGroup[$i]))."<br/>";
+            //CHtml::link(Group::getNameGroup($listGroup[$i]),array("../group/","id"=>$listGroup[$i]));
+        };
+        return $string;
+    }
+
+
+    public static function getList(){
+        $list = array();
+        /**
+         * @var $listAll Student[]
+         */
+        $listAll=self::model()->findAll();
+        foreach($listAll as $item){
+            $list[$item->id]=$item->getFullName()."\t".$item->getStudentNumber();
+        }
+        return $list;
+    }
+
+    public function getGroupHistory(){
+        /**
+         * @var $listRecord StudentGroup[]
+         */
+        $listRecord=StudentGroup::model()->findAllByAttributes(array('student_id'=>$this->id));
+        $stringRezult="";
+        foreach($listRecord as $record){
+            if($record->type==1) $string=Yii::t('student','Include in '); else $string=Yii::t('student','Declude with ');
+            $string=$string.CHtml::link(Group::getNameGroup($record->group_id),array("../group/view/".$record->group_id)).Yii::t('student',', in date - ');
+            $string=$string.$record->date;
+            $stringRezult=$stringRezult.$string."<br/>";
+        }
+        return $stringRezult;
+    }
+
     public function behaviors()
     {
         return array(
@@ -97,12 +172,28 @@ class Student extends ActiveRecord implements IDateContainable
         return 'student';
     }
 
+
     /**
      * @return string
      */
     public function getFullName()
     {
-        return "$this->last_name $this->first_name $this->middle_name";
+        return "$this->last_name $this->first_name $this->middle_name ";
+    }
+    /**
+     * @return string
+     */
+    public function getFullNameAndCode()
+    {
+        return "$this->last_name $this->first_name $this->middle_name $this->code";
+    }
+
+    /**
+     * @return string
+     */
+
+    public function getStudentNumber(){
+        return $this->code;
     }
 
     /**
@@ -121,8 +212,8 @@ class Student extends ActiveRecord implements IDateContainable
     public function rules()
     {
         return array(
-            array('last_name, first_name, middle_name, group_id, gender', 'required'),
-            array('group_id, admission_order_number, admission_semester, math_mark, ua_language_mark, graduated, graduation_semester, graduation_order_number, sseed_id', 'numerical', 'integerOnly' => true),
+            array('last_name, first_name, middle_name, gender', 'required'),
+            array('admission_order_number, admission_semester, math_mark, ua_language_mark, graduated, graduation_semester, graduation_order_number, sseed_id', 'numerical', 'integerOnly' => true),
             array('code', 'length', 'max' => 12),
             array('last_name, first_name, middle_name', 'length', 'max' => 40),
             array('phone_number, mobile_number', 'length', 'max' => 15),
@@ -136,7 +227,7 @@ class Student extends ActiveRecord implements IDateContainable
             array('characteristics, birth_date, admission_date, graduation_date, exemptions', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, code, last_name, first_name, middle_name, group_id, phone_number, mobile_number, mother_name, father_name, gender, official_address, characteristics, factual_address, birth_date, admission_date, tuition_payment, admission_order_number, admission_semester, entry_exams, education_document, contract, math_mark, ua_language_mark, mother_workplace, mother_position, mother_workphone, mother_boss_workphone, father_workplace, father_position, father_workphone, father_boss_workphone, graduated, graduation_date, graduation_basis, graduation_semester, graduation_order_number, diploma, direction, misc_data, hobby, exemptions, sseed_id, document, identification_code', 'safe', 'on' => 'search'),
+            array('id, code, last_name, first_name, middle_name, phone_number, mobile_number, mother_name, father_name, gender, official_address, characteristics, factual_address, birth_date, admission_date, tuition_payment, admission_order_number, admission_semester, entry_exams, education_document, contract, math_mark, ua_language_mark, mother_workplace, mother_position, mother_workphone, mother_boss_workphone, father_workplace, father_position, father_workphone, father_boss_workphone, graduated, graduation_date, graduation_basis, graduation_semester, graduation_order_number, diploma, direction, misc_data, hobby, exemptions, sseed_id, document, identification_code', 'safe', 'on' => 'search'),
         );
     }
 
@@ -146,11 +237,12 @@ class Student extends ActiveRecord implements IDateContainable
     public function relations()
     {
         return array(
-            'group' => array(self::BELONGS_TO, 'Group', 'group_id'),
+            'group' => array(self::MANY_MANY, 'Group', 'student_group(student_id,group_id)'),
             'marks' => array(self::HAS_MANY, 'ClassMark', 'student_id'),
             'absences' => array(self::HAS_MANY, 'ClassAbsence', 'student_id'),
             'student_has_exemption' => array(self::HAS_MANY, 'StudentExemption', 'student_id'),
             'exemptions' => array(self::MANY_MANY, 'Exemption', 'student_has_exemption(student_id, exemption_id)'),
+            'student_group' => array(self::HAS_MANY,'StudentGroup','student_id'),
         );
     }
 
@@ -165,7 +257,6 @@ class Student extends ActiveRecord implements IDateContainable
             'last_name' => Yii::t('student', 'Last Name'),
             'first_name' => Yii::t('student', 'First Name'),
             'middle_name' => Yii::t('student', 'Middle Name'),
-            'group_id' => Yii::t('student', 'Group'),
             'phone_number' => Yii::t('student', 'Phone Number'),
             'mobile_number' => Yii::t('student', 'Mobile Number'),
             'mother_name' => Yii::t('student', 'Mother Name'),
@@ -208,6 +299,8 @@ class Student extends ActiveRecord implements IDateContainable
             'identification_code' => Yii::t('student', 'Identification code'),
             'form_of_study_notes' => Yii::t('student', 'Form of study notes'),
             'fullName' => Yii::t('student', 'Full name'),
+            'group'=>Yii::t('student','Group'),
+            'group_history'=>Yii::t('student','History of migration students'),
         );
     }
 
@@ -222,7 +315,6 @@ class Student extends ActiveRecord implements IDateContainable
         $criteria->compare('last_name', $this->last_name, true);
         $criteria->compare('first_name', $this->first_name, true);
         $criteria->compare('middle_name', $this->middle_name, true);
-        $criteria->compare('group_id', $this->group_id);
         $criteria->compare('phone_number', $this->phone_number, true);
         $criteria->compare('mobile_number', $this->mobile_number, true);
         $criteria->compare('mother_name', $this->mother_name, true);

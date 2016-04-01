@@ -894,7 +894,7 @@ SQL;
         $this->setValue($sheet, 'C17', GlobalHelper::getCurrentYear(1), '@value1');
         $this->setValue($sheet, 'C17', GlobalHelper::getCurrentYear(2), '@value2');
         $k = $i = 40;
-        foreach ($group->students as $item) {
+        foreach ($group->getStudentArray() as $item) {
             /**@var Student $item */
             $sheet->setCellValue("A$i", $i - $k + 1);
             $sheet->setCellValue("B$i", $item->getShortFullName());

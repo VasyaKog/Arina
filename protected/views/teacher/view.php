@@ -42,6 +42,16 @@ $this->menu = array(
         'short_name',
         array(
             'type' => 'raw',
+            'label' => Yii::t('group','Groups'),
+            'value' => $model->getGroupListLinks(),
+        ),
+        array(
+            'type' => 'raw',
+            'label' => Yii::t('group','Group0 hisotry'),
+            'value' => $model->getGroupHistory(),
+        ),
+        array(
+            'type' => 'raw',
             'label' => Yii::t('teacher', 'Cyclic Commission'),
             'value' => CHtml::link($model->getCyclicCommissionName(), array('cyclicCommission/view', 'id' => $model->cyclic_commission_id)),
         ),

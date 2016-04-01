@@ -7,7 +7,6 @@
  * @property integer $id
  * @property string $title
  * @property integer $speciality_id
- * @property integer $curator_id
  * @property integer $monitor_id
  *
  * @property Student[] $students
@@ -40,9 +39,63 @@ class Group extends ActiveRecord
         return $value;
     }
 
+    public function getStudentArray()
+    {
+        /**
+         * @var $list Student[]
+         * @var $list2 Student[]
+         */
+        $list2 = array();
+        $list = Student::model()->findAll();
+        foreach ($list as $item) {
+            $listgr = $item->getGroupListArray();
+            if ($listgr == Yii::t('student', 'This group have not group')) continue;
+            if (in_array($this->id, $listgr)) array_push($list2, Student::model()->findByPk($item->id));
+        }
+        return $list2;
+    }
+
+    public function getCuratorId()
+    {
+        /**
+         * @var $list Teacher[]
+         */
+        $list = Teacher::model()->findAll();
+        foreach ($list as $item) if (in_array($this->id, $item->getGroupListArray())) return $item->id;
+        return -1;
+    }
+
+    public function getCuratorLink()
+    {
+        /**
+         * @var $teacher Teacher[]
+         */
+        $i = $this->getCuratorId();
+        if ($i >= 0) {
+            $teacher = Teacher::model()->findAllByPk($i);
+            return CHtml::link($teacher[0]->getFullName(), array('../teacher/view/', 'id' => $i));
+        } else  return 'Fatal - this group have not curator';
+    }
+
+
     public function getStudentsList()
     {
-        return CHtml::listData($this->students, 'id', 'fullName');
+        /**
+         * @var $list Student[]
+         * @var $list2 Student[]
+         */
+
+        $list2 = $this->getStudentArray();
+        return 0;
+    }
+
+    public static function getNameGroup($id)
+    {
+        /**
+         * @var $list Group[]
+         */
+        $list = self::model()->findAll();
+        return $list[$id]->title;
     }
 
     public static function getTreeList()
@@ -90,9 +143,10 @@ class Group extends ActiveRecord
     {
         return array(
             'speciality' => array(self::BELONGS_TO, 'Speciality', 'speciality_id'),
-            'curator' => array(self::BELONGS_TO, 'Teacher', 'curator_id'),
-            'students' => array(self::HAS_MANY, 'Student', 'group_id', 'order' => 'last_name, first_name, middle_name ASC'),
+            'curator' => array(self::MANY_MANY, 'Teacher', 'curator_group(teacher_id,group_id)'),
+            'students' => array(self::MANY_MANY, 'Student', 'student_group(student_id,group_id)', 'order' => 'last_name, first_name, middle_name ASC'),
             'loads' => array(self::HAS_MANY, 'TeacherLoad', 'group_id'),
+            'student_group' => array(self::HAS_MANY, 'StudentGroup', 'group_id'),
         );
     }
 
@@ -161,19 +215,13 @@ class Group extends ActiveRecord
         return parent::beforeSave();
     }
 
-    protected function afterFind()
-    {
-        $this->curator_old = $this->curator_id;
-        $this->monitor_old = $this->monitor_id;
-        parent::afterFind();
-    }
 
     /**
      * @return int
      */
     public function getStudentsCount()
     {
-        return count($this->students);
+        return count($this->getStudentArray());
     }
 
     /**
@@ -181,8 +229,17 @@ class Group extends ActiveRecord
      */
     public function getBudgetStudentsCount()
     {
-        $command = Yii::app()->db->createCommand();
-        return $command->select('count(id)')->from('student')->where('((contract=0) OR (contract IS NULL)) AND group_id=:group', array(':group' => $this->id))->queryScalar();
+        /**
+         * @var list Student[]
+         */
+        $list = $this->getStudentArray();
+        $k = 0;
+        if(empty($list)) return 0;
+        foreach ($list as $item) {
+
+            if(!isset($item->contract)) $k++;
+        }
+        return $k;
     }
 
     /**
@@ -190,7 +247,16 @@ class Group extends ActiveRecord
      */
     public function getContractStudentsCount()
     {
-        $command = Yii::app()->db->createCommand();
-        return $command->select('count(id)')->from('student')->where('contract=1 AND group_id=:group', array(':group' => $this->id))->queryScalar();
+        /**
+         * @var list Student[]
+         */
+        $list = $this->getStudentArray();
+        $k = 0;
+        foreach ($list as $item) {
+            if(isset($item->contract)) {
+                if ($item->contract == 1) $k++;
+            }
+        }
+        return $k;
     }
 }
