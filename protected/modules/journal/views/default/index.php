@@ -13,13 +13,3 @@ $this->breadcrumbs = array(
 $this->renderPartial('_form', array('model' => $model));
 
 ?>
-
-<div id="journal"></div>
-<script>
-function myfunc(html)
-{
-	jQuery("#journal-form").replaceWith(html);
-	jQuery('#JournalViewer_dateStart').datepicker({'language':'uk'});
-	jQuery('#JournalViewer_dateEnd').datepicker({'language':'uk'});
-}
-</script>

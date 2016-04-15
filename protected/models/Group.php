@@ -73,7 +73,7 @@ class Group extends ActiveRecord
         $i = $this->getCuratorId();
         if ($i >= 0) {
             $teacher = Teacher::model()->findAllByPk($i);
-            return CHtml::link($teacher[0]->getFullName(), array('../teacher/view/', 'id' => $i));
+            return CHtml::link($teacher[0]->getFullName(), array('../teacher/view/'.$i));
         } else  return 'Fatal - this group have not curator';
     }
 
@@ -92,10 +92,23 @@ class Group extends ActiveRecord
     public static function getNameGroup($id)
     {
         /**
-         * @var $list Group[]
+         * @var $list Group;
          */
-        $list = self::model()->findAll();
-        return $list[$id]->title;
+        $list=self::model()->findByPk($id);
+        return $list->title;
+    }
+
+    public static function getArrayStudentByGroupId($id,$date=null){
+        $students=self::getStudentArray();
+        /*
+         * $sArray Student[]
+         */
+        $sArray=array();
+        foreach($students as $item){
+            $item->getGroupListArray($date);
+            if(in_array($id,$item->getGroupListArray())) array_push($sArray,$item);
+        }
+        return $sArray;
     }
 
     public static function getTreeList()
@@ -128,9 +141,9 @@ class Group extends ActiveRecord
     public function rules()
     {
         return array(
-            array('title, speciality_id, curator_id', 'required'),
+            array('title, speciality_id','required'),
             array('monitor_id', 'required', 'on' => 'update'),
-            array('speciality_id, curator_id, monitor_id', 'numerical', 'integerOnly' => true),
+            array('speciality_id , monitor_id', 'numerical', 'integerOnly' => true),
             array('title', 'length', 'max' => 8),
             array('title', 'unique'),
         );
@@ -170,7 +183,7 @@ class Group extends ActiveRecord
 
     protected function beforeSave()
     {
-
+        /*
         if ($this->curator_id != $this->curator_old) {
             $auth = Yii::app()->authManager;
             $curator_old_user = User::model()->findByAttributes(
@@ -185,6 +198,7 @@ class Group extends ActiveRecord
                     'identity_type' => User::TYPE_TEACHER
                 )
             );
+
             if (isset($curator_old_user)) {
                 $auth->revoke('curator', $curator_old_user->getAttribute('id'));
             }
@@ -211,7 +225,7 @@ class Group extends ActiveRecord
                 $auth->assign('prefect', $monitor_new_user->getAttribute('id'));
             }
         }
-
+        */
         return parent::beforeSave();
     }
 
@@ -236,8 +250,8 @@ class Group extends ActiveRecord
         $k = 0;
         if(empty($list)) return 0;
         foreach ($list as $item) {
+            if(!isset($item->contract)) $k++; elseif($item->contract==0) $k++;
 
-            if(!isset($item->contract)) $k++;
         }
         return $k;
     }

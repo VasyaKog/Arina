@@ -60,7 +60,8 @@
             <?php endforeach; ?>
         </tr>
         <tr class="numbers">
-            <?php for ($i = 0; $i < $amount; $i++): ?>
+            <?php
+            for ($i = 0; $i < $amount; $i++): ?>
                 <th>
                     <?php echo $i+1; ?>
                 </th>

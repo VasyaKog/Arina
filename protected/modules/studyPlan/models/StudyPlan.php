@@ -35,7 +35,7 @@ class StudyPlan extends ActiveRecord
      * @param $id
      * @return array
      */
-    public static function getList($id)
+    public static function getList($id=null)
     {
         if (isset($id)){
             /** @var Department $department */

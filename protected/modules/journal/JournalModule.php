@@ -2,6 +2,7 @@
 
 class JournalModule extends CWebModule
 {
+    public $defaultController = 'main';
     public function init()
     {
         // this method is called when the module is being created
@@ -11,6 +12,7 @@ class JournalModule extends CWebModule
         $this->setImport(array(
             'journal.models.*',
             'journal.components.*',
+            'load.models.*',
         ));
     }
 

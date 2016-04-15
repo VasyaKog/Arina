@@ -53,20 +53,7 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->dropDownList('group_id','',Group::getTreeList(),
-			array(
-				'class'=>'span5',
-				'empty'=>Yii::t('group',Yii::t('studentGroup','Select group')),
-				'ajax'=>array(
-					'type'=>'GET',
-					'url'=>CController::createUrl(
-						'/group/listByCriteria',
-						array('id')
-					)
-				)
-
-		),
-		));?>
+		<?php echo $form->dropDownListRow($model,'group_id',Group::getTreeList(),array('empty'=>Yii::t('group',Yii::t('studentGroup','Select group'))));?>
 	</div>
 
 	<div class="row">

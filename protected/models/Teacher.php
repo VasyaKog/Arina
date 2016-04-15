@@ -73,8 +73,8 @@ class Teacher extends Employee
          * @var $string string
          */
         $string="";
-        for ($i=0;$i<count($listGroup);++$i){
-            $string= $string.CHtml::link(Group::getNameGroup($listGroup[$i]),array("../group/view/".$listGroup[$i]))."<br/>";
+        foreach ($listGroup as $i=>$key){
+            $string= $string.CHtml::link(Group::getNameGroup($key),array("../group/view/".$key))."<br/>";
             //CHtml::link(Group::getNameGroup($listGroup[$i]),array("../group/","id"=>$listGroup[$i]));
         };
         return $string;

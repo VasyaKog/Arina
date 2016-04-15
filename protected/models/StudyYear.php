@@ -133,6 +133,8 @@ class StudyYear extends ActiveRecord
         return "$this->begin/$this->end";
     }
 
+
+
     public function setTitle($title)
     {
         $this->begin = substr($title,0,3);

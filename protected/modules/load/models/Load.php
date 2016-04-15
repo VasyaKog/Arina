@@ -23,6 +23,7 @@
  * @property Group $group
  * @property Teacher $teacher
  * @property WorkSubject $planSubject
+ * @property JournalRecord[] $journal_records
  */
 class Load extends ActiveRecord
 {
@@ -90,6 +91,7 @@ class Load extends ActiveRecord
             'teacher' => array(self::BELONGS_TO, 'Teacher', 'teacher_id'),
             'group' => array(self::BELONGS_TO, 'Group', 'group_id'),
             'planSubject' => array(self::BELONGS_TO, 'WorkSubject', 'wp_subject_id'),
+            'journal_records'=>array(self::HAS_MANY, 'JournalRecord','load_id')
         );
     }
 
@@ -462,6 +464,10 @@ class Load extends ActiveRecord
         return $this->planSubject->getSelfwork($fall-1) + $this->planSubject->getSelfwork($spring-1);
     }
 
+    public function getGroupId()
+    {
+        return $this->group_id;
+    }
 
     public function validateConsultation()
     {

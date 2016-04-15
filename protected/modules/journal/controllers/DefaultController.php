@@ -6,9 +6,10 @@ class DefaultController extends Controller
     {
         $model = new JournalViewer();
 
-        $model->setScenario('group');
 
-        if (Yii::app()->getRequest()->isAjaxRequest) {
+      //  $model->setScenario('group');
+
+      /*  if (Yii::app()->getRequest()->isAjaxRequest) {
             if (isset($_POST["JournalViewer"])) {
                 $model->attributes = $_POST["JournalViewer"];
                 if ($model->validate()) {
@@ -19,25 +20,27 @@ class DefaultController extends Controller
                 ));
             }
 
-            if (Yii::app()->user->checkAccess('student')) {
-                $this->studentView();
-                return;
-            } else if (Yii::app()->user->checkAccess('teacher')) {
-                $this->teacherView();
-                return;
-            } else if (Yii::app()->user->checkAccess('curator') || Yii::app()->user->checkAccess('prefect')) {
-                $this->curatorAndPrefectView();
-                return;
-            } else if (Yii::app()->user->checkAccess('admin')) {
-                $this->adminView();
-                return;
-            } else if (Yii::app()->user->checkAccess('dephead')) {
-                $this->depheadView();
-                return;
-            }
+      */
+        //
+//            if (Yii::app()->user->checkAccess('student')) {
+//                $this->studentView();
+//                return;
+//            } else if (Yii::app()->user->checkAccess('teacher')) {
+//                $this->teacherView();
+//                return;
+//            } else if (Yii::app()->user->checkAccess('curator') || Yii::app()->user->checkAccess('prefect')) {
+//                $this->curatorAndPrefectView();
+//                return;
+//            } else if (Yii::app()->user->checkAccess('admin')) {
+//                $this->adminView();
+//                return;
+//            } else if (Yii::app()->user->checkAccess('dephead')) {
+//                $this->depheadView();
+//                return;
+//            }
 
-            Yii::app()->end();
-        }
+           // Yii::app()->end();
+       // }
 
 
         $this->render('index', array(
@@ -51,7 +54,7 @@ class DefaultController extends Controller
 
     protected function adminView()
     {
-
+        
     }
 
     protected function depHeadView()

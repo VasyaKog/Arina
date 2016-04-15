@@ -5,59 +5,58 @@
 <div id="journal-form">
     <?php
     $form = $this->beginWidget(BoosterHelper::FORM);
+    echo $form->dropDownListRow($model, 'studyYearId', StudyYear::getList(), array('empty' => 'Select year'));
     echo $form->dropDownListRow($model, 'groupId', Group::getListAll('id', 'title'), array('empty' => 'Select group'));
     echo $form->dropDownListRow($model, 'subjectId', Subject::getListAll('id', 'title'), array('empty' => 'Select subject'));
-    //echo $form->datePickerRow($model, 'dateStart');
-    //echo $form->datePickerRow($model, 'dateEnd');
-    echo CHtml::ajaxSubmitButton(Yii::t('base', 'Show'), array('index'), array('success' => 'myfunc'));
+    echo CHtml::ajaxSubmitButton(Yii::t('base', 'Open'), array('index'), array('success' => 'myfunc'));
     $this->endWidget();
     ?>
-    <?php if (!$model->isEmpty): ?>
-
-        <?php $data = $model->getData(); ?>
-        <div>
-            <table class="table table-bordered">
-                <caption>Журнал</caption>
-                <thead>
-                <tr>
-                    <th style="width: 100px">Студенти\Заняття:</th>
-                    <?php foreach ($data['classes'] as $item): ?>
-                        <th><?php echo CHtml::link($item->date, $this->createUrl('/actualClass/update/', array('id' => $item->id)), array("target" => "_blank")); ?></th>
-                    <?php endforeach; ?>
-                </tr>
-                </thead>
-                <tbody>
-                <?php /** @var $item Student */ ?>
-                <?php foreach ($data['students'] as $item): ?>
-                    <tr>
-                        <td><?php echo $item->getFullName(); ?></td>
-                        <?php foreach ($item->classes as $class): ?>
-                            <td><?php
-                                if (isset($class['mark']))
-                                    //echo $class->mark;
-                                    echo CHtml::link($class['mark']->mark, $this->createUrl('/classMark/update/', array('id' => $class['mark']->id)), array("target" => "_blank"));
-                                /*$this->widget('bootstrap.TbEditableField', array(
-                                        'type' => 'select2',
-                                        'model' => ClassMark::model(),
-                                        'attribute' => 'mark',
-                                        'url' => '',
-                                        'source' => array('2', '3', '4', '5', '.')
-                                ));*/
-                                else
-                                    echo CHtml::link('___', $this->createUrl('/classMark/createFromJournal/', array('studentId' => $item->id, 'actualClassId' => $class['class'])), array("target" => "_blank"));
-                                if (isset($class['absence']))
-                                    echo CHtml::link(' / Нб', $this->createUrl('/classAbsence/update/', array('id' => $class['absence']->id)), array("target" => "_blank"));
-                                else
-                                    echo CHtml::link(' / ___', $this->createUrl('/classAbsence/createFromJournal/', array('studentId' => $item->id, 'actualClassId' => $class['class'])), array("target" => "_blank"));
-
-
-                                ?></td>
-                        <?php endforeach; ?>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-    <?php endif; ?>
+<!--    --><?php //if (!$model->isEmpty): ?>
+<!---->
+<!--        --><?php //$data = $model->getData(); ?>
+<!--        <div>-->
+<!--            <table class="table table-bordered">-->
+<!--                <caption>Журнал</caption>-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th style="width: 100px">Студенти\Заняття:</th>-->
+<!--                    --><?php //foreach ($data['classes'] as $item): ?>
+<!--                        <th>--><?php //echo CHtml::link($item->date, $this->createUrl('/actualClass/update/', array('id' => $item->id)), array("target" => "_blank")); ?><!--</th>-->
+<!--                    --><?php //endforeach; ?>
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                --><?php ///** @var $item Student */ ?>
+<!--                --><?php //foreach ($data['students'] as $item): ?>
+<!--                    <tr>-->
+<!--                        <td>--><?php //echo $item->getFullName(); ?><!--</td>-->
+<!--                        --><?php //foreach ($item->classes as $class): ?>
+<!--                            <td>--><?php
+//                                if (isset($class['mark']))
+//                                    //echo $class->mark;
+//                                    echo CHtml::link($class['mark']->mark, $this->createUrl('/classMark/update/', array('id' => $class['mark']->id)), array("target" => "_blank"));
+//                                /*$this->widget('bootstrap.TbEditableField', array(
+//                                        'type' => 'select2',
+//                                        'model' => ClassMark::model(),
+//                                        'attribute' => 'mark',
+//                                        'url' => '',
+//                                        'source' => array('2', '3', '4', '5', '.')
+//                                ));*/
+//                                else
+//                                    echo CHtml::link('___', $this->createUrl('/classMark/createFromJournal/', array('studentId' => $item->id, 'actualClassId' => $class['class'])), array("target" => "_blank"));
+//                                if (isset($class['absence']))
+//                                    echo CHtml::link(' / Нб', $this->createUrl('/classAbsence/update/', array('id' => $class['absence']->id)), array("target" => "_blank"));
+//                                else
+//                                    echo CHtml::link(' / ___', $this->createUrl('/classAbsence/createFromJournal/', array('studentId' => $item->id, 'actualClassId' => $class['class'])), array("target" => "_blank"));
+//
+//
+//                                ?><!--</td>-->
+<!--                        --><?php //endforeach; ?>
+<!--                    </tr>-->
+<!--                --><?php //endforeach; ?>
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!---->
+<!--    --><?php //endif; ?>
 </div>

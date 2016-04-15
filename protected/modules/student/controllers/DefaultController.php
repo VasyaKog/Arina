@@ -29,7 +29,7 @@ class DefaultController extends Controller
 
         if (isset($_POST['Student'])) {
             $model->attributes = $_POST['Student'];
-
+             /*
             if(!Yii::app()->user->checkAccess('manageStudent',
                 array(
                     'id' => $model->group->speciality->department->head_id,
@@ -39,6 +39,7 @@ class DefaultController extends Controller
             {
                 throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
             }
+             */
             if ($model->save()) {
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -99,6 +100,7 @@ class DefaultController extends Controller
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
+
 
         $this->render('update', array(
             'model' => $model,
