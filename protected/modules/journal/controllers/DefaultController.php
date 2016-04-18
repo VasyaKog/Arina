@@ -52,6 +52,13 @@ class DefaultController extends Controller
 
     }
 
+    public function actionView($id){
+
+        $this->render('view', array(
+            'id' => $id,
+        ));
+    }
+/*
     protected function adminView()
     {
         
@@ -100,4 +107,5 @@ class DefaultController extends Controller
 
     }
 
+*/
 }

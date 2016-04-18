@@ -99,7 +99,7 @@ class Group extends ActiveRecord
     }
 
     public static function getArrayStudentByGroupId($id,$date=null){
-        $students=self::getStudentArray();
+        $students=Student::model()->findAll();
         /*
          * $sArray Student[]
          */

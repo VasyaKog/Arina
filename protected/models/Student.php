@@ -206,6 +206,10 @@ class Student extends ActiveRecord implements IDateContainable
         return "$this->last_name " . $v . '. ' . $v2 . '.';
     }
 
+    public function getLink(){
+        return CHtml::link($this->getShortFullName(),array('../student/view/'.$this->model()->id));
+    }
+
     /**
      * @return array validation rules for model attributes.
      */
