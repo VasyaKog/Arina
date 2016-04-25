@@ -32,5 +32,6 @@ return array(
     'included'=>'Додати',
     'Select type' =>'Оберіть тип',
     'Execute' =>'Виконати',
+    'Surname and initials' => 'Прізвище та ініціали'
 );
 

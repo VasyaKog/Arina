@@ -5,9 +5,31 @@
 <div id="journal-form">
     <?php
     $form = $this->beginWidget(BoosterHelper::FORM);
-    echo $form->dropDownListRow($model, 'studyYearId', StudyYear::getList(), array('empty' => 'Select year'));
-    echo $form->dropDownListRow($model, 'groupId', Group::getListAll('id', 'title'), array('empty' => 'Select group'));
-    echo $form->dropDownListRow($model, 'subjectId', Subject::getListAll('id', 'title'), array('empty' => 'Select subject'));
+    echo $form->dropDownListRow(
+        $model,
+        'studyYearId',
+        StudyYear::getList(),
+        array(
+            'empty'=>Yii::t('journal','Select Study Year'),
+            'ajax'=> array(
+                'type'=>'POST',
+                'url'=>$this->createUrl('default/changeGroupList'),
+                'update'=> '#JournalViewer_groupId',
+            ))
+    );
+    echo $form->dropDownListRow(
+        $model,
+        'groupId',
+        array(),
+        array(
+            'empty'=>'Select study year',
+            'ajax'=> array(
+                'type'=>'POST',
+                'url'=>$this->createUrl('default/changeSubjectList'),
+                'update'=> '#JournalViewer_subjectId',
+    ))
+    );
+    echo $form->dropDownListRow($model, 'subjectId', array(), array('empty' => 'Select group'));
     echo CHtml::ajaxSubmitButton(Yii::t('base', 'Open'), array('index'), array('success' => 'myfunc'));
     $this->endWidget();
     ?>

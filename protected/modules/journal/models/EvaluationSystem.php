@@ -65,8 +65,8 @@ class EvaluationSystem extends ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'title' => 'Title',
+			'id' => Yii::t('journal','indetify'),
+			'title' => Yii::t('journal','Title'),
 		);
 	}
 

@@ -24,7 +24,7 @@ class EvaluationSystemController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
+	/**public function accessRules()
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -71,7 +71,7 @@ class EvaluationSystemController extends Controller
 		{
 			$model->attributes=$_POST['EvaluationSystem'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
@@ -114,7 +114,7 @@ class EvaluationSystemController extends Controller
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array());
 	}
 
 	/**
@@ -131,17 +131,6 @@ class EvaluationSystemController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
-	{
-		$model=new EvaluationSystem('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['EvaluationSystem']))
-			$model->attributes=$_GET['EvaluationSystem'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

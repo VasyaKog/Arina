@@ -27,6 +27,21 @@ class JournalViewer extends CFormModel
         );
     }
 
+
+
+
+    public static function getGroupListByYearId($yearId=null){
+        $Groups=Group::getGroupsByYearId($yearId);
+        /**
+         *
+         **/
+        $res=array();
+        foreach($Groups as $item){
+            $res[$item->id]=$item->title;
+        }
+        return $res;
+    }
+
    /* public function getData()
     {
         switch ($this->scenario) {

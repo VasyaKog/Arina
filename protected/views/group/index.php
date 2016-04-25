@@ -39,6 +39,10 @@ $this->menu = array(
                 'value' => 'CHtml::link($data->speciality->title, array("speciality/view", "id"=>$data->speciality_id))',
             ),
             array(
+                'header'=>Yii::t('base','Course'),
+                'value'=>'$data->getCourse()',
+            ),
+            array(
                 'header' => Yii::t('base', 'Actions'),
                 'htmlOptions' => array('nowrap' => 'nowrap'),
                 'class' => 'bootstrap.widgets.TbButtonColumn',

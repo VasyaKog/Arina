@@ -15,26 +15,27 @@ class PageJournal extends CWidget
      * @var $load Load;
      */
     public $load;
-    public $list=array('Para1','para2');
+    public $list=array();
     /*
      * @var $students Student[]
      */
     public $students;
-    public $rows=array('Student1','Student2');
+    public $rows=array();
     /*
      * @var $records JournalRecord[]
      */
-    public $records=array();
+    public $records=array();    
+    public $map;
+    public $t=false;
 
     public function init(){
         $this->load=Load::model()->findByPk($this->load_id);
-        var_dump($this->load);
-        $group = Group::model()->findByPk($this->load->group_id);
+        $group =Group::model()->findByPk($this->load->group_id);
         $this->students=$group->getStudentArray();
         /*
              * @var $item Student
         */
-        var_dump($this->students);
+
         foreach ($this->students as $item){
             array_push($this->rows,$item->getLink());
         }
@@ -42,14 +43,39 @@ class PageJournal extends CWidget
         foreach($this->records as $item){
             array_push($this->list,$item->getLink());
         }
+        $i=0;
+        $j=0;
+        $this->map=array();
+        /**
+         * $student Student
+         */
+        foreach($this->students as $student) {
+            array_push($this->map, array());
+            /**
+             * @var $study JournalRecord;
+             */
+            foreach ($this->records as $study) {
+                if (Mark::model()->getLink($study->id, $student->id)) {
+                    array_push($this->map[$i], Mark::model()->getLink($study->id, $student->id));
+                } elseif ($this->t) {
+                    array_push($this->map[$i], CHtml::link(Yii::t('journal','Create'),array("/journal/mark/create/","student_id"=>$student->id,"journal_record_id"=>$study->id)));
+                } else {
+                    array_push($this->map[$i], '');
+                }
+                $j++;
+            }
+            $i++;
+        }
     }
 
     public function run(){
         $this->render('pageJournal', array(
-            'map'=> null,
+            'map'=> $this->map,
             'list'=>$this->list,
             'rows'=>$this->rows,
             'readOnly'=>$this->readOnly,
+            't' =>$this->t,
+            'load_id'=>$this->load_id
         ));
     }
 

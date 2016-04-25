@@ -25,13 +25,15 @@ switch ($course) {
         $fall = 0;
         $spring = 1;
 }
+
 ?>
+
 <table class="table table-bordered">
     <tr>
         <th rowspan="2"></th>
         <th rowspan="2" style="vertical-align: top">Предмет</th>
-        <th colspan="8">Осінній семестр: <?php echo $model->semesters[$fall]; ?> тижнів</th>
-        <th colspan="8">Веснянний семестр: <?php echo $model->semesters[$spring]; ?> тижнів</th>
+        <th colspan="8">Осінній семестр: <?php if(isset($model->semesters[$fall]))echo $model->semesters[$fall]; ?> тижнів</th>
+        <th colspan="8">Веснянний семестр: <?php if(isset($model->semesters[$spring]))echo $model->semesters[$spring]; ?> тижнів</th>
     </tr>
     <tr>
         <th>Всього</th>

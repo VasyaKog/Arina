@@ -47,14 +47,14 @@ $this->menu = array(
 <h2><?php echo Yii::t('subject', 'Subject list'); ?></h2>
 
 <?php
-$columns = array(
+$columns= array(
     'title',
     'code',
     'short_name',
     array(
         'header' => Yii::t('base', 'Actions'),
         'class' => 'bootstrap.widgets.TbButtonColumn',
-        'template' => '{update}{delete}',
+        'template' => '{view}{update}{delete}',
     ),
 );
 $this->renderPartial(

@@ -3,16 +3,13 @@
 /* @var $model EvaluationSystem */
 
 $this->breadcrumbs=array(
-	'Evaluation Systems'=>array('index'),
-	'Create',
+	Yii::t('journal','Journal')=>$this->createUrl('/journal'),
+	Yii::t('journal','Evaluation Systems')=>array('index'),
+	Yii::t('journal','Create EvaluationSystem'),
 );
 
-$this->menu=array(
-	array('label'=>'List EvaluationSystem', 'url'=>array('index')),
-	array('label'=>'Manage EvaluationSystem', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create EvaluationSystem</h1>
+<h1><?php echo Yii::t('journal','Create EvaluationSystem');?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

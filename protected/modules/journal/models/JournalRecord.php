@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'journal_record':
  * @property integer $id
  * @property integer $type_id
- * @property integer $date
+ * @property string $date
  * @property string $description
  * @property string $home_work
  * @property integer $load_id
@@ -17,6 +17,7 @@
  * @property Mark[] $marks
  * @property Teacher $teacher
  * @property $types Type
+ * @property $load Load
  */
 class JournalRecord extends CActiveRecord
 {
@@ -34,7 +35,7 @@ class JournalRecord extends CActiveRecord
 
 	public function getLink()
 	{
-		return CHtml::link($this->getName(),array('journal/records/view/'.$this->model()->id));
+		return CHtml::link($this->getName(),array('/journal/journalRecord/views/'.$this->id));
 	}
 
 	/**
@@ -46,7 +47,7 @@ class JournalRecord extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'required'),
-			array('type_id, date, load_id, numer_in_day', 'numerical', 'integerOnly'=>true),
+			array('type_id, load_id, numer_in_day', 'numerical', 'integerOnly'=>true),
 			array('description, home_work', 'length', 'max'=>255),
 			array('teacher_id, n_pp', 'length', 'max'=>10),
 			// The following rule is used by search().
@@ -63,8 +64,8 @@ class JournalRecord extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'types'=>array(self::HAS_ONE,'JournalRecordType','type_id'),
-			'marks'=>array(self::HAS_MANY,'Marks','journal_record_id'),
+			'types'=>array(self::BELONGS_TO,'JournalRecordType','type_id'),
+			'marks'=>array(self::HAS_MANY,'Mark','journal_record_id'),
 			'teacher'=>array(self::BELONGS_TO,'Teacher','teacher_id'),
 			'load'=>array(self::BELONGS_TO,'Load','load_id'),
 		);

@@ -3,19 +3,13 @@
 /* @var $model JournalRecordType */
 
 $this->breadcrumbs=array(
-	'Journal Record Types'=>array('index'),
-	$model->title=>array('view','id'=>$model->id),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List JournalRecordType', 'url'=>array('index')),
-	array('label'=>'Create JournalRecordType', 'url'=>array('create')),
-	array('label'=>'View JournalRecordType', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage JournalRecordType', 'url'=>array('admin')),
+	Yii::t('journal','Journal')=>$this->createUrl('/journal'),
+	Yii::t('journal','Journal Record Types')=>$this->createUrl('/journal/JournalRecordType'),
+	$model->title=>$this->createUrl('/journal/JournalRecordType/'.$model->id),
+	Yii::t('journal','Update'),
 );
 ?>
 
-<h1>Update JournalRecordType <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('journal','Update JournalRecordType').' '.$model->title; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

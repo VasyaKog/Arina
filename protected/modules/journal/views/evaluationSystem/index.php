@@ -3,18 +3,30 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Evaluation Systems',
+	Yii::t('journal','Journal')=>$this->createUrl('/journal'),
+	Yii::t('journal','Evaluation Systems'),
 );
 
 $this->menu=array(
-	array('label'=>'Create EvaluationSystem', 'url'=>array('create')),
-	array('label'=>'Manage EvaluationSystem', 'url'=>array('admin')),
+	array(
+		'label'=> Yii::t('journal','Create EvaluationSystem'),
+		'type' => BoosterHelper::TYPE_PRIMARY,
+		'url'=>array('create')),
 );
 ?>
 
-<h1>Evaluation Systems</h1>
+<h1><?php echo Yii::t('journal','Evaluation Systems');?></h1>
 
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
+<?php
+$columns= array(
+	'title',
+	array(
+		'header' => Yii::t('base', 'Actions'),
+		'class' => 'bootstrap.widgets.TbButtonColumn',
+		'template' => '{update}{delete}',
+	),
+);
+$this->renderPartial('//tableList', array(
+	'provider'=>$dataProvider,
+	'columns' =>$columns,
 )); ?>

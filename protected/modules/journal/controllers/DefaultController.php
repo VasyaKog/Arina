@@ -5,8 +5,6 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $model = new JournalViewer();
-
-
       //  $model->setScenario('group');
 
       /*  if (Yii::app()->getRequest()->isAjaxRequest) {
@@ -41,7 +39,23 @@ class DefaultController extends Controller
 
            // Yii::app()->end();
        // }
-
+        if(isset($_POST['JournalViewer']['studyYearId'])&&isset($_POST['JournalViewer']['groupId'])&&isset($_POST['JournalViewer']['subjectId'])){
+            /**
+             * @var $loadmas Load[]
+             * @var $load Load
+             **/
+            $loadMas=Load::model()->findAll();
+            foreach($loadMas as $item){
+                /**
+                 * @var $item Load
+                 */
+                if($item->study_year_id==$_POST['JournalViewer']['studyYearId']&&$item->group_id==$_POST['JournalViewer']['groupId']){
+                    $load=$item; break;
+                }
+            }
+            if(isset($load)) $this->actionView($load->id);
+            return;
+        }
 
         $this->render('index', array(
             'model' => $model,
@@ -52,8 +66,29 @@ class DefaultController extends Controller
 
     }
 
-    public function actionView($id){
+    public function actionChangeGroupList(){
+        $selectedyear=$_POST['JournalViewer']['studyYearId'];
+        var_dump($selectedyear);
+        if($selectedyear==0) {echo CHtml::tag('option',array('value'=>0),Yii::t('journal','Select study year'),true); return;}
+        $data=Group::getGroupsByYearId($selectedyear);
+        foreach($data as $item){
+            echo CHtml::tag('option',array('value'=>$item->id),$item->title,true);
+        }
+    }
 
+   /* public function actionChangeSubjectList(){
+        $selectedyear=$_POST['JournalViewer']['studyYearId'];
+        $selectedgroup=$_POST['JournalViewer']['groupId'];
+        /**
+         * @var $data Load[]
+         **/
+       /* $data=Load::model()->findAllByAttributes(array('group_id'=>$selectedgroup,'study_year_id'=>$selectedyear));
+        $result=array();
+        foreach
+    }*/
+
+    public function actionView($id)
+    {
         $this->render('view', array(
             'id' => $id,
         ));

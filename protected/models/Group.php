@@ -46,7 +46,7 @@ class Group extends ActiveRecord
          * @var $list2 Student[]
          */
         $list2 = array();
-        $list = Student::model()->findAll();
+        $list = Student::model()->findAll(array('order'=>'last_name, first_name, middle_name'));
         foreach ($list as $item) {
             $listgr = $item->getGroupListArray();
             if ($listgr == Yii::t('student', 'This group have not group')) continue;
@@ -77,17 +77,6 @@ class Group extends ActiveRecord
         } else  return 'Fatal - this group have not curator';
     }
 
-
-    public function getStudentsList()
-    {
-        /**
-         * @var $list Student[]
-         * @var $list2 Student[]
-         */
-
-        $list2 = $this->getStudentArray();
-        return 0;
-    }
 
     public static function getNameGroup($id)
     {
@@ -125,6 +114,25 @@ class Group extends ActiveRecord
             }
         }
         return $list;
+    }
+
+    public static function getGroupsByYearId($year_id=null){
+        /**
+         * @var $list Group[]
+         * @var $rezultList Group[]
+         *
+         **/
+        $rezultList=array();
+        $list=Group::model()->findAll();
+        /**
+         * @var $item Group
+         */
+        foreach($list as $item){
+            if($item->getCourse($year_id)>0 && $item->getCourse($year_id)<5){
+                array_push($rezultList,$item);
+            }
+        }
+        return $rezultList;
     }
 
     /**
@@ -273,4 +281,5 @@ class Group extends ActiveRecord
         }
         return $k;
     }
+
 }

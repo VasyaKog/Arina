@@ -20,5 +20,6 @@ $this->menu = array(
         'url' => $this->createUrl('index'),
     ),
 );
+
 ?>
 <?php $this->renderPartial('_subjects', array('model' => $model)); ?>

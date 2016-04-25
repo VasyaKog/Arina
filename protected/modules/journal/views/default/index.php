@@ -12,4 +12,10 @@ $this->breadcrumbs = array(
 
 $this->renderPartial('_form', array('model' => $model));
 
+/*$this->widget('journal.widgets.PageJournal', array(
+    'load_id' => $id,
+));
+*/
 ?>
+
+

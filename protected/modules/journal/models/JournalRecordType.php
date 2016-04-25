@@ -12,7 +12,6 @@
  * @property boolean $date
  * @property boolean $n_pp
  * @property boolean $ticket
- * @property integer $hours
  * @property boolean $reports
  * @property string $title_report
  */
@@ -29,19 +28,21 @@ class JournalRecordType extends CActiveRecord
 	/**
 	 * @return array validation rules for model attributes.
 	 */
+	public static function  getName($int){
+		if($int) return Yii::t('journal','True'); else return Yii::t('journal','False');
+	}
 	public function rules()
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title', 'required'),
-			array('hours','numerical', 'integerOnly' => true),
+			array('title','required'),
 			array('description, homework, present, date, n_pp, ticket,  reports', 'boolean'),
 			array('title', 'length', 'max'=>15),
 			array('title_report', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, homework, present, date, n_pp, ticket, hours, reports, title_report', 'safe', 'on'=>'search'),
+			array('id, title, description, homework, present, date, n_pp, ticket, reports, title_report', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,17 +64,16 @@ class JournalRecordType extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'title' => 'Title',
-			'description' => 'Description',
-			'homework' => 'Homework',
-			'present' => 'Present',
-			'date' => 'Date',
-			'n_pp' => 'N Pp',
-			'ticket' => 'Ticket',
-			'hours' => 'Hours',
-			'reports' => 'Reports',
-			'title_report' => 'Title Report',
+			'id' => Yii::t('journal', 'indetify'),
+			'title' => Yii::t('journal','Title'),
+			'description' => Yii::t('journal','Description present'),
+			'homework' => Yii::t('journal','Homework present'),
+			'present' => Yii::t('journal','not present'),
+			'date' => Yii::t('journal','Date'),
+			'n_pp' => Yii::t('journal','N Pp'),
+			'ticket' => Yii::t('journal','Ticket'),
+			'reports' => Yii::t('journal','Reports'),
+			'title_report' =>Yii::t('journal', 'Title Report'),
 		);
 	}
 
@@ -103,7 +103,6 @@ class JournalRecordType extends CActiveRecord
 		$criteria->compare('date',$this->date);
 		$criteria->compare('n_pp',$this->n_pp);
 		$criteria->compare('ticket',$this->ticket);
-		$criteria->compare('hours',$this->hours);
 		$criteria->compare('reports',$this->reports);
 		$criteria->compare('title_report',$this->title_report,true);
 

@@ -21,7 +21,7 @@ class Graph extends CWidget
     public $workPlanProcessLink = '/studyPlan/work/executeGraph';
 
     protected $list;
-    protected $map;
+    protected $map=array();
     protected $graphProcessLink;
     protected $rows = array();
 

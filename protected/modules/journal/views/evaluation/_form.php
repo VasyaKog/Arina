@@ -16,13 +16,14 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
 	<?php echo $form->errorSummary($model); ?>
 		<?php echo $form->textFieldRow($model,Yii::t('Evaluation','title',array('size'=>11,'maxlength'=>11))); ?>
 		<?php echo $form->dropDownListRow($model,'system_id',EvaluationSystem::getListAll('id', 'title'),array('size'=>0,'maxlength'=>11)); ?>
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php $this->widget(
+			'bootstrap.widgets.TbButton',
+			array('buttonType' => 'submit', 'type' => 'primary', 'label' => $model->isNewRecord ? Yii::t('terms','Create') : Yii::t('terms','Save'))); ?>
+
 	</div>
 
 <?php $this->endWidget(); ?>

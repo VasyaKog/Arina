@@ -28,7 +28,7 @@ class JournalRecordController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','views'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -49,9 +49,9 @@ class JournalRecordController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+	public function actionViews($id)
 	{
-		$this->render('view',array(
+		$this->render('views',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -60,10 +60,10 @@ class JournalRecordController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	public function actionCreate($id)
 	{
 		$model=new JournalRecord;
-
+		$model->load_id=$id;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 

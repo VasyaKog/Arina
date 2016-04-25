@@ -15,7 +15,9 @@
  * @property integer $ticket_numb
  * @property integer $retake_ticket_numb
  * @property string $system_id
- * @property string $student_id
+ * @property integer $student_id
+ *
+ * @property $journal_record JournalRecord
  */
 class Mark extends CActiveRecord
 {
@@ -54,9 +56,31 @@ class Mark extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'system' => array(self::BELONGS_TO,'',''),
+			'journal_record'=>array(self::BELONGS_TO,'JournalRecord','journal_record_id'),
 		);
 	}
 
+
+	public static function getLink($record_id,$student_id) {
+		/**
+		 * $mark Mark
+		 **/
+		$mark=Mark::model()->findByAttributes(array('student_id'=>$student_id,'journal_record_id'=>$record_id));
+		if(!empty($mark)){
+			$string='';
+			if(isset($mark->present)){
+				if($mark->present==1) $string+=Yii::t('journal','NP').'/';
+			}
+			if(isset($mark->value_id)) {
+				$mark_string = $mark->value_id;
+				$string += $mark_string . '/';
+			}
+			return CHtml::link($string,array('/mark/view/'.$mark->id));
+		}
+		else {
+			return false;
+		}
+	}
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */

@@ -207,7 +207,7 @@ class Student extends ActiveRecord implements IDateContainable
     }
 
     public function getLink(){
-        return CHtml::link($this->getShortFullName(),array('../student/view/'.$this->model()->id));
+        return CHtml::link($this->getShortFullName(),array('../student/default/view/'.$this->id));
     }
 
     /**
@@ -221,7 +221,7 @@ class Student extends ActiveRecord implements IDateContainable
             array('code', 'length', 'max' => 12),
             array('last_name, first_name, middle_name', 'length', 'max' => 40),
             array('phone_number, mobile_number', 'length', 'max' => 15),
-            array('mother_name, father_name, identification_code', 'length', 'max' => 60),
+               array('mother_name, father_name, identification_code', 'length', 'max' => 60),
             array('gender', 'length', 'max' => 10),
             array('official_address', 'length', 'max' => 200),
             array('factual_address, entry_exams, misc_data, hobby', 'length', 'max' => 100),

@@ -16,21 +16,21 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
 	<?php echo $form->errorSummary($model); ?>
 		<?php echo $form->textFieldRow($model,'title',array('size'=>15,'maxlength'=>15)); ?>
-		<?php echo $form->checkBoxRow($model,'description'); ?>
-		<?php echo $form->checkBoxRow($model,'homework'); ?>
-		<?php echo $form->checkBoxRow($model,'present'); ?>
-		<?php echo $form->checkBoxRow($model,'date'); ?>
-		<?php echo $form->checkBoxRow($model,'n_pp'); ?>
-		<?php echo $form->checkBoxRow($model,'ticket'); ?>
-		<?php echo $form->textFieldRow($model,'hours'); ?>
-		<?php echo $form->checkBoxRow($model,'reports'); ?>
+		<?php echo $form->toggleButtonRow($model, 'description', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
+	    <?php echo $form->toggleButtonRow($model, 'homework', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
+		<?php echo $form->toggleButtonRow($model, 'present', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
+		<?php echo $form->toggleButtonRow($model, 'date', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
+		<?php echo $form->toggleButtonRow($model, 'n_pp', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
+		<?php echo $form->toggleButtonRow($model, 'ticket', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
+		<?php echo $form->toggleButtonRow($model, 'reports', array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No'),));?>
 		<?php echo $form->textFieldRow($model,'title_report',array('size'=>20,'maxlength'=>20)); ?>
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php $this->widget(
+			'bootstrap.widgets.TbButton',
+			array('buttonType' => 'submit', 'type' => 'primary', 'label' => $model->isNewRecord ? Yii::t('terms','Create') : Yii::t('terms','Save'))); ?>
+	</div>
 	</div>
 
 <?php $this->endWidget(); ?>

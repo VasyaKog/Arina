@@ -3,19 +3,15 @@
 /* @var $model EvaluationSystem */
 
 $this->breadcrumbs=array(
-	'Evaluation Systems'=>array('index'),
-	$model->title=>array('view','id'=>$model->id),
-	'Update',
+	Yii::t('journal','Journal')=>$this->createUrl('/journal'),
+	Yii::t('journal','Evaluation Systems')=>array('index'),
+	$model->title=>$this->createUrl('/journal/EvoluationSystem/'.$model->id),
+	Yii::t('journal','Update'),
 );
 
-$this->menu=array(
-	array('label'=>'List EvaluationSystem', 'url'=>array('index')),
-	array('label'=>'Create EvaluationSystem', 'url'=>array('create')),
-	array('label'=>'View EvaluationSystem', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage EvaluationSystem', 'url'=>array('admin')),
-);
+
 ?>
 
-<h1>Update EvaluationSystem <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('journal','Update EvaluationSystem').': "'.$model->title.'""'; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

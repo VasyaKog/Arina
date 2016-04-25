@@ -258,6 +258,7 @@ class WorkPlan extends ActiveRecord
             }
         }
         $this->graph = $graph;
+        $this->semesters=$origin->semesters;
         foreach ($origin->subjects as $subject) {
             $model = new WorkSubject();
             $model->plan_id = $this->id;
@@ -278,9 +279,9 @@ class WorkPlan extends ActiveRecord
 
     protected function beforeSave()
     {
-        if ($this->getScenario() == 'graph') {
-            if (count($this->semesters) < 8) throw new CException("Немає відповідних груп для плану");
-        }
+//        if ($this->getScenario() == 'graph') {
+//            if (count($this->semesters) < 8) throw new CException("Немає відповідних груп для плану");
+//        }
         return parent::beforeSave();
     }
 

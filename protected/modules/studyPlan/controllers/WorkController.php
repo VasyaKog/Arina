@@ -40,9 +40,9 @@ class WorkController extends Controller
         $model->setScenario('graph');
 
         if (isset($_POST['yt0'])) {
-            if (isset(Yii::app()->session['weeks'])) {
-                $model->semesters = Yii::app()->session['weeks'];
-                unset(Yii::app()->session['weeks']);
+            if (isset(Yii::app()->session['semesters'])) {
+                $model->semesters = Yii::app()->session['semesters'];
+                unset(Yii::app()->session['semesters']);
             }
             if (isset(Yii::app()->session['graph'])) {
                 $model->graph = Yii::app()->session['graph'];
@@ -141,6 +141,7 @@ class WorkController extends Controller
     public function actionExecuteGraph()
     {
         $semesters = array();
+        $semesters1 = array();
         $groups = array();
         if (isset($_POST['graph']) && isset($_POST['groups'])) {
             $groups = $_POST['groups'];
@@ -158,17 +159,32 @@ class WorkController extends Controller
                     }
                     if (($j != 'T') && ($j != 'P') && (!$findFirst)) {
                         $findFirst = true;
-                        $semesters[$i + 1][1] = $counter;
+                        $semesters1[$i + 1][1] = $counter;
                         $counter = 0;
                     } elseif (($j == 'T') && ($findFirst)) {
                         $findSecond = true;
                     } elseif (($j != 'T') && ($j != 'P') && ($findSecond)) {
-                        $semesters[$i + 1][2] = $counter;
+                        $semesters1[$i + 1][2] = $counter;
                         break;
                     }
                 }
             }
+
+         }
+        for($ye=0;$ye<4;$ye++) if(!isset($semesters1[$ye])) {$semesters1[$ye][1]=0;$semesters1[$ye][2]=0;}
+//                  for ($sem = 1; $sem < 3; $sem++) {
+//                      {
+//                          ;
+//                      };
+//                  }
+//              }
+
+        for($ye=0;$ye<4;$ye++){
+            for ($sem = 1; $sem < 3; $sem++){
+                $semesters[$ye][$sem]=$semesters1[$ye][$sem];
+            }
         }
+        var_dump($semesters);
         $weeks = array();
         $last = 0;
         $lastYear = array();
@@ -192,6 +208,8 @@ class WorkController extends Controller
                 }
             }
         }
+        var_dump($semestersForGroups);
+        Yii::app()->session['semesters']=$semesters;
         Yii::app()->session['weeks'] = $weeks;
         Yii::app()->session['graph'] = $_POST['graph'];
         $this->renderPartial('semestersPlan', array('data' => $semestersForGroups, 'errors' => $errors));

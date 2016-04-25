@@ -7,6 +7,8 @@
  * @property integer $id
  * @property string $title
  * @property integer $system_id
+ *
+ * @property EvaluationSystem $evaluation_system
  */
 class Evaluation extends CActiveRecord
 {
@@ -53,8 +55,8 @@ class Evaluation extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Title',
-			'system_id' => 'System',
+			'title' => Yii::t('journal','Title'),
+			'system_id' => Yii::t('journal','Evaluation System'),
 		);
 	}
 

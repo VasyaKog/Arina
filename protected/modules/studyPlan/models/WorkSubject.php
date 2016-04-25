@@ -28,8 +28,7 @@
  * @property WorkPlan $plan
  * @property Subject $subject
  * @property CyclicCommission $cycleCommission
- */
-class WorkSubject extends ActiveRecord
+ */class WorkSubject extends ActiveRecord
 {
     const CONTROL_TEST = 0;
     const CONTROL_EXAM = 1;
