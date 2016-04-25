@@ -9,5 +9,5 @@ $menu = array(
     array('label' => Yii::t('base', 'Load'), 'url' => array('/load')),
     array('label' => Yii::t('base', 'Students'), 'url' => array('/student')),
     array('label' => Yii::t('base', 'Journal'), 'url' => array('/journal')),
-    array('label' => Yii::t('base', 'File Shares'), 'url' => array('/fileShare')),
+   // array('label' => Yii::t('base', 'File Shares'), 'url' => array('/fileShare')),
 );

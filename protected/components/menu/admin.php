@@ -34,4 +34,5 @@ $menu = array(
         array('label' => Yii::t('base', 'Schedule'), 'url' => array('/schedule')),
         array('label' => Yii::t('student', 'Create document'), 'url' => array('/site/schedule')),
     )),
+    array('label' => Yii::t('user', 'Користувачі'), 'url' => array('/user'))
 );

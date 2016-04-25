@@ -4,7 +4,7 @@
         private $db;
         public function openConnect(){
             $userName = "root";
-            $password = "1234";
+            $password = "1";
             $dbName = "khpk";
             $this->db = new Connect($userName, $password, $dbName);
         }

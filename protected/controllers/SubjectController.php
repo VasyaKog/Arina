@@ -13,7 +13,8 @@ class SubjectController extends Controller
      */
     public function actionCreate()
     {
-        if (!Yii::app()->user->checkAccess('manageSubject')) {
+        if (!Yii::app()->user->checkAccess('manageSubject')) 
+        {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
         $model = new Subject;

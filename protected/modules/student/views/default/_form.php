@@ -67,7 +67,7 @@
 
         <?php echo $form->checkBoxRow($model, 'contract'); ?>
 
-        <?php echo $form->textFieldRow($model, 'form_of_study_notes', array('size' => 50, 'maxlength' => 50)); ?>
+        <?php //echo $form->textFieldRow($model, 'form_of_study_notes', array('size' => 50, 'maxlength' => 50)); ?>
 
         <?php echo $form->textFieldRow($model, 'math_mark'); ?>
 

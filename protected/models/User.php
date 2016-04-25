@@ -28,6 +28,8 @@ class User extends ActiveRecord
     const TYPE_SUPER = 0;
     const TYPE_TEACHER = 1;
     const TYPE_STUDENT = 2;
+    const TYPE_INSPECTOR = 3;
+    const TYPE_TRAININGOF = 4;
 
     /**
      * @return string the associated database table name

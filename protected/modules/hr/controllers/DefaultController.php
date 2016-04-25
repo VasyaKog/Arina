@@ -4,6 +4,10 @@ class DefaultController extends Controller
 {
     public function actionView($id)
     {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $this->render('view', array(
             'model' => Employee::model()->loadContent($id),
         ));
@@ -19,6 +23,7 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
+
         $model = new Employee('search');
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Employee'])) {
@@ -36,6 +41,10 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new Employee();
 
         $this->ajaxValidation('employee-form', $model);
@@ -43,6 +52,11 @@ class DefaultController extends Controller
         if (isset($_POST['Employee'])) {
             $model->setAttributes($_POST['Employee']);
             $model->short_name = $model->getShortName();
+             if(!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('inspector')
+            )
+            {
+                throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+            }
             if ($model->save()) {
                 $this->redirect(array('index'));//, 'id' => $model->id));
             }
@@ -58,12 +72,20 @@ class DefaultController extends Controller
         /**
          * @var $model Student
          */
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = Employee::model()->loadContent($id);
 
         $this->ajaxValidation('student-form', $model);
 
         if (isset($_POST['Employee'])) {
             $model->attributes = $_POST['Employee'];
+            if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
@@ -76,7 +98,15 @@ class DefaultController extends Controller
 
     public function actionDelete($id)
     {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = Employee::model()->loadContent($id);
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model->delete();
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))

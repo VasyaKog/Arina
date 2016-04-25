@@ -19,7 +19,7 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('dephead'))
+        if(!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -29,13 +29,17 @@ class DefaultController extends Controller
 
         if (isset($_POST['Student'])) {
             $model->attributes = $_POST['Student'];
-
-            if(!Yii::app()->user->checkAccess('manageStudent',
+            var_dump($model->attributes);
+            if(!Yii::app()->user->checkAccess('manageGroup',
                 array(
                     'id' => $model->group->speciality->department->head_id,
                     'type' => User::TYPE_TEACHER,
-                )
-            ))
+                ))
+                &&
+                !Yii::app()->user->checkAccess('admin')
+                &&
+                !Yii::app()->user->checkAccess('inspector',array('type' => User::TYPE_INSPECTOR))
+            )
             {
                 throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
             }
@@ -60,27 +64,18 @@ class DefaultController extends Controller
          * @var $model Student
          */
         $model = Student::model()->loadContent($id);
-        if (
-            !Yii::app()->user->checkAccess('manageStudent',
-                array(
-                    'id' => $model->group->curator_id,
-                    'type' => User::TYPE_TEACHER,
-                )
-            )
-            &&
-            !Yii::app()->user->checkAccess('manageStudent',
-                array(
-                    'id' => $model->group->monitor_id,
-                    'type' => User::TYPE_STUDENT,
-                )
-            )
-            &&
-            !Yii::app()->user->checkAccess('manageStudent',
+        if (        
+            !Yii::app()->user->checkAccess('manageGroup',
                 array(
                     'id' => $model->group->speciality->department->head_id,
                     'type' => User::TYPE_TEACHER,
                 )
-            )
+            )&&
+                !Yii::app()->user->checkAccess('admin')
+                &&
+                !Yii::app()->user->checkAccess('inspector')
+                &&
+                !Yii::app()->user->checkAccess('dephead')
         )
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
@@ -109,19 +104,22 @@ class DefaultController extends Controller
     public function actionDelete($id)
     {
         $model = Student::model()->loadContent($id);
-        if(!Yii::app()->user->checkAccess('manageStudent',
+        if(!Yii::app()->user->checkAccess('manageGroup',
             array(
                 'id' => $model->group->speciality->department->head_id,
                 'type' => User::TYPE_TEACHER,
             )
-        ))
+        )&&!Yii::app()->user->checkAccess('admin')
+            &&!Yii::app()->user->checkAccess('inspector'))
+
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
         $model->delete();
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        /*if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));*/
+            $this->redirect(array('index'));
     }
 
     /**

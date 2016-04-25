@@ -10,7 +10,7 @@ class AudienceController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('createAudience'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -36,7 +36,7 @@ class AudienceController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(!Yii::app()->user->checkAccess('updateAudience'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -61,7 +61,7 @@ class AudienceController extends Controller
      */
     public function actionDelete($id)
     {
-        if(!Yii::app()->user->checkAccess('deleteAudience'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

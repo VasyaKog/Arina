@@ -21,7 +21,7 @@ class SpecialityController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('manageSpeciality'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -44,14 +44,10 @@ class SpecialityController extends Controller
      */
     public function actionUpdate($id)
     {
+        
         $model = Speciality::model()->loadContent($id);
 
-        if(!Yii::app()->user->checkAccess('manageSpeciality',
-            array(
-                'id' => $model->department->head_id,
-                'type' => User::TYPE_TEACHER,
-            )
-        ))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -73,13 +69,9 @@ class SpecialityController extends Controller
      */
     public function actionDelete($id)
     {
+        
         $model = Speciality::model()->loadContent($id);
-        if(!Yii::app()->user->checkAccess('manageSpeciality',
-            array(
-                'id' => $model->department->head_id,
-                'type' => User::TYPE_TEACHER,
-            )
-        ))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
