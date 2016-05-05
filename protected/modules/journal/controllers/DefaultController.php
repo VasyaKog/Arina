@@ -55,7 +55,9 @@ class DefaultController extends Controller
                 }
             }
             if(!is_null($load)){
-                $this->actionViews($load->id);
+
+               // $this->actionViews($load->id);
+                $this->redirect('/journal/default/views/'.$load->id);
             }
             return;
         }

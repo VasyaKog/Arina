@@ -30,7 +30,7 @@ class JournalRecord extends CActiveRecord
 	}
 
 	public function getName(){
-		if($this->types->date) return $this->date; else return $this->types->title;
+		if($this->types->date==1) return $this->date; else return $this->types->title;
    	}
 
 	public function getLink()
@@ -46,7 +46,7 @@ class JournalRecord extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'required'),
+			//array('type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'required'),
 			array('type_id, load_id, numer_in_day', 'numerical', 'integerOnly'=>true),
 			array('description, home_work', 'length', 'max'=>255),
 			array('teacher_id, n_pp', 'length', 'max'=>10),

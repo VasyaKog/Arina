@@ -60,6 +60,15 @@ class Evaluation extends CActiveRecord
 		);
 	}
 
+	public static function getTitle($id)
+	{
+		/**
+		 * @var $mark Evaluation
+		 */
+		$mark=Evaluation::model()->findByPk($id);
+		return $mark->title;
+	}
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *

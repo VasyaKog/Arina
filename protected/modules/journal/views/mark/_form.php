@@ -21,8 +21,8 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php if(!$type->present)
-			if(!isset($model->present)) echo $form->toggleButtonRow($model,'present',array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No')));else
+		<?php if($type->present)
+			 echo $form->toggleButtonRow($model,'present',array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No')));else
 		?>
 	</div>
 

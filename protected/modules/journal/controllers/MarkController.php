@@ -31,8 +31,10 @@ class MarkController extends Controller
         $type=$model->journal_record->types;
         if(isset($_POST['Mark'])){
             $model->attributes=$_POST['Mark'];
-            if(isset($model->value_id)) $model->date=date('Y-m-d');
-            if(isset($model->retake_value_id)) $model->retake_date=date('Y-m-d');
+            if(isset($model->value_id))
+                $model->date=date('Y-m-d');
+            if(isset($model->retake_value_id))
+                $model->retake_date=date('Y-m-d');
             if($model->save()) {
                 /**
                  * $journal_record JournalRecord
