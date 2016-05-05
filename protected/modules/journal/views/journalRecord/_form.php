@@ -6,7 +6,7 @@
 
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget(BoosterHelper::FORM, array(
 	'id'=>'journal-record-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
@@ -20,39 +20,21 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'type_id'); ?>
-		<?php echo $form->textField($model,'type_id'); ?>
-		<?php echo $form->error($model,'type_id'); ?>
+		<?php echo $form->dropDownListRow(
+			$model,
+			'type_id',
+			JournalRecordType::getListAll('id','title'),
+			array(
+				'empty'=>Yii::t('journal','Select')
+			)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'date'); ?>
-		<?php echo $form->textField($model,'date'); ?>
-		<?php echo $form->error($model,'date'); ?>
+		<?php echo $form->textFieldRow($model,'description',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'description'); ?>
-		<?php echo $form->textField($model,'description',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'description'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'home_work'); ?>
-		<?php echo $form->textField($model,'home_work',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'home_work'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'load_id'); ?>
-		<?php echo $form->textField($model,'load_id'); ?>
-		<?php echo $form->error($model,'load_id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'teacher_id'); ?>
-		<?php echo $form->textField($model,'teacher_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'teacher_id'); ?>
+		<?php echo $form->textFieldRow($model,'home_work',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
@@ -62,9 +44,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'numer_in_day'); ?>
-		<?php echo $form->textField($model,'numer_in_day'); ?>
-		<?php echo $form->error($model,'numer_in_day'); ?>
+		<?php echo $form->dropDownListRow($model,'numer_in_day',array(1,2,3,4),array(
+			'empty'=>Yii::t('journal','Select'),
+		)); ?>
 	</div>
 
 	<div class="row buttons">

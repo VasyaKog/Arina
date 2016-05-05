@@ -13,6 +13,7 @@ class JournalModule extends CWebModule
             'journal.models.*',
             'journal.components.*',
             'load.models.*',
+            'studyPlan.models.*'
         ));
     }
 

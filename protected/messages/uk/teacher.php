@@ -5,6 +5,7 @@
  */
 return array(
     'Teachers' => 'Викладачі',
+    'Teacher' => 'Викладач',
     'Last Name' => 'Прізвище',
     'First Name' => 'Ім’я',
     'Middle Name' => 'По батькові',

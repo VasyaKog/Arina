@@ -9,6 +9,17 @@
 class MarkController extends Controller
 {
 
+    public function actionChangeMarkList(){
+        /**
+         * @var Evaluation[] $Evaluations
+         */
+        $Evaluations=Evaluation::model()->findAllByAttributes(array('system_id'=>$_POST['Mark']['system_id']));
+        echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select evolution'), true);
+        foreach($Evaluations as $Evaluation){
+            echo CHtml::tag('option', array('value' => $Evaluation->id), $Evaluation->title, true);
+        }
+    }
+
     public function actionCreate($student_id,$journal_record_id){
         /**
          * $model Mark
@@ -16,20 +27,23 @@ class MarkController extends Controller
         $model = new Mark();
         $model->student_id=$student_id;
         $model->journal_record_id=$journal_record_id;
+        $journal_record = $model->journal_record;
+        $type=$model->journal_record->types;
         if(isset($_POST['Mark'])){
             $model->attributes=$_POST['Mark'];
+            if(isset($model->value_id)) $model->date=date('Y-m-d');
+            if(isset($model->retake_value_id)) $model->retake_date=date('Y-m-d');
             if($model->save()) {
                 /**
                  * $journal_record JournalRecord
                  */
-                $journal_record = $model->journal_record;
-                var_dump($journal_record);
-                $this->redirect('../default/view/'.$journal_record->load_id);
+               // $this->redirect('../default/view/'.$journal_record->load_id);
             }
         }
         $this->render('create',
             array(
                 'model'=>$model,
+                'type'=>$type,
             ));
     }
 }

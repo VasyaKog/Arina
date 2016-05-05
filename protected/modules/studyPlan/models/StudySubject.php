@@ -159,6 +159,18 @@ class StudySubject extends ActiveRecord
         return $this->total - $this->getClasses();
     }
 
+
+    /**
+     * @return string
+     */
+    public static function getNameSubject($wp_wubject_id){
+        /**
+         * @var StudySubject;
+         **/
+        $dat=StudySubject::model()->findByAttributes();
+    }
+
+
     /**
      * @return int
      */

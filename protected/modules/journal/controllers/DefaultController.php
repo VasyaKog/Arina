@@ -44,16 +44,19 @@ class DefaultController extends Controller
              * @var $loadmas Load[]
              * @var $load Load
              **/
+            $load=null;
             $loadMas=Load::model()->findAll();
             foreach($loadMas as $item){
                 /**
                  * @var $item Load
                  */
-                if($item->study_year_id==$_POST['JournalViewer']['studyYearId']&&$item->group_id==$_POST['JournalViewer']['groupId']){
+                if($item->study_year_id==$_POST['JournalViewer']['studyYearId']&&$item->group_id==$_POST['JournalViewer']['groupId']&&$_POST['JournalViewer']['subjectId']){
                     $load=$item; break;
                 }
             }
-            if(isset($load)) $this->actionView($load->id);
+            if(!is_null($load)){
+                $this->actionViews($load->id);
+            }
             return;
         }
 
@@ -66,28 +69,50 @@ class DefaultController extends Controller
 
     }
 
-    public function actionChangeGroupList(){
-        $selectedyear=$_POST['JournalViewer']['studyYearId'];
+    public function actionChangeGroupList()
+    {
+        $selectedyear = $_POST['JournalViewer']['studyYearId'];
         var_dump($selectedyear);
-        if($selectedyear==0) {echo CHtml::tag('option',array('value'=>0),Yii::t('journal','Select study year'),true); return;}
-        $data=Group::getGroupsByYearId($selectedyear);
-        foreach($data as $item){
-            echo CHtml::tag('option',array('value'=>$item->id),$item->title,true);
+        if ($selectedyear == 0) {
+            echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select study year'), true);
+            return;
+        }
+        $data = Group::getGroupsByYearId($selectedyear);
+        echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select group'), true);
+        foreach ($data as $item) {
+            echo CHtml::tag('option', array('value' => $item->id), $item->title, true);
         }
     }
 
-   /* public function actionChangeSubjectList(){
+
+    public function actionChangeSubjectList(){
+
         $selectedyear=$_POST['JournalViewer']['studyYearId'];
         $selectedgroup=$_POST['JournalViewer']['groupId'];
-        /**
-         * @var $data Load[]
-         **/
-       /* $data=Load::model()->findAllByAttributes(array('group_id'=>$selectedgroup,'study_year_id'=>$selectedyear));
-        $result=array();
-        foreach
-    }*/
 
-    public function actionView($id)
+      /**
+         * @var $dat Load[]
+        **/
+        $dat=array();
+        $dat=Load::model()->findAll();
+        /**
+         * @var $ws WorkSubject[]
+         **/
+        var_dump($dat);
+
+        if ($_POST['JournalViewer']['groupId'] == 0) {
+            echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select group'), true);
+            return;
+        };
+        echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select subject'), true);
+       foreach ($dat as $item){
+           if($item->group_id==$selectedgroup&&$item->study_year_id==$selectedyear){
+                echo CHtml::tag('option', array('value' => $item->id), WorkSubject::getNameSubject($item->wp_subject_id), true);
+                }
+            }
+        }
+
+    public function actionViews($id)
     {
         $this->render('view', array(
             'id' => $id,

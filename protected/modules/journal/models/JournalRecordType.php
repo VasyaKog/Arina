@@ -15,7 +15,7 @@
  * @property boolean $reports
  * @property string $title_report
  */
-class JournalRecordType extends CActiveRecord
+class JournalRecordType extends ActiveRecord
 {
 	/**
 	 * @return string the associated database table name

@@ -64,6 +64,7 @@ class JournalRecordController extends Controller
 	{
 		$model=new JournalRecord;
 		$model->load_id=$id;
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 

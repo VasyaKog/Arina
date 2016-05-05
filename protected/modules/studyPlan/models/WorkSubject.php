@@ -210,4 +210,17 @@
         return CHtml::listData($subjects, 'id', 'subject.title');
     }
 
+    public static function getNameSubject($id)
+    {
+        /**
+         * @var $item WorkSubject
+         **/
+        $item=WorkSubject::model()->findByPk($id);
+        /**
+         * @var $item1 Subject
+         **/
+        $item1=Subject::model()->findByPk($item->subject_id);
+        return $item1->title;
+    }
+
 } 

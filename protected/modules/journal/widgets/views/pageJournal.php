@@ -13,6 +13,8 @@
  * @var array $map
  * @var boolean $t
  * @var int $load_id
+ * @var string $subject
+ * @var string $teacherName
  */
 if($t) $k =0; else $k=1;
 ?>
@@ -30,7 +32,11 @@ if($t) $k =0; else $k=1;
     .journal  {
         width: auto;
     }
+    #back{
+        background-color: gainsboro;
+    }
 </style>
+<h3><?php echo Yii::t('subject','Subject').': '.$subject.'  '.Yii::t('teacher','Teacher').': '.$teacherName;?></h3>
 <table class="journal graph table items table-striped table-condensed table-bordered table-hover">
     <tr>
         <td rowspan="2"><?echo Yii::t('terms','N p/p');?></td>
@@ -59,9 +65,15 @@ if($t) $k =0; else $k=1;
         <td class="name">
             <?echo $row?>
         </td>
-    <? for($j=0;$j<$krecords;$j++) {?>
+    <? for($j=0;$j<$krecords;$j++) {
+        if($map[$i][$j]=='Відраховано')
+        {
+            echo '<td class="oc" id="back" align="center">';
+        }else{?>
         <td class="oc" align="center">
+
             <?echo $map[$i][$j]?>
+        <?}?>
         </td>
 
     <?

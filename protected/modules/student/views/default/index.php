@@ -72,7 +72,10 @@ $this->widget(BoosterHelper::GRID_VIEW, array(
                     array('empty' => '')),
             */
        ),
-
+//        array(
+//            'header'=>'Lists',
+//            'value'=>'$data->getListArray()'
+//        ),
         array(
             'header' => Yii::t('base', 'Actions'),
             'htmlOptions' => array('nowrap' => 'nowrap'),

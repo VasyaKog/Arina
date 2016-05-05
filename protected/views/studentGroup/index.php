@@ -59,7 +59,7 @@ $columns= array(
 
 );
 
-$this->renderPartial('//tableList',
+$this->renderPartial('/tableList',
 	array(
 		'provider' => $dataProvider,
 		'columns' => $columns,

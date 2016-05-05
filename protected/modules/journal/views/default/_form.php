@@ -22,7 +22,7 @@
         'groupId',
         array(),
         array(
-            'empty'=>'Select study year',
+            'empty'=>Yii::t('journal','Select Study Year'),
             'ajax'=> array(
                 'type'=>'POST',
                 'url'=>$this->createUrl('default/changeSubjectList'),
@@ -30,7 +30,11 @@
     ))
     );
     echo $form->dropDownListRow($model, 'subjectId', array(), array('empty' => 'Select group'));
+    ?>
+    <div class="row"><?
     echo CHtml::ajaxSubmitButton(Yii::t('base', 'Open'), array('index'), array('success' => 'myfunc'));
+        ?>
+        </div><?
     $this->endWidget();
     ?>
 <!--    --><?php //if (!$model->isEmpty): ?>

@@ -11,27 +11,41 @@ class PageJournal extends CWidget
     public $readOnly = true;
     public $date = null;
     public $load_id;
-    /*
-     * @var $load Load;
+    /**
+     * @property $load Load;
      */
     public $load;
     public $list=array();
-    /*
+    /**
      * @var $students Student[]
      */
     public $students;
     public $rows=array();
-    /*
+    /**
      * @var $records JournalRecord[]
      */
-    public $records=array();    
+    public $records=array();
     public $map;
-    public $t=false;
+    /**
+     * @var $teacher Teacher
+     */
+    public $teacher;
+    public $teacherName;
+
+    public $t=true;
 
     public function init(){
         $this->load=Load::model()->findByPk($this->load_id);
         $group =Group::model()->findByPk($this->load->group_id);
-        $this->students=$group->getStudentArray();
+        $this->students=JournalStudents::getAllStudentsInList($this->load);
+        $this->teacher=Teacher::model()->findByPk($this->load->teacher_id);
+        if(!isset($this->teacher)) {
+            $this->teacherName=Yii::t('base','Not selected');
+        }
+        else
+        {
+            $this->teacherName=$this->teacher->getNameWithInitials();
+        }
         /*
              * @var $item Student
         */
@@ -57,6 +71,8 @@ class PageJournal extends CWidget
             foreach ($this->records as $study) {
                 if (Mark::model()->getLink($study->id, $student->id)) {
                     array_push($this->map[$i], Mark::model()->getLink($study->id, $student->id));
+                } elseif(!in_array($this->load_id,$student->getListArray($study->date))){
+                    array_push($this->map[$i], 'Відраховано');
                 } elseif ($this->t) {
                     array_push($this->map[$i], CHtml::link(Yii::t('journal','Create'),array("/journal/mark/create/","student_id"=>$student->id,"journal_record_id"=>$study->id)));
                 } else {
@@ -70,6 +86,8 @@ class PageJournal extends CWidget
 
     public function run(){
         $this->render('pageJournal', array(
+            'teacherName'=>$this->teacherName,
+            'subject'=>WorkSubject::getNameSubject($this->load->wp_subject_id),
             'map'=> $this->map,
             'list'=>$this->list,
             'rows'=>$this->rows,

@@ -81,6 +81,39 @@ class Student extends ActiveRecord implements IDateContainable
     /*
      * $date - is date
      */
+
+    public function getListArray($date=null){
+        /**
+         * @var JournalStudents[] $records
+         */
+        /**
+         * @var Student[] $students;
+         */
+        if($date == null){$date=date('Y-m-d');}
+        $records=JournalStudents::model()->findAllByAttributes(array('student_id'=>$this->id));
+        $listLists=array();
+        $k=0;
+        foreach($records as $item){
+            if($item->type==1){
+                if($date<$item->date) continue;
+                $k=0;
+                if(in_array($item->id,$listLists)) continue;
+                foreach($records as $item2){
+                    if($item2->date>$date) continue;
+                    if($item->load_id==$item2->load_id){
+                        if($item != $item2 && $item2->type==0){
+                            $k++;
+                        }
+                    }
+                }
+                if($k%2==0){
+                    array_push($listLists,$item->load_id);
+                }
+            }
+		}
+        return $listLists;
+    }
+
     public function getGroupListArray($date = null) {
         /**
          * @var $listRecord StudentGroup[]
@@ -95,7 +128,7 @@ class Student extends ActiveRecord implements IDateContainable
             if($item->type==1) {
                 if($date<$item->date) continue;
                 $k=0;
-                if(in_array($item->id,$listGroup)) continue;
+                if(in_array($item->group_id,$listGroup)) continue;
                 foreach($listRecord as $item2){
                     if ($item2->date>$date) continue;
                 if($item->group_id==$item2->group_id) {
@@ -247,6 +280,7 @@ class Student extends ActiveRecord implements IDateContainable
             'student_has_exemption' => array(self::HAS_MANY, 'StudentExemption', 'student_id'),
             'exemptions' => array(self::MANY_MANY, 'Exemption', 'student_has_exemption(student_id, exemption_id)'),
             'student_group' => array(self::HAS_MANY,'StudentGroup','student_id'),
+            'srudent_journal'=>array(self::HAS_MANY,'JournalStudents','student_id'),
         );
     }
 

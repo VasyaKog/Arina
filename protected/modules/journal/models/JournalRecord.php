@@ -16,7 +16,7 @@
  *
  * @property Mark[] $marks
  * @property Teacher $teacher
- * @property $types Type
+ * @property $types JournalRecordType
  * @property $load Load
  */
 class JournalRecord extends CActiveRecord

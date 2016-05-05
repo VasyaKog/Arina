@@ -68,6 +68,11 @@ class Load extends ActiveRecord
         return 'load';
     }
 
+    public function getSubjectName(){
+        return $this->planSubject->id;
+    }
+
+
     /**
      * @return array validation rules for model attributes.
      */
