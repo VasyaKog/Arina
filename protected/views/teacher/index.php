@@ -47,6 +47,11 @@ $columns = array(
         'filter' => CHtml::listData(CyclicCommission::model()->findAll(), 'id', 'title')
     ),
     array(
+        'type' => 'raw',
+        'header' => Yii::t('group','Groups'),
+        'value' => '$data->getGroupListLinks()',
+    ),
+    array(
         'header' => Yii::t('base', 'Actions'),
         'htmlOptions' => array('nowrap' => 'nowrap'),
         'class' => 'bootstrap.widgets.TbButtonColumn',

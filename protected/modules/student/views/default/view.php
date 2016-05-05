@@ -52,9 +52,14 @@ $this->widget(
     'data' => $model,
     'attributes' => array(
         array(
+            'name' => 'group',
             'type' => 'raw',
-            'name' => 'group_id',
-            'value' => CHtml::link($model->group->title, array('/group/view', 'id' => $model->group_id)),
+            'value' => $model->getGroupListLinks(),
+        ),
+        array(
+            'name' => 'group_history',
+            'type' => 'raw',
+            'value' => $model->getGroupHistory(),
         ),
         'code',
         'exemptionNames',

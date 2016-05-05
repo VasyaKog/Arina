@@ -26,4 +26,12 @@ return array(
     'Date of update' => 'Дата оновлення',
     'DPA' => 'ДПА',
     'Select gender' => 'Оберіть стать',
+    'Save' => 'Зберегти',
+    'Create' => 'Створити',
+    'exclude'=>'Виключити',
+    'included'=>'Додати',
+    'Select type' =>'Оберіть тип',
+    'Execute' =>'Виконати',
+    'Surname and initials' => 'Прізвище та ініціали'
 );
+

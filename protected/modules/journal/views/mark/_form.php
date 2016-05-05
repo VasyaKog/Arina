@@ -1,0 +1,95 @@
+<?php
+/* @var $this MarkController */
+/* @var $model Mark */
+/* @var $type JournalRecordType*/
+/* @var $form CActiveForm */
+?>
+
+<div class="form">
+
+<?php $form=$this->beginWidget(BoosterHelper::FORM, array(
+	'id'=>'mark-_form-form',
+	// Please note: When you enable ajax validation, make sure the corresponding
+	// controller action is handling ajax validation correctly.
+	// See class documentation of CActiveForm for details on this,
+	// you need to use the performAjaxValidation()-method described there.
+	'enableAjaxValidation'=>false,
+)); ?>
+
+	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
+	<?php echo $form->errorSummary($model); ?>
+
+	<div class="row">
+		<?php if(!$type->present)
+			if(!isset($model->present)) echo $form->toggleButtonRow($model,'present',array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No')));else
+		?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->dropDownListRow(
+			$model,
+			'system_id',
+			EvaluationSystem::getListAll('id','title'),
+			array(
+				'empty'=>Yii::t('journal','Select EvaluationSystem'),
+				'ajax'=>array(
+					'type'=>'POST',
+					'url'=>$this->createUrl('changeMarkList'),
+					'update'=> '#Mark_value_id',
+			),
+		)
+		); ?>
+	</div>
+
+	<div class="row">
+		<?php if($type->ticket) echo $form->textFieldRow($model,'ticket_numb'); ?>
+	</div>
+
+	<div class="row">
+		<?php if($type->ticket) echo $form->textFieldRow($model,'retake_ticket_numb'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->dropDownListRow(
+			$model,
+			'value_id',
+			array(),
+				array(
+					'empty'=>Yii::t('journal','Select EvaluationSystem'),
+					'ajax'=>array(
+						'type'=>'POST',
+						'url'=>$this->createUrl('changeMarkList'),
+						'update'=> '#Mark_retake_value_id',
+					),
+
+			)
+		); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->dropDownListRow($model,'retake_value_id',array()); ?>
+	</div>
+
+
+<!--
+	<div class="row">
+		<?php /*echo $form->labelEx($model,'date'); */?>
+		<?php /*echo $form->textField($model,'date'); */?>
+		<?php /*echo $form->error($model,'date'); */?>
+	</div>
+
+	<div class="row">
+		<?php /*echo $form->labelEx($model,'retake_date'); */?>
+		<?php /*echo $form->textField($model,'retake_date'); */?>
+		<?php /*echo $form->error($model,'retake_date'); */?>
+	</div>-->
+
+
+	<div class="row buttons">
+		<?php echo CHtml::submitButton('Submit'); ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->

@@ -133,7 +133,7 @@ class Speciality extends ActiveRecord implements IDateContainable
      * Typical usecase:
      * - Initialize the model fields with values from filter form.
      * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
+     * mo   dels according to data in model fields.
      * - Pass data provider to CGridView, CListView or any similar widget.
      *
      * @return CActiveDataProvider the data provider that can return the models

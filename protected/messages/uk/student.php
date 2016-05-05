@@ -4,6 +4,7 @@
  * Localization file uk/student
  */
 return array(
+    'Student'=>'Студент',
     'Get "fast" list' => 'Отримати "Швидкий" список',
     'Create document' => 'Створити документ',
     'Students of group' => 'Студенти групи',

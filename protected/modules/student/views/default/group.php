@@ -28,7 +28,7 @@ $this->widget(
             array(
                 'type' => BoosterHelper::TYPE_PRIMARY,
                 'label' => Yii::t('student', 'Генерувати документ'),
-                'url' => $this->createUrl('/group/simpleList', array('id' => $id)),
+               'url' => $this->createUrl('/group/simpleList', array('id' => $id)),
             ),
         ),
     )
@@ -39,16 +39,18 @@ $columns = array(
     'last_name',
     'first_name',
     'middle_name',
-    array(
+   array(
         'header' => 'Форма оплати',
         'value' => '$data->contract?"к":""',
-    ),
+    )
+   ,
     array(
         'header' => Yii::t('base', 'Actions'),
         'htmlOptions' => array('nowrap' => 'nowrap'),
         'class' => 'bootstrap.widgets.TbButtonColumn',
         'template' => '{update}{view}',
     ),
+
 );
 ?>
 <?php $this->renderPartial('//tableList', array('provider' => $provider, 'columns' => $columns));

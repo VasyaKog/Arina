@@ -40,6 +40,7 @@ return CMap::mergeArray(
             'settings',
             'curator',
             'import',
+            'journal',
             'load',
             'fileShare',
             'gii' => array(
