@@ -29,12 +29,18 @@
                 'update'=> '#JournalViewer_subjectId',
     ))
     );
-    echo $form->dropDownListRow($model, 'subjectId', array(), array('empty' => 'Select group'));
+    echo $form->dropDownListRow($model, 'subjectId', array(), array('empty' => Yii::t('journal','Select group')));
     ?>
-    <div class="row"><?
-    echo CHtml::ajaxSubmitButton(Yii::t('base', 'Open'), array('index'), array('success' => 'myfunc'));
-        ?>
-        </div><?
+    <div class="row buttons">
+        <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'buttonType' => 'submit',
+                'type' => 'primary',
+                'label' => Yii::t('terms','Open'),
+                )); ?>
+
+    </div><?
     $this->endWidget();
     ?>
 <!--    --><?php //if (!$model->isEmpty): ?>

@@ -40,5 +40,8 @@ $menu = array(
     array('label' => Yii::t('base', 'Settings'), 'items' => array(
         array('label' => Yii::t('base', 'Main Settings'), 'url' => array('/settings')),
         array('label' => Yii::t('base', 'Settings benefits'),'url' =>array('/benefits')),
+        array('label'=> Yii::t('journal','Journal Record Types'),'url'=>array('/journal/journalRecordType')),
+        array('label'=> Yii::t('journal','Evaluation Systems'),'url'=>array('/journal/EvaluationSystem')),
+        array('label'=> Yii::t('journal','Evaluations'),'url'=>array('/journal/Evaluation')),
     )),
 );

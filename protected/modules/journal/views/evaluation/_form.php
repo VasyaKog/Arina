@@ -22,7 +22,10 @@
 	<div class="row buttons">
 		<?php $this->widget(
 			'bootstrap.widgets.TbButton',
-			array('buttonType' => 'submit', 'type' => 'primary', 'label' => $model->isNewRecord ? Yii::t('terms','Create') : Yii::t('terms','Save'))); ?>
+			array(
+				'buttonType' => 'submit', 
+				'type' => 'primary', 
+				'label' => $model->isNewRecord ? Yii::t('terms','Create') : Yii::t('terms','Save'))); ?>
 
 	</div>
 

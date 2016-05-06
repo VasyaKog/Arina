@@ -69,19 +69,18 @@ class Mark extends CActiveRecord
 		$mark=Mark::model()->findByAttributes(array('student_id'=>$student_id,'journal_record_id'=>$record_id));
 		if(!empty($mark)){
 			$string='';
-			if($mark->present==1) $string=$string.Yii::t('journal','NP').',';
+			if($mark->present==1) $string=$string.Yii::t('journal','NP').'/';
 			if(isset($mark->value_id)) {
 				if($mark->value_id!=0){
 				$mark_string = Evaluation::getTitle($mark->value_id);
-				$string=$string.$mark_string.',';}
+				$string=$string.$mark_string.'/';}
 			}
 			if(isset($mark->retake_value_id)){
 				if($mark->retake_value_id!=0) {
 					$mark_string = Evaluation::getTitle($mark->retake_value_id);
-					$string=$string.$mark_string . ',';
+					$string=$string.$mark_string . '/';
 				}
 			};
-			var_dump($string);
 			$string=substr($string,0,-1);
 			return CHtml::link($string,array('/mark/view/'.$mark->id));
 		}

@@ -31,5 +31,12 @@ return array(
     'Update EvaluationSystem'=> 'Редагування системи оцінювання',
     'Evaluations'=>'Оцінки',
     'Create Evaluation'=>'Створити Оцінку',
-    'Update Evaluation'=>'Редагування оцінки'
+    'Update Evaluation'=>'Редагування оцінки',
+    'Select Study Year'=>'Оберіть навчальний рік',
+    'Select group'=>'Оберіть групу',
+    'Select subject'=>'Оберіть предмет',
+    'NP'=>'Нб',
+    'JournalStudents'=>'Спиcок',
+    'Journal Students'=>'Список',
+    
 );

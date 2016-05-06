@@ -11,9 +11,8 @@ class JournalViewer extends CFormModel
     public function rules()
     {
         return array(
-            array('subjectId', 'required'),
+            array('subjectId studyYearId', 'required'),
             array('groupId', 'required', 'on' => 'group'),
-            array('studyYearId','required'),
             array('studentId', 'required', 'on' => 'student'),
         );
     }
@@ -24,6 +23,7 @@ class JournalViewer extends CFormModel
             'subjectId' => Yii::t('terms', 'Subject'),
             'groupId' => Yii::t('terms', 'Group'),
             'studentId' => Yii::t('terms', 'Student'),
+            'studyYearId'=>Yii::t('terms','Study year'),
         );
     }
 

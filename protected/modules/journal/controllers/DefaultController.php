@@ -76,7 +76,7 @@ class DefaultController extends Controller
         $selectedyear = $_POST['JournalViewer']['studyYearId'];
         var_dump($selectedyear);
         if ($selectedyear == 0) {
-            echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select study year'), true);
+            echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select Study Year'), true);
             return;
         }
         $data = Group::getGroupsByYearId($selectedyear);
@@ -100,7 +100,6 @@ class DefaultController extends Controller
         /**
          * @var $ws WorkSubject[]
          **/
-        var_dump($dat);
 
         if ($_POST['JournalViewer']['groupId'] == 0) {
             echo CHtml::tag('option', array('value' => 0), Yii::t('journal', 'Select group'), true);

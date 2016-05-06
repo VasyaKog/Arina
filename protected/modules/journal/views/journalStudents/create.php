@@ -4,12 +4,12 @@
 /* @var $model JournalStudents */
 
 $this->breadcrumbs=array(
-    'Journal Students'=>array('index'),
+    Yii::t('journal','Journal Students')=>array('index'),
     'Create',
 );
 
 $this->menu=array(
-    array('label'=>'List JournalStudents', 'url'=>array('index')),
+    array('label'=>Yii::t('journal','List JournalStudents'), 'url'=>array('index')),
 );
 ?>
 
