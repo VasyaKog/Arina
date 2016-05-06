@@ -67,12 +67,11 @@ if (isset(Yii::app()->user->identityType)) {
             if (isset($cyccomm))
                 echo 'Циклова комісія ' . CHtml::link($cyccomm->title, 'cyclicCommission/' . $cyccomm->id) . '<br>';
         }
-     /**   if (Yii::app()->user->checkAccess('curator')) {
+        if (Yii::app()->user->checkAccess('curator')) {
             $group = Group::model()->findByAttributes(array('curator_id'=>Yii::app()->user->identityId));
             if (isset($group))
                 echo 'Група ' . CHtml::link($group->title, 'group/' . $group->id) . '<br>';
         }
-      * */
         if (Yii::app()->user->checkAccess('prefect')) {
             $group = Group::model()->findByAttributes(array('monitor_id'=>Yii::app()->user->identityId));
             if (isset($group))

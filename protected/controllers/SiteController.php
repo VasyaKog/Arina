@@ -398,37 +398,4 @@ class SiteController extends Controller
         }
         $this->render('schedule', ['data' => $data]);
     }
-
-    public function actionActualSchedule(){
-        $data = array(
-            'date' => null,
-        );
-        if (Yii::app()->request->isPostRequest) {
-            $data = array(
-                'date' => Yii::app()->request->getPost('date'),
-            );
-            /**@var $excel ExcelMaker */
-            $excel = Yii::app()->getComponent('excel');
-            $excel->getDocument(['date' => $data['date']], 'actualSchedule');
-        }
-        $this->render('actualSchedule', ['data' => $data]);
-    }
-
-    public function actionScheduleTeachers()
-    {
-        $data = array(
-            'year' => null,
-            'semester' => null,
-        );
-        if (Yii::app()->request->isPostRequest) {
-            $data = array(
-                'year' => Yii::app()->request->getPost('year'),
-                'semester' => Yii::app()->request->getPost('semester'),
-            );
-            /**@var $excel ExcelMaker */
-            $excel = Yii::app()->getComponent('excel');
-            $excel->getDocument(['id' => $data['year'], 'semester' => $data['semester']], 'scheduleTeachers');
-        }
-        $this->render('scheduleTeachers', ['data' => $data]);
-    }
 }
