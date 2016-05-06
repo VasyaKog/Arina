@@ -26,7 +26,27 @@ if (isset(Yii::app()->user->identityType)) {
                     echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', студент<br>';
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+                     echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
                     echo 'Адміністратор<br>';
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+                    echo 'Інспектор кадрів<br>';
+                    echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+                    echo 'Секретар навчальної частини<br>';
+                    echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+                    echo 'Заступник директора коледжу<br>';
+                    echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+                    echo 'Директор коледжу<br>';
+                    echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    
                 }
             }
         }

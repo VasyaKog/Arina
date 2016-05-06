@@ -18,6 +18,7 @@ $menu = array(
             array('label' => Yii::t('base', 'List'), 'url' => array('/teacher'),),
             array('label' => Yii::t('base', 'Cyclic commissions'), 'url' => array('/cyclicCommission')),
         )),
+        array('label' => Yii::t('base', 'Settings'), 'url' => array('/settings')),
     )),
     array('label' => Yii::t('base', 'Groups'), 'url' => array('/group')),
     array('label' => Yii::t('base', 'Study plans'), 'url' => array('/studyPlan')),
@@ -31,18 +32,7 @@ $menu = array(
     array('label' => Yii::t('base', 'File Shares'), 'url' => array('/fileShare')),
     array('label' => Yii::t('base', 'Schedule'), 'items' => array(
         array('label' => Yii::t('base', 'Schedule'), 'url' => array('/schedule')),
-        array('label' => Yii::t('student', 'Create document'), 'items' => array(
-            array('label' => Yii::t('base', 'Overal'),'url' => array('/site/schedule')),
-            array('label' => Yii::t('base', 'For teachers'),'url' => array('/site/scheduleTeachers')),
-        )),
-        array('label' => Yii::t('base', 'Create a document replacements'), 'url' => array('/site/actualSchedule')),
-    )),
-    array('label' => Yii::t('base', 'Settings'), 'items' => array(
-        array('label' => Yii::t('base', 'Main Settings'), 'url' => array('/settings')),
-        array('label' => Yii::t('base', 'Settings benefits'),'url' =>array('/benefits')),
-        array('label'=> Yii::t('journal','Journal Record Types'),'url'=>array('/journal/journalRecordType')),
-        array('label'=> Yii::t('journal','Evaluation Systems'),'url'=>array('/journal/EvaluationSystem')),
-        array('label'=> Yii::t('journal','Evaluations'),'url'=>array('/journal/Evaluation')),
+        array('label' => Yii::t('student', 'Create document'), 'url' => array('/site/schedule')),
     )),
     array('label' => Yii::t('user', 'Користувачі'), 'url' => array('user/admin'))
 );

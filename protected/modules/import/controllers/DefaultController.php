@@ -4,6 +4,10 @@ class DefaultController extends Controller
 {
     public function actionIndex()
     {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new FileModel();
         if (isset($_POST['FileModel'])) {
             $model->attributes = $_POST['FileModel'];

@@ -13,8 +13,9 @@ class SubjectController extends Controller
      */
     public function actionCreate()
     {
-        if (!Yii::app()->user->checkAccess('manageSubject')) {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
         $model = new Subject;
 
@@ -39,8 +40,9 @@ class SubjectController extends Controller
 
     public function actionAddRelation($id = null)
     {
-        if (!Yii::app()->user->checkAccess('manageSubject')) {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
         if (isset($_POST['SubjectRelation'])) {
             if (!isset(Yii::app()->session['subject'])) {
@@ -63,6 +65,10 @@ class SubjectController extends Controller
 
     public function actionRemoveRelation($id1, $id2, $id3)
     {
+        if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         if (!isset(Yii::app()->session['subject'])) {
             Yii::app()->session['subject'] = array('add' => array(), 'delete' => array());
         }
@@ -82,8 +88,9 @@ class SubjectController extends Controller
     {
         $model = Subject::model()->loadContent($id);
 
-        if (!Yii::app()->user->checkAccess('manageSubject')) {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
 
         $this->ajaxValidation('subject-form', $model);
@@ -112,8 +119,9 @@ class SubjectController extends Controller
      */
     public function actionDelete($id)
     {
-        if (!Yii::app()->user->checkAccess('manageSubject')) {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
         if (Yii::app()->request->isPostRequest) {
             Subject::model()->loadContent($id)->delete();
@@ -131,6 +139,11 @@ class SubjectController extends Controller
      */
     public function actionIndex()
     {
+if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
+
         $model = new Subject();
         if (isset($_GET['Subject'])) {
             $model->setAttributes($_GET['Subject'], false);
@@ -146,6 +159,10 @@ class SubjectController extends Controller
 
     public function actionListByCycle($id)
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $condition = "cycle_id = :cycle_id";
         $params = array(':cycle_id' => $id);
         if (isset($_GET['speciality_id'])) {
@@ -159,6 +176,10 @@ class SubjectController extends Controller
 
     public function actionListBySpeciality($id)
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $condition = "speciality_id = :speciality_id";
         $params = array(':speciality_id' => $id);
         if (isset($_GET['cycle_id'])) {

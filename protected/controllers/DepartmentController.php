@@ -38,6 +38,10 @@ class DepartmentController extends Controller
      */
     public function actionView($id)
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
@@ -62,7 +66,7 @@ class DepartmentController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('manageDepartment'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -89,6 +93,10 @@ class DepartmentController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = $this->loadModel($id);
 
         if(!Yii::app()->user->checkAccess('manageDepartment',
@@ -122,7 +130,7 @@ class DepartmentController extends Controller
      */
     public function actionDelete($id)
     {
-        if(!Yii::app()->user->checkAccess('manageDepartment'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -142,6 +150,10 @@ class DepartmentController extends Controller
      */
     public function actionIndex()
     {
+         if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new Department('search');
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Department']))
@@ -154,7 +166,7 @@ class DepartmentController extends Controller
 
     public function actionAdmin($id)
     {
-        if(!Yii::app()->user->checkAccess('manageDepartment'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

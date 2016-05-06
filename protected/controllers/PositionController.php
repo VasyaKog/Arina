@@ -10,6 +10,11 @@ class PositionController extends Controller
      */
     public function actionView($id)
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
+        
         $this->render('view', array(
             'model' => Position::model()->loadContent($id),
         ));
@@ -21,7 +26,7 @@ class PositionController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('managePosition'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -46,7 +51,7 @@ class PositionController extends Controller
     {
         $model = Position::model()->loadContent($id);
 
-        if(!Yii::app()->user->checkAccess('managePosition'))
+       if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -68,7 +73,7 @@ class PositionController extends Controller
      */
     public function actionDelete($id)
     {
-        if(!Yii::app()->user->checkAccess('managePosition'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -83,6 +88,10 @@ class PositionController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new Position('search');
         $model->unsetAttributes();
         if (isset($_GET['Position']))

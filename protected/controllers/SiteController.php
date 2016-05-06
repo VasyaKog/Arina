@@ -318,9 +318,12 @@ class SiteController extends Controller
         $role->addChild('student');
         $role->addChild('manageOwnStudent');
 
+
         $role=$auth->createRole('teacher');
         $role->addChild('manageOwnMAC');
         $role->addChild('manageOwnLoad');
+      
+
 
         $role=$auth->createRole('curator');
         $role->addChild('teacher');
@@ -338,6 +341,8 @@ class SiteController extends Controller
         $role->addChild('manageOwnStudyPlan');
         $role->addChild('manageOwnSpeciality');
         $role->addChild('manageOwnDepartment');
+        $role->addChild('manageStudent');
+
 
         $role=$auth->createRole('admin');
         $role->addChild('dephead');
@@ -353,12 +358,21 @@ class SiteController extends Controller
         $role->addChild('manageCyclicCommission');
         $role->addChild('manageTeacher');
 
-        $auth->assign('admin',1);
+        $role=$auth->createRole('inspector');
+        $role->addChild('manageStudent');
+        $role->addChild('manageTeacher');
+
+
+
+        /*$auth->assign('admin',1);
         $auth->assign('dephead',91);
-        $auth->assign('curator',92);
-        $auth->assign('teacher',93);
+        $auth->assign('curator',93);
+        $auth->assign('teacher',92);
+        $auth->assign('dephead',92);
         $auth->assign('student',94);
         $auth->assign('prefect',95);
+        //$auth->assign('inspector',860);
+        //$auth->assign('trainingof',861);*/
 
         echo "OK";
         return;

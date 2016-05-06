@@ -16,6 +16,10 @@ class MainController extends Controller
 
     public function actionCreate()
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         if (isset($_POST['study_year'])) {
             $this->generateLoadFor($_POST['study_year']);
             $this->redirect($this->createUrl('index'));
@@ -26,6 +30,11 @@ class MainController extends Controller
 
     public function actionDelete($id)
     {
+
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = Load::model()->loadContent($id);
         $year = $model->study_year_id;
         $model->delete();
@@ -37,6 +46,10 @@ class MainController extends Controller
      */
     protected function generateLoadFor($studyYear)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         /** @var StudyYear $year */
         $year = StudyYear::model()->loadContent($studyYear);
 
@@ -76,6 +89,10 @@ class MainController extends Controller
      */
     protected function getNewLoad($studyYear, $subject, $group, $course, $type)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = new Load();
         $model->study_year_id = $studyYear->id;
         $model->wp_subject_id = $subject->id;
@@ -96,6 +113,11 @@ class MainController extends Controller
 
     public function actionUpdate($id)
     {
+
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         /** @var Load $model */
         $model = Load::model()->loadContent($id);
 
@@ -124,12 +146,20 @@ class MainController extends Controller
 
     public function actionGenerate($id)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $this->generateLoadFor($id);
         $this->redirect($this->createUrl('view', array('id' => $id)));
     }
 
     public function actionProject($id)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = new Load('project');
         $model->study_year_id = $id;
         $model->type = Load::TYPE_PROJECT;
@@ -147,6 +177,10 @@ class MainController extends Controller
 
     public function actionEdit($id)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         /** @var Load $model */
         $model = Load::model()->loadContent($id);
         $model->setScenario('project');
@@ -165,6 +199,10 @@ class MainController extends Controller
 
     public function actionDoc($id)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         /** @var StudyYear $year */
         $year = StudyYear::model()->loadContent($id);
         $model = new LoadDocGenerateModel();

@@ -15,7 +15,7 @@ class StudyYearController extends Controller
 	 */
 	public function actionCreate()
 	{
-        if(!Yii::app()->user->checkAccess('manageStudyYear'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -44,7 +44,10 @@ class StudyYearController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-
+		if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = StudyYear::model() -> loadContent($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -69,7 +72,7 @@ class StudyYearController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-        if(!Yii::app()->user->checkAccess('manageStudyYear'))
+       if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -85,6 +88,10 @@ class StudyYearController extends Controller
 	 */
 	public function actionIndex()
 	{
+		if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
 		$dataProvider = new CActiveDataProvider('StudyYear', array('criteria' => array(
            'order' => 'id',
         )));

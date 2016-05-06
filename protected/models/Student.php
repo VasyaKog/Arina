@@ -228,6 +228,10 @@ class Student extends ActiveRecord implements IDateContainable
     public function getStudentNumber(){
         return $this->code;
     }
+    public static function getList1()
+    {
+        return CHtml::listData(self::model()->findAll(array('order' => 'last_name, middle_name, first_name')), 'id', 'fullName');
+    }
 
     /**
      * @return string

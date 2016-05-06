@@ -18,7 +18,7 @@
    <div class="row">
     <div class="span3">
         <?php echo $form->textFieldRow($model, 'code', array('size' => 12, 'maxlength' => 12)); ?>
-
+      
         <?php echo $form->checkBoxListRow($model, 'exemptions', CHtml::listData(Exemption::model()->findAll(), 'id', 'title'), array('placeholder' => '  ')) ?>
 
         <?php echo $form->textFieldRow($model, 'last_name', array('size' => 40, 'maxlength' => 40)); ?>
@@ -26,7 +26,7 @@
         <?php echo $form->textFieldRow($model, 'first_name', array('size' => 40, 'maxlength' => 40)); ?>
 
         <?php echo $form->textFieldRow($model, 'middle_name', array('size' => 40, 'maxlength' => 40)); ?>
-
+        
         <?php echo $form->textFieldRow($model, 'phone_number', array('size' => 15, 'maxlength' => 15)); ?>
 
         <?php echo $form->textFieldRow($model, 'mobile_number', array('size' => 15, 'maxlength' => 15)); ?>
@@ -65,7 +65,7 @@
 
         <?php echo $form->checkBoxRow($model, 'contract'); ?>
 
-        <?php echo $form->textFieldRow($model, 'form_of_study_notes', array('size' => 50, 'maxlength' => 50)); ?>
+        <?php //echo $form->textFieldRow($model, 'form_of_study_notes', array('size' => 50, 'maxlength' => 50)); ?>
 
         <?php echo $form->textFieldRow($model, 'math_mark'); ?>
 

@@ -12,10 +12,10 @@ $this->breadcrumbs = array(
 
 if (Yii::app()->user->checkAccess('admin')) {
     $this->menu = array(
-        array('label' => 'List User', 'url' => array('index')),
-        array('label' => 'Create User', 'url' => array('create')),
-        array('label' => 'View User', 'url' => array('view', 'id' => $model->id)),
-        array('label' => 'Manage User', 'url' => array('admin')),
+        array('label' => 'Список користувачів', 'url' => array('index')),
+        array('label' => 'Додати користувача', 'url' => array('create')),
+        array('label' => 'Переглянути користувача', 'url' => array('view', 'id' => $model->id)),
+        array('label' => 'Редагувати користувача', 'url' => array('admin')),
     );
 }
 

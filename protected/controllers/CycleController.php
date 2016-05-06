@@ -10,6 +10,10 @@ class CycleController extends Controller
      */
     public function actionView($id)
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $this->render('view', array(
             'model' => SubjectCycle::model()->loadContent($id),
         ));
@@ -21,7 +25,7 @@ class CycleController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('manageSubjectCycle'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -47,7 +51,7 @@ class CycleController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(!Yii::app()->user->checkAccess('manageSubjectCycle'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -73,7 +77,7 @@ class CycleController extends Controller
      */
     public function actionDelete($id)
     {
-        if(!Yii::app()->user->checkAccess('manageSubjectCycle'))
+       if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -88,6 +92,10 @@ class CycleController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $dataProvider = new CActiveDataProvider('SubjectCycle');
         $this->render('index', array(
             'dataProvider' => $dataProvider,

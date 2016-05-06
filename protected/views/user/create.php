@@ -4,16 +4,16 @@
  * @var UserController $this
  */
 $this->breadcrumbs = array(
-    'Users' => array('index'),
-    'Create',
+    'Користувачі' => array('admin'),
+    'Додати користувача',
 );
 
 $this->menu = array(
-    array('label' => 'List User', 'url' => array('index')),
-    array('label' => 'Manage User', 'url' => array('admin')),
+    array('label' => 'Список користувачів', 'url' => array('user/admin')),
+    array('label' => 'Редагувати користувача', 'url' => array('admin')),
 );
 ?>
 
-    <h1>Create User</h1>
+    <h1>Додати користувача</h1>
 
 <?php echo $this->renderPartial('_form', array('model' => $model)); ?>

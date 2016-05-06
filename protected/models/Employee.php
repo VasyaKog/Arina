@@ -91,6 +91,8 @@ class Employee extends ActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'position' => array(self::BELONGS_TO, 'Position', 'position_id'),
+
+            'user' => array(self::HAS_MANY, 'User', 'identity_id'),
         );
     }
 
@@ -220,6 +222,11 @@ class Employee extends ActiveRecord
         ));
     }
 
+    public static function getList()
+    {
+        return CHtml::listData(self::model()->findAll(array('order' => 'last_name, middle_name, first_name')), 'id', 'fullName');
+    }
+    
     /**
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
