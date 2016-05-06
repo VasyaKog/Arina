@@ -13,6 +13,8 @@
 
 <?php echo $form->textFieldRow($model, 'identity_id', array('class' => 'span5')); ?>
 
+
+
 <div class="form-actions">
     <?php $this->widget(
         'bootstrap.widgets.TbButton',

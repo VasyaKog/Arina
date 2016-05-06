@@ -5,11 +5,11 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'List User', 'url' => array('index')),
-    array('label' => 'Create User', 'url' => array('create')),
-    array('label' => 'Update User', 'url' => array('update', 'id' => $model->id)),
-    array('label' => 'Delete User', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
-    array('label' => 'Manage User', 'url' => array('admin')),
+    array('label' => 'Список користувачів', 'url' => array('index')),
+    //array('label' => 'Створити користувача', 'url' => array('create')),
+    array('label' => 'Редагувати користвуача', 'url' => array('update', 'id' => $model->id)),
+    array('label' => 'Видалити користувача', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Ви впевнені, що хочете видалити цього користвуача?')),
+    //array('label' => 'Список користувачів', 'url' => array('admin')),
 );
 ?>
 

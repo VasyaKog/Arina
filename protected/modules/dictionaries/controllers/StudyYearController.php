@@ -44,7 +44,7 @@ class StudyYearController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-if(!Yii::app()->user->checkAccess('admin'))
+		if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -88,6 +88,10 @@ if(!Yii::app()->user->checkAccess('admin'))
 	 */
 	public function actionIndex()
 	{
+		if(!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
 		$dataProvider = new CActiveDataProvider('StudyYear', array('criteria' => array(
            'order' => 'id',
         )));

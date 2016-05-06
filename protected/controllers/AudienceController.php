@@ -77,6 +77,10 @@ class AudienceController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         /*$dataProvider = new CActiveDataProvider('Audience', array( 'criteria'=>array(
             'order'=>'number ASC',
         )));

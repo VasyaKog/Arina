@@ -8,6 +8,10 @@ class DefaultController extends Controller
      */
     public function actionView($id)
     {
+if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $this->render('view', array(
             'model' => Student::model()->loadContent($id),
         ));
@@ -19,7 +23,7 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        if(!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('manageStudent'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -104,13 +108,7 @@ class DefaultController extends Controller
     public function actionDelete($id)
     {
         $model = Student::model()->loadContent($id);
-        if(!Yii::app()->user->checkAccess('manageGroup',
-            array(
-                'id' => $model->group->speciality->department->head_id,
-                'type' => User::TYPE_TEACHER,
-            )
-        )&&!Yii::app()->user->checkAccess('admin')
-            &&!Yii::app()->user->checkAccess('inspector'))
+        if(!Yii::app()->user->checkAccess('admin'))
 
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
@@ -127,7 +125,10 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-
+if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new Student('search');
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Student'])) {
@@ -141,6 +142,10 @@ class DefaultController extends Controller
 
     public function actionGroup($id)
     {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $group = Group::model()->findByPk($id);
         $groupName = $group->title;
         $provider = Student::model()->getProvider(array('criteria' => array('condition' => "group_id=$id")));

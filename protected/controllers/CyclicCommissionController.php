@@ -9,6 +9,10 @@ class CyclicCommissionController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new CyclicCommission('search');
         $model->unsetAttributes();
         if (isset($_GET['CyclicCommission']))
@@ -27,6 +31,11 @@ class CyclicCommissionController extends Controller
      */
     public function actionView($id)
     {
+        
+        if (Yii::app()->user->checkAccess('student'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $this->render('view', array(
             'model' => CyclicCommission::model()->loadContent($id),
         ));
@@ -38,7 +47,7 @@ class CyclicCommissionController extends Controller
      */
     public function actionCreate()
     {
-        if (!Yii::app()->user->checkAccess('manageCyclicCommission'))
+        if (!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -66,16 +75,10 @@ class CyclicCommissionController extends Controller
     {
         $model = CyclicCommission::model()->loadContent($id);
 
-        if (!Yii::app()->user->checkAccess('manageCyclicCommission',
-            array(
-                'id' => $model->head_id,
-                'type' => User::TYPE_TEACHER,
-            )
-        ))
+       if (!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
-
         $this->ajaxValidation('cyclic-commission-form', $model);
 
         if (isset($_POST['CyclicCommission'])) {
@@ -95,7 +98,7 @@ class CyclicCommissionController extends Controller
      */
     public function actionDelete($id)
     {
-        if (!Yii::app()->user->checkAccess('manageCyclicCommission'))
+        if (!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }

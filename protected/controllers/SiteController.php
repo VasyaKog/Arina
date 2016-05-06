@@ -318,9 +318,12 @@ class SiteController extends Controller
         $role->addChild('student');
         $role->addChild('manageOwnStudent');
 
+
         $role=$auth->createRole('teacher');
         $role->addChild('manageOwnMAC');
         $role->addChild('manageOwnLoad');
+      
+
 
         $role=$auth->createRole('curator');
         $role->addChild('teacher');
@@ -361,7 +364,7 @@ class SiteController extends Controller
 
 
 
-        $auth->assign('admin',1);
+        /*$auth->assign('admin',1);
         $auth->assign('dephead',91);
         $auth->assign('curator',93);
         $auth->assign('teacher',92);
@@ -369,7 +372,7 @@ class SiteController extends Controller
         $auth->assign('student',94);
         $auth->assign('prefect',95);
         //$auth->assign('inspector',860);
-        //$auth->assign('trainingof',861);
+        //$auth->assign('trainingof',861);*/
 
         echo "OK";
         return;

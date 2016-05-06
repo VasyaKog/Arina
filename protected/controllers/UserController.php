@@ -30,7 +30,10 @@ class UserController extends Controller
 
         if (isset($_POST['ELoginForm'])) {
             $model->attributes = $_POST['ELoginForm'];
-            if ($model->validate() && $model->login()) {
+
+            $list= Yii::app()->db->createCommand('select * from `user` a where a.username=:name')->bindValue('name',$model->username)->queryAll();
+
+            if ($model->validate() && $model->login() && $list[0]['role']!=0) {
                 Yii::app()->request->redirect(Yii::app()->homeUrl);
             }
         }
@@ -107,13 +110,20 @@ class UserController extends Controller
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
         $model = new User;
-
+        $arr_role = RolesModel::getListNames();
         //$this->performAjaxValidation('user-form', $model);
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+            $model->role = 1;
+            $i_t = $_POST['User']['identity_type'];
+            $model->identity_type=$i_t;
+            if ($model->save()){
+                
+                 Yii::app()->db->createCommand("INSERT INTO `AuthAssignment`(`itemname`, `userid`) VALUES ('".$arr_role[$i_t]."','".$model->id."')")->query();
+                
+                  $this->redirect(array('view', 'id' => $model->id));
+            }
         }
 
         $this->render('create', array(
@@ -127,7 +137,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        if ((!Yii::app()->user->checkAccess('admin')) && (Yii::app()->user->id != $id)) {
+       if (!Yii::app()->user->checkAccess('admin')) {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
         /** @var User $model */
@@ -135,9 +145,16 @@ class UserController extends Controller
         $model->password = '';
         //$this->performAjaxValidation('user-form', $model);
 
+        $arr_role = RolesModel::getListNames();
+
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
+            $i_t = $_POST['User']['identity_type'];
+            $model->identity_type=$i_t;
             if ($model->save()){
+
+                 Yii::app()->db->createCommand("UPDATE `AuthAssignment` SET `itemname`= '".$arr_role[$i_t]."' WHERE `userid`='".$model->id."'")->query();
+                
                 Yii::app()->getUser()->setFlash('success','Дані були успішно змінені');
                 $this->redirect(array('update', 'id' => $model->id));
             }
@@ -159,7 +176,7 @@ class UserController extends Controller
         }
         if (Yii::app()->request->isPostRequest) {
             $this->loadModel($id)->delete();
-
+                Yii::app()->db->createCommand("Delete From `AuthAssignment` WHERE `userid`='".$id."'")->query();
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         } else

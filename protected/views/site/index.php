@@ -33,8 +33,18 @@ if (isset(Yii::app()->user->identityType)) {
                     echo 'Інспектор кадрів<br>';
                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
                 }
-                else if (Yii::app()->user->identityType == User::TYPE_TRAININGOF) {
+                else if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
                     echo 'Секретар навчальної частини<br>';
+                    echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+                    echo 'Заступник директора коледжу<br>';
+                    echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+                    echo 'Директор коледжу<br>';
                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
                     
                 }

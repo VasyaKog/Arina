@@ -29,7 +29,9 @@ class User extends ActiveRecord
     const TYPE_TEACHER = 1;
     const TYPE_STUDENT = 2;
     const TYPE_INSPECTOR = 3;
-    const TYPE_TRAININGOF = 4;
+    const TYPE_NAVCH = 4;
+    const TYPE_ZASTUPNIK = 5;
+    const TYPE_DIRECTOR = 6;
 
     /**
      * @return string the associated database table name
@@ -86,7 +88,10 @@ class User extends ActiveRecord
      */
     public function relations()
     {
-        return array();
+        return array(
+            'employee' => array(self::BELONGS_TO, 'Employee', 'identity_id'),
+            'roles' => array(self::BELONGS_TO, 'RolesModel', 'identity_type'),
+            );
     }
 
     /**
@@ -123,10 +128,11 @@ class User extends ActiveRecord
 
         $criteria->compare('id', $this->id);
         $criteria->compare('username', $this->username, true);
-        $criteria->compare('password', $this->password, true);
+        //$criteria->compare('password', $this->password, true);
         $criteria->compare('email', $this->email, true);
         $criteria->compare('role', $this->role);
-        $criteria->compare('identity_id', $this->identity_id);
+        // $criteria->compare('asd', $this->employee->last_name, true);
+        $criteria->compare('identity_type', $this->identity_type);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

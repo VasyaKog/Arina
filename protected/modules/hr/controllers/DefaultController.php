@@ -4,7 +4,8 @@ class DefaultController extends Controller
 {
     public function actionView($id)
     {
-        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -15,6 +16,10 @@ class DefaultController extends Controller
 
     public function actionExcelList()
     {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         /**@var $excel ExcelMaker */
         $excel = Yii::app()->getComponent('excel');
         $excel->getDocument(NULL, 'employeesList');
@@ -24,6 +29,10 @@ class DefaultController extends Controller
     public function actionIndex()
     {
 
+if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $model = new Employee('search');
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET['Employee'])) {
@@ -41,6 +50,7 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+
         if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
@@ -98,7 +108,7 @@ class DefaultController extends Controller
 
     public function actionDelete($id)
     {
-        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs = array(
-    'Users' => array('index'),
-    'Manage',
+    'Користувачі' => array('admin'),
+    'Управління',
 );
 
 $this->menu = array(
-    array('label' => 'List User', 'url' => array('index')),
-    array('label' => 'Create User', 'url' => array('create')),
+   // array('label' => 'Список користувачів', 'url' => array('index')),
+    array('label' => 'Додати користувача', 'url' => array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -23,15 +23,15 @@ return false;
 ");
 ?>
 
-<h1>Manage Users</h1>
+<h1>Управління користувачами</h1>
 
 <p>
-    You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
+    Ви можете додатково ввести оператор порівняння (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
         &lt;&gt;</b>
-    or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+    or <b>=</b>) на початку кожного із значень пошуку, щоб вказати, як порівняння повинно бути зроблено..
 </p>
 
-<?php echo CHtml::link('Advanced Search', '#', array('class' => 'search-button btn')); ?>
+<?php echo CHtml::link('Розширений пошук', '#', array('class' => 'search-button btn')); ?>
 <div class="search-form" style="display:none">
     <?php $this->renderPartial('_search', array(
         'model' => $model,
@@ -44,11 +44,19 @@ return false;
     'filter' => $model,
     'columns' => array(
         'id',
-        'username',
-        'password',
-        'email',
+        'username',        
+        'email',        
+        array(
+            'name' => 'employee.last_name',
+            'value' => 'CHtml::link($data->employee->fullname, array("view", "id"=>$data->id))',
+            'type' => 'raw'
+        ),        
+        array(
+            'name' => 'roles.title',
+            'value' => 'CHtml::link($data->roles["title"], array("view", "id"=>$data->id))',
+            'type' => 'raw'
+        ),     
         'role',
-        'identity_id',
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
         ),

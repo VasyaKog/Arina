@@ -16,10 +16,10 @@ class WorkController extends Controller
 
     public function actionCreate()
     {
-        /*if (!Yii::app()->user->checkAccess('dephead'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-        }*/
+        }
         $model = new WorkPlan();
 
         if (isset($_POST['WorkPlan'])) {
@@ -63,7 +63,12 @@ class WorkController extends Controller
 
     public function actionUpdate($id)
     {
+        
         $model = WorkPlan::model()->loadContent($id);
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 
         if (isset($_POST['WorkPlan'])) {
             $model->attributes = $_POST['WorkPlan'];
@@ -86,6 +91,10 @@ class WorkController extends Controller
 
     public function actionDelete($id)
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         WorkPlan::model()->loadContent($id)->delete();
 
         if (!isset($_GET['ajax'])) {
@@ -102,6 +111,10 @@ class WorkController extends Controller
 
     public function actionAddSubject($id)
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = new WorkSubject();
         $model->plan_id = $id;
 
@@ -116,6 +129,11 @@ class WorkController extends Controller
 
     public function actionEditSubject($id)
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
+
         /** @var WorkSubject $model */
         $model = WorkSubject::model()->loadContent($id);
 
@@ -131,6 +149,10 @@ class WorkController extends Controller
 
     public function actionDeleteSubject($id)
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         WorkSubject::model()->loadContent($id)->delete();
 
         if (!isset($_GET['ajax'])) {
@@ -140,6 +162,10 @@ class WorkController extends Controller
 
     public function actionExecuteGraph()
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $semesters = array();
         $groups = array();
         if (isset($_POST['graph']) && isset($_POST['groups'])) {
@@ -199,6 +225,7 @@ class WorkController extends Controller
 
     public function actionMakeExcel($id)
     {
+
         /**@var $excel ExcelMaker */
         $excel = Yii::app()->getComponent('excel');
         $plan = WorkPlan::model()->loadContent($id);

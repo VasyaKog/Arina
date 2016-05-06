@@ -9,6 +9,7 @@ class PlanController extends Controller
 
     public function actionIndex()
     {
+
         $dataProvider = StudyPlan::model()->getProvider();
 
         $this->render('index', array('dataProvider' => $dataProvider));
@@ -16,10 +17,10 @@ class PlanController extends Controller
 
     public function actionCreate()
     {
-       /* if (!Yii::app()->user->checkAccess('dephead'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-        }*/
+        }
         $model = new StudyPlan('create');
 
         if (isset($_POST['StudyPlan'])) {
@@ -51,6 +52,11 @@ class PlanController extends Controller
      */
     public function copyPlan($origin, $newPlan)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
+
         foreach ($origin->subjects as $subject) {
             $model = new StudySubject();
             $model->attributes = $subject->attributes;
@@ -61,6 +67,7 @@ class PlanController extends Controller
 
     public function actionExecuteGraph()
     {
+
         $semesters = array();
         if (isset($_POST['graph'])) {
             $g = $_POST['graph'];
@@ -101,6 +108,7 @@ class PlanController extends Controller
 
     public function actionSubjects($id)
     {
+
         $model = new StudySubject();
         $model->plan_id = $id;
 
@@ -123,6 +131,11 @@ class PlanController extends Controller
 
     public function actionUpdate($id)
     {
+
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = StudyPlan::model()->loadContent($id);
       /*  if (!Yii::app()->user->checkAccess('manageStudyPlan',
                 array(
@@ -155,6 +168,10 @@ class PlanController extends Controller
 
     public function actionEditSubject($id)
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         /** @var StudySubject $model */
         $model = StudySubject::model()->loadContent($id);
 
@@ -170,6 +187,10 @@ class PlanController extends Controller
 
     public function actionDeleteSubject($id)
     {
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         StudySubject::model()->loadContent($id)->delete();
 
         if (!isset($_GET['ajax'])) {
@@ -179,6 +200,10 @@ class PlanController extends Controller
 
     public function actionMakeExcel($id)
     {
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         /**@var $excel ExcelMaker */
         $excel = Yii::app()->getComponent('excel');
         $plan = StudyPlan::model()->loadContent($id);
@@ -187,6 +212,11 @@ class PlanController extends Controller
 
     public function actionDelete($id)
     {
+        
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = StudyPlan::model()->loadContent($id);
         if (!Yii::app()->user->checkAccess('manageStudyPlan',
             array(

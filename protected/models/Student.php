@@ -104,6 +104,10 @@ class Student extends ActiveRecord implements IDateContainable
     {
         return "$this->last_name $this->first_name $this->middle_name";
     }
+    public static function getList()
+    {
+        return CHtml::listData(self::model()->findAll(array('order' => 'last_name, middle_name, first_name')), 'id', 'fullName');
+    }
 
     /**
      * @return string

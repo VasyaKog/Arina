@@ -18,7 +18,7 @@
    <div class="row">
     <div class="span3">
         <?php echo $form->textFieldRow($model, 'code', array('size' => 12, 'maxlength' => 12)); ?>
-
+      
         <?php echo $form->checkBoxListRow($model, 'exemptions', CHtml::listData(Exemption::model()->findAll(), 'id', 'title'), array('placeholder' => '  ')) ?>
 
         <?php echo $form->textFieldRow($model, 'last_name', array('size' => 40, 'maxlength' => 40)); ?>
@@ -28,6 +28,8 @@
         <?php echo $form->textFieldRow($model, 'middle_name', array('size' => 40, 'maxlength' => 40)); ?>
 
         <?php echo $form->dropDownListRow($model, 'group_id', Group::getTreeList(), array('empty' => Yii::t('group', 'Select group'))); ?>
+        
+        
 
         <?php echo $form->textFieldRow($model, 'phone_number', array('size' => 15, 'maxlength' => 15)); ?>
 

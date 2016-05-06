@@ -59,8 +59,14 @@ class WebUser extends CWebUser
         } else if (Yii::app()->user->checkAccess('inspector')) {
             require_once('menu/inspector.php');
             return $menu;
-        }else if (Yii::app()->user->checkAccess('trainingof')) {
-            require_once('menu/trainingof.php');
+        }else if (Yii::app()->user->checkAccess('navch')) {
+            require_once('menu/navch.php');
+            return $menu;
+        }else if (Yii::app()->user->checkAccess('director')) {
+            require_once('menu/director.php');
+            return $menu;
+        }else if (Yii::app()->user->checkAccess('zastupnik')) {
+            require_once('menu/zastupnik.php');
             return $menu;
         } else {
             require_once('menu/guest.php');

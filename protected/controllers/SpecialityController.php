@@ -10,6 +10,8 @@ class SpecialityController extends Controller
      */
     public function actionView($id)
     {
+        
+        
         $this->render('view', array(
             'model' => Speciality::model()->loadContent($id),
         ));
@@ -86,6 +88,7 @@ class SpecialityController extends Controller
      */
     public function actionIndex()
     {
+        
         $model = new Speciality('search');
         $model->unsetAttributes();
         if (isset($_GET['Speciality']))
