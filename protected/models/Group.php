@@ -55,6 +55,11 @@ class Group extends ActiveRecord
         return $list2;
     }
 
+    public function getStudentsList(){
+        return CHtml::listData($this->getStudentArray(), 'id', 'fullName');
+    }
+
+
     public function getCuratorId()
     {
         /**

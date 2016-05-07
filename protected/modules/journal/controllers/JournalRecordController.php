@@ -68,7 +68,7 @@ class JournalRecordController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		$model->date=date('Y-m-d');
-		$model->teacher_id=0;
+		$model->teacher_id=Yii::app()->user->identityId;
 		if(isset($_POST['JournalRecord']))
 		{
 			$model->attributes=$_POST['JournalRecord'];

@@ -7,9 +7,11 @@
  */
 /* @var $this DefaultController */
 /* @var $id int */
+/* @var $t boolean*/
 
 $this->widget('journal.widgets.PageJournal', array(
     'load_id' => $id,
+    't'=>$t,
 ));
 $this->menu=array(
     array(

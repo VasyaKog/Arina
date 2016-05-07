@@ -2,7 +2,7 @@
 /**
  *
  * @var GroupController $this
- * @var \Group $model
+ * @var Group $model
  * @var TbActiveForm $form
  */
 ?>

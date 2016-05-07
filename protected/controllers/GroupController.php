@@ -128,7 +128,7 @@ class GroupController extends Controller
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
-
+*/
         $this->ajaxValidation('group-form', $model);
 
         if (isset($_POST['Group'])) {
@@ -138,7 +138,7 @@ class GroupController extends Controller
             }
         }
 
-        $this->render('update', array('model' => $model,));*/
+        $this->render('update', array('model' => $model,));
     }
 
     /**

@@ -102,6 +102,20 @@ class JournalStudents extends CActiveRecord
 		}
 		return $students;
 	}
+	public static function getAllStudentsInArray($load){
+		/**
+		 * @var $students Student[]
+		 * @var $records JournalStudents[]
+		 * @var $student Student[]
+		 */
+		$records=JournalStudents::model()->findAllByAttributes(array('load_id'=>$load->id));
+		$studentsid = array();
+		$students=array();
+		foreach($records as $record) {
+			if(!in_array($record->student_id,$studentsid)) array_push($studentsid, $record->student_id);
+		}
+		return $students;
+	}
 	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
