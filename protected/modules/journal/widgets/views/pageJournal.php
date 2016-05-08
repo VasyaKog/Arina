@@ -35,23 +35,31 @@ if($t) $k =0; else $k=1;
     #back{
         background-color: gainsboro;
     }
+
+    .record{
+        text-orientation:upright;
+    }
+
+    #center{
+        text-align: center;
+    }
 </style>
 <h3><?php echo Yii::t('subject','Subject').': '.$subject.'  '.Yii::t('teacher','Teacher').': '.$teacherName;?></h3>
 <table class="journal graph table items table-striped table-condensed table-bordered table-hover">
     <tr>
         <td rowspan="2"><?echo Yii::t('terms','N p/p');?></td>
         <td class="name" rowspan="2"><? echo Yii::t('terms','Surname and initials');?></td>
-        <td colspan="<? echo count($list)+$k; ?> " align="center"><?echo Yii::t('terms','Day, month') ?></td>
+        <td colspan="<? echo count($list)+$k; ?> " id="center"><?echo Yii::t('terms','Day, month') ?></td>
     </tr>
     <tr>
     <?php
     $krecords=0;
     foreach($list as $key){
         $krecords++;?>
-        <td class="oc" align="center"><?php echo $key?></td>
+        <td class="oc record" align="center"><?php echo $key?></td>
     <?
     }
-    if($t){echo '<td>'.CHtml::link(Yii::t('terms','create'),array('journalRecord/create/'.$load_id)).'</td>';}
+    if($t){echo '<td class="record">'.CHtml::link(Yii::t('terms','create'),array('journalRecord/create/'.$load_id)).'</td>';}
     ?>
     </tr>
         <?

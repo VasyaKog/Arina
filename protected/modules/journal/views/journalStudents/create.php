@@ -4,15 +4,11 @@
 /* @var $model JournalStudents */
 
 $this->breadcrumbs=array(
-    Yii::t('journal','Journal Students')=>array('index'),
-    'Create',
-);
-
-$this->menu=array(
-    array('label'=>Yii::t('journal','List JournalStudents'), 'url'=>array('index')),
+    Yii::t('journal','Page of journal')=>array('/journal/default/views/'.$model->load_id),
+    Yii::t('journal','Journal Students')=>array('/journal/journalStudents/index/'.$model->load_id),
+    Yii::t('base','Settings'),
 );
 ?>
-
-<h1>Create JournalStudents</h1>
+<h1><? echo Yii::t('journal','To setting JournalStudents')?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

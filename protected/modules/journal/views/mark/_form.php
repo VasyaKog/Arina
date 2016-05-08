@@ -62,13 +62,16 @@
 						'url'=>$this->createUrl('changeMarkList'),
 						'update'=> '#Mark_retake_value_id',
 					),
-
 			)
 		); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->dropDownListRow($model,'retake_value_id',array()); ?>
+		<?php echo $form->dropDownListRow($model,'retake_value_id',array('0'=>Yii::t('journal','Select'))); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->textFieldRow($model,'comment'); ?>
 	</div>
 
 

@@ -65,7 +65,7 @@ class JournalStudents extends CActiveRecord
 			'date' => Yii::t('base','Date'),
 			'student_id' => Yii::t('student','Student'),
 			'load_id' => Yii::t('load','Load'),
-			'type' => 'Type',
+			'type' => Yii::t('studentGroup','Type action'),
 		);
 	}
 

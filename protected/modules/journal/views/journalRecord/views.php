@@ -3,8 +3,8 @@
 /* @var $model JournalRecord */
 
 $this->breadcrumbs=array(
-	'Journal Records'=>array('index'),
-	$model->id,
+	Yii::t('journal','Page of journal')=>array('/journal/default/views/'.$model->load_id),
+	$model->types->
 );
 
 $this->menu=array(

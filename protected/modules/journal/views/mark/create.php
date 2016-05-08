@@ -18,7 +18,7 @@ $this->breadcrumbs=array(
 );
 
 $this->renderPartial('_form',array(
-    'model'=>$model,
-        'type'=>$type,
+    'model'=>$model, 
+    'type'=>$type,
     )
 );

@@ -85,7 +85,7 @@ class JournalStudentsController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id the ID of the model to be updated
      */
-    public function actionUpdate($id)
+  /*  public function actionUpdate($id)
     {
         $model=$this->loadModel($id);
 
@@ -103,7 +103,7 @@ class JournalStudentsController extends Controller
             'model'=>$model,
         ));
     }
-
+*/
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -138,7 +138,7 @@ class JournalStudentsController extends Controller
     /**
      * Manages all models.
      */
-    public function actionAdmin()
+  /*  public function actionAdmin()
     {
         $model=new JournalStudents('search');
         $model->unsetAttributes();  // clear any default values
@@ -149,7 +149,7 @@ class JournalStudentsController extends Controller
             'model'=>$model,
         ));
     }
-
+*/
     public function actionChangeStudentList()
     {
         /** @var $students Student[] */

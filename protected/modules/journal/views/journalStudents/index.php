@@ -4,18 +4,19 @@
 /* @var $load_id int */
 
 $this->breadcrumbs=array(
-    'Journal Students',
+    Yii::t('journal','Page of journal')=>array('/journal/default/views/'.$load_id),
+    Yii::t('journal','Journal Students'),
 );
 
 $this->menu=array(
     array(
-        'label'=>'Create JournalStudents',
+        'label'=>Yii::t('journal','To setting JournalStudents'),
         'type'=>BoosterHelper::TYPE_PRIMARY,
         'url'=>array('journalStudents/create/'.$load_id),
 ));
 ?>
 
-<h1>Journal Students</h1>
+<h1><?php echo Yii::t('journal','Journal Students');?></h1>
 
 <?php
 $columns = array(
@@ -36,6 +37,12 @@ $columns = array(
         'type'=>'raw',
         'value' => 'CHtml::label($data->getTypes(),false)',
         'htmlOptions' => array('style' => 'width: 160px'),
+    ),
+    array(
+        'header' => Yii::t('base', 'Actions'),
+        'htmlOptions' => array('nowrap' => 'nowrap'),
+        'class' => 'bootstrap.widgets.TbButtonColumn',
+        'template' => '{delete}',
     ),
 );
 $this->renderPartial('//tableList', array(

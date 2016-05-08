@@ -38,5 +38,8 @@ return array(
     'NP'=>'Нб',
     'JournalStudents'=>'Спиcок',
     'Journal Students'=>'Список',
-    
+    'Page of journal'=>'Сторінка журналу',
+    'Type'=>'Тип запису',
+    'Setting JournalStudents'=>'Налаштування списку',
+    'To setting JournalStudents'=>'Налаштувати список'
 );

@@ -12,7 +12,7 @@
  * @property integer $load_id
  * @property string $teacher_id
  * @property string $n_pp
- * @property integer $numer_in_day
+ * @property integer $hours
  *
  * @property Mark[] $marks
  * @property Teacher $teacher
@@ -86,6 +86,7 @@ class JournalRecord extends CActiveRecord
 			'teacher_id' => 'Teacher',
 			'n_pp' => 'N Pp',
 			'numer_in_day' => 'Numer In Day',
+			'hours'=>'Кількість годин'
 		);
 	}
 

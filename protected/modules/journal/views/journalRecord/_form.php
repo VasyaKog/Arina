@@ -38,9 +38,7 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'n_pp'); ?>
-		<?php echo $form->textField($model,'n_pp',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'n_pp'); ?>
+		<?php echo $form->textFieldRow($model,'hours',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
 	<div class="row">
@@ -50,7 +48,7 @@
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('base','Create') : Yii::t('base','Save')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

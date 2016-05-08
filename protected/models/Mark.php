@@ -16,9 +16,10 @@
  * @property integer $retake_ticket_numb
  * @property string $system_id
  * @property integer $student_id
+ * @property string $comment
  *
  * @property $journal_record JournalRecord
- * @property $Mark Mark
+ * @property $system EvaluationSystem
  */
 class Mark extends CActiveRecord
 {
@@ -56,7 +57,7 @@ class Mark extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'system' => array(self::BELONGS_TO,'',''),
+			'system' => array(self::BELONGS_TO,'EvaluationSystem','system_id'),
 			'journal_record'=>array(self::BELONGS_TO,'JournalRecord','journal_record_id'),
 		);
 	}
@@ -82,7 +83,7 @@ class Mark extends CActiveRecord
 				}
 			};
 			$string=substr($string,0,-1);
-			return CHtml::link($string,array('/mark/view/'.$mark->id));
+			return CHtml::link($string,array('mark/views/'.$mark->id));
 		}
 		else {
 			return false;
@@ -106,6 +107,7 @@ class Mark extends CActiveRecord
 			'retake_ticket_numb' => 'Retake Ticket Numb',
 			'system_id' => 'System',
 			'student_id' => 'Student',
+			'comment'=>'Note'
 		);
 	}
 

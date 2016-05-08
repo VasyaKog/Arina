@@ -15,7 +15,7 @@ $this->widget('journal.widgets.PageJournal', array(
 ));
 $this->menu=array(
     array(
-        'label'=>'Setting list',
+        'label'=>Yii::t('journal','Setting JournalStudents'),
         'type'=>BoosterHelper::TYPE_PRIMARY,
         'url'=>array('/journal/journalStudents/index/'.$id),
     ),
