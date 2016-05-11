@@ -1403,4 +1403,9 @@ SQL;
 
         return $objPHPExcel;
     }
+
+    protected function makeGroupHoursList($data){
+        $objPHPExcel = $this->loadTemplate('report_group.xls');
+        return $objPHPExcel;
+    }
 }
