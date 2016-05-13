@@ -402,3 +402,8 @@ h1{
     color: #CB5151;
     text-shadow: 0px 0px 0px black, 0 0 2px rgb(161, 32, 32);
 }
+
+#btn_actual_schedule{
+    margin: 18px auto;
+    display: block;
+}

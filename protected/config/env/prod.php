@@ -5,7 +5,7 @@ return array(
             'connectionString' => 'mysql:host=localhost;dbname=khpk',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => '1234',
+            'password' => 'svenacer1ABC',
             'charset' => 'utf8',
         ),
     ),

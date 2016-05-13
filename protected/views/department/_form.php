@@ -12,7 +12,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <?php echo $form->textFieldRow($model, 'title', array('class' => 'span4', 'maxlength' => 40)); ?>
 
-<?php echo $form->dropDownListRow($model, 'head_id', Teacher::getTreeList(), array('class' => 'span4')); ?>
+<?php echo $form->dropDownListRow($model, 'head_id', Teacher::getList(), array('class' => 'span4')); ?>
 
 <?php $this->renderPartial('//formButtons', array('model' => $model)); ?>
 

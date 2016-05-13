@@ -17,6 +17,7 @@ return array(
     'Group' => 'Група',
     'Student' => 'Студент',
     'Head' => 'Голова',
+    'Name' => 'Назва',
     'Full name' => 'Повне ім’я',
     'Teachers'=>'Викладачі',
     'Male'=>'Чоловіча',
@@ -25,4 +26,14 @@ return array(
     'Date of update' => 'Дата оновлення',
     'DPA' => 'ДПА',
     'Select gender' => 'Оберіть стать',
+    'Save' => 'Зберегти',
+    'Create' => 'Створити',
+    'exclude'=>'Виключити',
+    'included'=>'Додати',
+    'Select type' =>'Оберіть тип',
+    'Execute' =>'Виконати',
+    'Surname and initials' => 'Прізвище та ініціали',
+    'Open'=>'Відкрити',
+    'Day, month'=>'Рік, день, місяць',
 );
+

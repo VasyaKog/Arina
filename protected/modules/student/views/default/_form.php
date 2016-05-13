@@ -26,11 +26,7 @@
         <?php echo $form->textFieldRow($model, 'first_name', array('size' => 40, 'maxlength' => 40)); ?>
 
         <?php echo $form->textFieldRow($model, 'middle_name', array('size' => 40, 'maxlength' => 40)); ?>
-
-        <?php echo $form->dropDownListRow($model, 'group_id', Group::getTreeList(), array('empty' => Yii::t('group', 'Select group'))); ?>
         
-        
-
         <?php echo $form->textFieldRow($model, 'phone_number', array('size' => 15, 'maxlength' => 15)); ?>
 
         <?php echo $form->textFieldRow($model, 'mobile_number', array('size' => 15, 'maxlength' => 15)); ?>

@@ -22,6 +22,64 @@ class Teacher extends Employee
 
     }
 
+
+    public function getGroupListArray(){
+        /**
+         * @var $listRecord CuratorGroup[]
+         * @var $group Group;
+         */
+        $listRecord=CuratorGroup::model()->findAllByAttributes(array('teacher_id'=>$this->id));
+        $listGroup=array();
+        // sort($listRecord,1);
+        $k=0;
+        foreach ($listRecord as $item){
+            if($item->type==1) {
+                $k=0;
+                if(in_array($item->group_id,$listGroup)) continue;
+                foreach($listRecord as $item2){
+                    if($item->group_id==$item2->group_id) {
+                        if ($item != $item2 && $item2->type == 0) {
+                            $k+=1;
+                        }
+                    }
+                }
+                if($k%2==0){
+                    array_push($listGroup,$item->group_id)  ;
+                }
+            }
+        }
+        return $listGroup;
+    }
+
+
+    public function getGroupHistory(){
+        /**
+         * @var $listRecord CuratorGroup[]
+         */
+        $listRecord=CuratorGroup::model()->findAllByAttributes(array('teacher_id'=>$this->id));
+        $stringRezult="";
+        foreach($listRecord as $record){
+            if($record->type==1) $string=Yii::t('student','Include in '); else $string=Yii::t('student','Declude with ');
+            $string=$string.CHtml::link(Group::getNameGroup($record->group_id),array("../group/view/".$record->group_id)).Yii::t('student',', in date - ');
+            $string=$string.$record->date;
+            $stringRezult=$stringRezult.$string."<br/>";
+        }
+        return $stringRezult;
+    }
+    public function getGroupListLinks(){
+        $listGroup=$this->getGroupListArray();
+        if($listGroup==array()) return Yii::t('teacher','This teacher have not group');
+        /**
+         * @var $string string
+         */
+        $string="";
+        foreach ($listGroup as $i=>$key){
+            $string= $string.CHtml::link(Group::getNameGroup($key),array("../group/view/".$key))."<br/>";
+            //CHtml::link(Group::getNameGroup($listGroup[$i]),array("../group/","id"=>$listGroup[$i]));
+        };
+        return $string;
+    }
+
     public static function getListByCycle($id)
     {
         /** @var CyclicCommission|null $model */
@@ -87,7 +145,7 @@ class Teacher extends Employee
     public function relations()
     {
         return array(
-            'group' => array(self::HAS_ONE, 'Group', 'curator_id'),
+            'group' => array(self::MANY_MANY, 'Group', 'curator_group(teacher_id,group_id)'),
             'cyclicCommission' => array(self::BELONGS_TO, 'CyclicCommission', 'cyclic_commission_id'),
             'attestations' => array(self::HAS_MANY, 'Attestation', 'teacher_id'),
         );

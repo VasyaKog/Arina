@@ -33,8 +33,10 @@ if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('
 
         if (isset($_POST['Student'])) {
             $model->attributes = $_POST['Student'];
+
             var_dump($model->attributes);
             if(!Yii::app()->user->checkAccess('manageGroup',
+
                 array(
                     'id' => $model->group->speciality->department->head_id,
                     'type' => User::TYPE_TEACHER,
@@ -47,6 +49,7 @@ if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('
             {
                 throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
             }
+
             if ($model->save()) {
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -68,6 +71,23 @@ if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('
          * @var $model Student
          */
         $model = Student::model()->loadContent($id);
+       /** if (
+           !Yii::app()->user->checkAccess('manageStudent',
+                array(
+                    'id' => $model->group->curator_id,
+                    'type' => User::TYPE_TEACHER,
+                )
+            )
+            &&
+
+            !Yii::app()->user->checkAccess('manageStudent',
+                array(
+                    'id' => $model->group->monitor_id,
+                    'type' => User::TYPE_STUDENT,
+                )
+            )
+            &&
+        * */
         if (        
             !Yii::app()->user->checkAccess('manageGroup',
                 array(
@@ -81,9 +101,11 @@ if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('
                 &&
                 !Yii::app()->user->checkAccess('dephead')
         )
+
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
+
         $this->ajaxValidation('student-form', $model);
 
         if (isset($_POST['Student'])) {
@@ -94,6 +116,7 @@ if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
+
 
         $this->render('update', array(
             'model' => $model,
@@ -142,21 +165,26 @@ if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('
 
     public function actionGroup($id)
     {
+
         if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
         $group = Group::model()->findByPk($id);
         $groupName = $group->title;
-        $provider = Student::model()->getProvider(array('criteria' => array('condition' => "group_id=$id")));
+
+        $provider= new CArrayDataProvider($group->getStudentArray(),array(
+            'keyField' => 'id'
+        ));
         $this->render(
             'group',
             array(
                 'provider' => $provider,
                 'groupName' => $groupName,
                 'group' => $group,
-                'id'=>$id,
+                'id' => $id,
             )
         );
     }
+
 }

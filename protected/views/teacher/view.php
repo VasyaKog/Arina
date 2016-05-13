@@ -5,8 +5,8 @@
  * @var Teacher $model
  */
 $this->breadcrumbs = array(
-    Yii::t('teacher', 'Teachers') => array('index'),
     $model->getFullName(),
+    Yii::t('teacher', 'Teachers') => array('index'),
 );
 
 $this->menu = array(
@@ -40,6 +40,16 @@ $this->menu = array(
         'first_name',
         'middle_name',
         'short_name',
+        array(
+            'type' => 'raw',
+            'label' => Yii::t('group','Groups'),
+            'value' => $model->getGroupListLinks(),
+        ),
+        array(
+            'type' => 'raw',
+            'label' => Yii::t('group','Group0 hisotry'),
+            'value' => $model->getGroupHistory(),
+        ),
         array(
             'type' => 'raw',
             'label' => Yii::t('teacher', 'Cyclic Commission'),

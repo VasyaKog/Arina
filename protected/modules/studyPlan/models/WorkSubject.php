@@ -28,8 +28,7 @@
  * @property WorkPlan $plan
  * @property Subject $subject
  * @property CyclicCommission $cycleCommission
- */
-class WorkSubject extends ActiveRecord
+ */class WorkSubject extends ActiveRecord
 {
     const CONTROL_TEST = 0;
     const CONTROL_EXAM = 1;
@@ -209,6 +208,19 @@ class WorkSubject extends ActiveRecord
                 $subjects = array_merge($subjects, $plan->subjects);
         }
         return CHtml::listData($subjects, 'id', 'subject.title');
+    }
+
+    public static function getNameSubject($id)
+    {
+        /**
+         * @var $item WorkSubject
+         **/
+        $item=WorkSubject::model()->findByPk($id);
+        /**
+         * @var $item1 Subject
+         **/
+        $item1=Subject::model()->findByPk($item->subject_id);
+        return $item1->title;
     }
 
 } 

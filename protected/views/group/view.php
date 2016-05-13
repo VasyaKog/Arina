@@ -49,7 +49,9 @@ $this->menu = array(
     'data' => $model,
     'attributes' => array(
         'title',
-        array('value' => $model->curator->fullName, 'name' => 'curator_id'),
+        array(
+            'type'=>'raw',
+            'value' => $model->getCuratorLink(), 'name' => 'curator_id'),
         array(
             'name' => Yii::t('student','Students count'),
             'value' => $model->getStudentsCount(),

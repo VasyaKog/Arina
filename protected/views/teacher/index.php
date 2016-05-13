@@ -14,7 +14,7 @@ $this->menu = array(
     array(
         'type' => 'primary',
         'label' => Yii::t('teacher', 'Add new teacher'),
-        'url' => $this->createUrl('hr/default/create'),
+        'url' => $this->createUrl('teacher/create'),
     ),
 );
 ?>
@@ -45,6 +45,11 @@ $columns = array(
         'value' => 'CHtml::link($data->cyclicCommission->title, array("cyclicCommission/view","id"=>$data->cyclic_commission_id))',
         'htmlOptions' => array(),
         'filter' => CHtml::listData(CyclicCommission::model()->findAll(), 'id', 'title')
+    ),
+    array(
+        'type' => 'raw',
+        'header' => Yii::t('group','Groups'),
+        'value' => '$data->getGroupListLinks()',
     ),
     array(
         'header' => Yii::t('base', 'Actions'),

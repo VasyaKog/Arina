@@ -4,7 +4,8 @@
         private $db;
         public function openConnect(){
             $userName = "root";
-            $password = "1";
+            $password = "svenacer1ABC";
+
             $dbName = "khpk";
             $this->db = new Connect($userName, $password, $dbName);
         }
@@ -33,10 +34,23 @@
             return $temp;
         }
 
-        public function selectTimetable($id, $semester){
+        public function selectTimetable($id, $semester, $day=""){
+            if($day=="")
             $select = "SELECT `tim`.`id`, `tim`.`study_year_id`, `tim`.`semester`, `tim`.`para`, `tim`.`day`, `tim`.`group_id`, `tim`.`subject_id`, `sb`.`title` AS `subject`, `tim`.`teacher1_id`, `tim`.`teacher2_id`, `tim`.`audience1_id`, `tim`.`audience2_id`, `tim`.`type`
             FROM  `timetable` `tim`  INNER JOIN `subject` `sb` ON `tim`.`subject_id` = `sb`.`id`
             WHERE  `tim`.`study_year_id` = ".$id." AND `tim`.`semester`='".$semester."' ORDER BY `tim`.`para`, `tim`.`type` ASC";
+            else
+            $select = "SELECT `tim`.`id`, `tim`.`study_year_id`, `tim`.`semester`, `tim`.`para`, `tim`.`day`, `tim`.`group_id`, `tim`.`subject_id`, `sb`.`title` AS `subject`, `tim`.`teacher1_id`, `tim`.`teacher2_id`, `tim`.`audience1_id`, `tim`.`audience2_id`, `tim`.`type`
+            FROM  `timetable` `tim`  INNER JOIN `subject` `sb` ON `tim`.`subject_id` = `sb`.`id`
+            WHERE  `tim`.`study_year_id` = ".$id." AND `tim`.`semester`='".$semester."' AND `tim`.`day`=".$day." ORDER BY `tim`.`para`, `tim`.`type` ASC";
+            $temp = mysql_query($select);
+            return $temp;
+        }
+
+        public function selectActualShedule($date, $day){
+            $select = "SELECT `sh`.`id`, `sh`.`date`, `sh`.`para`, `sh`.`day`, `sh`.`group_id`, `sh`.`subject_id`, `sb`.`title` AS `subject`, `sh`.`teacher1_id`, `sh`.`teacher2_id`, `sh`.`audience1_id`, `sh`.`audience2_id`, `sh`.`type`, `sh`.`type_lesson`
+            FROM  `actual_shedule` `sh`  INNER JOIN `subject` `sb` ON `sh`.`subject_id` = `sb`.`id`
+            WHERE  `sh`.`date` = '".$date."' AND `sh`.`day`=".$day." ORDER BY `sh`.`para`, `sh`.`type` ASC";
             $temp = mysql_query($select);
             return $temp;
         }
@@ -57,6 +71,12 @@
         public function insertTimetable($insertValues, $table, $year, $semester){
             mysql_query("DELETE FROM ".$table." WHERE `study_year_id`=".$year." AND `semester`='".$semester."'");
             $temp = mysql_query("INSERT INTO ".$table." (`study_year_id`, `semester`, `para`, `day`, `group_id`, `subject_id`, `teacher1_id`, `teacher2_id`, `audience1_id`, `audience2_id`, `type`) VALUES ".$insertValues);
+            return $temp;
+        }
+
+        public function insertActualSchedule($insertValues, $table, $date){
+            mysql_query("DELETE FROM ".$table." WHERE `date`='".$date."'");
+            $temp = mysql_query("INSERT INTO ".$table." (`date`, `para`, `day`, `group_id`, `subject_id`, `teacher1_id`, `teacher2_id`, `audience1_id`, `audience2_id`, `type`, `type_lesson`) VALUES ".$insertValues);
             return $temp;
         }
 
