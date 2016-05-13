@@ -1,7 +1,7 @@
 <?php
 /**
  * @var ReportController $this
- * @var GroupReport $model
+ * @var GroupReport $model_group
  */
 $this->breadcrumbs = array(
     Yii::t('report', 'Reports'),
@@ -13,7 +13,7 @@ $form=$this->beginWidget(BoosterHelper::FORM);
     ?>
 <div class="row">
     <?php
-    echo $form->dropDownList($model, 'group_id',  Group::getTreeList(),
+    echo $form->dropDownList($model_group, 'group_id',  Group::getTreeList(),
         array('empty'=>Yii::t('report','Choose group')));
     ?>
 </div>
