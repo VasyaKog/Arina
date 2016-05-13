@@ -13,34 +13,37 @@ class ReportController extends Controller{
     public function actionIndex()
     {
         /**
-         * @var GroupReport $model_group
-         * @var TeacherReport $model_teacher
+         * @var ReportHours $model
          * @var ExcelMaker $excel
          * @var $data JournalRecord[]
          * @var $item JournalRecord
-         * @var $temp Load
+         * @var $temp string
+         * @var $datarez JournalRecord[]
          */
-        $model_group = new GroupReport();
-        $model_teacher = new TeacherReport();
-        if (isset($_POST['GroupReport']['group_id'])) {
+        $model = new ReportHours();
+        if (isset($_POST['ReportHours']['group_id'])&&isset($_POST['ReportHours']['month'])) {
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll();
-            $datarez= array();
+            $datarez =array();
             foreach ($data as $item){
-                $temp = $item->load;
-                var_dump($temp);
+                if (substr($item->date,5,2)==$_POST['ReportHours']['month'])
+                    array_push($datarez,$item);
+
             //    if ($item->load->group_id==$_POST['GroupReport']['group_id']){
             //        array_push($datarez,$item);
             //    }
+                //var_dump($item->date);
             }
-            var_dump($_POST['GroupReport']['group_id']);
+            var_dump($datarez);
+            //var_dump($_POST['ReportHours']['group_id']);
+            //var_dump($_POST['ReportHours']['month']);
+
             //data = JournalRecord::model()->findAllByAttributes(array('' => $_POST['GroupReport']['group_id']));
             //var_dump($data);
             //$excel->getDocument($data, 'GroupHoursList');
         }
         $this->render('index', 
-            array('model_group' => $model_group,
-                'model_teacher'=>$model_teacher)
+            array('model' => $model,)
         );
     }
 }
