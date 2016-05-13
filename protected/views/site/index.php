@@ -19,7 +19,7 @@ if (isset(Yii::app()->user->identityType)) {
     <?php
         if (isset(Yii::app()->user->identityType)) {
             if (isset(Yii::app()->user->identityId)) {
-                if (Yii::app()->user->identityTypНуe == User::TYPE_TEACHER) {
+                if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
                     echo Teacher::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', викладач<br>';
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_STUDENT) {

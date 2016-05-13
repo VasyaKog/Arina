@@ -24,7 +24,7 @@ class JournalRecordController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
+/*	public function accessRules()
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -43,6 +43,14 @@ class JournalRecordController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+*/
+
+	public function actionIndex($id)
+	{
+		$this->render('views',array(
+			'model'=>$this->loadModel($id),
+		));
 	}
 
 	/**
@@ -73,7 +81,7 @@ class JournalRecordController extends Controller
 		{
 			$model->attributes=$_POST['JournalRecord'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('views','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -97,7 +105,7 @@ class JournalRecordController extends Controller
 		{
 			$model->attributes=$_POST['JournalRecord'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('views','id'=>$model->id));
 		}
 
 		$this->render('update',array(
@@ -112,11 +120,14 @@ class JournalRecordController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
-
+		/**
+		 * @var $model JournalRecord
+		 */
+		$model=JournalRecord::model()->findByPk($id);
+		$model->delete();
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		///if(!isset($_GET['ajax']))
+	//		$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
 	
