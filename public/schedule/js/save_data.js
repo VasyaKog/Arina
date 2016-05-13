@@ -4,7 +4,6 @@
 function save_timetable(){
     var count = checkData();
     var count_error_auditors = checkAudience();
-    alert(count_error_auditors);
     if ((count!=0)||(count_error_auditors!=0)){
         var text='';
         if((count!=0)&&(count_error_auditors==0)) text = "Увага! Ще є "+count+" пердметів в яких є вільні години! Продовжити збереження?";

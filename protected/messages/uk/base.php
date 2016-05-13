@@ -41,6 +41,9 @@ return array(
     'Groups' => 'Групи',
     'Audiences' => 'Аудиторії',
     'Schedule' => 'Розклад',
+    'Create a document replacements' => 'Створити документ замін в розкладі',
+    'Overal' => 'Загальний',
+    'For teachers' => 'Для викладачів',
     'Students' => 'Студенти',
     'Teachers' => 'Викладачі',
     'Actions' => 'Дії',
@@ -95,4 +98,7 @@ return array(
     'File Shares' => 'Файли',
     'Download' => 'Скачати',
     'users'=>'Користувачі',
+    'Main Settings' =>'Головні налаштування',
+    'Settings benefits' =>'Налаштування пільг',
+    'Teacher'=>'Викладач',
 );

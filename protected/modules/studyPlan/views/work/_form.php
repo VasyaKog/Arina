@@ -28,7 +28,7 @@
     <?php echo $form->dropDownListRow(
         $model,
         'plan_origin',
-        StudyPlan::getList(Yii::app()->user->identityId) ,
+        StudyPlan::getList() ,
         array('empty' => '', 'class'=>'span5')
     ); ?>
     <?php echo $form->dropDownListRow(

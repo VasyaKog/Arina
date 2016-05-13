@@ -70,7 +70,6 @@ $this->breadcrumbs = array(
             <?php echo $form->dropDownListRow($model, 'subject_id', array(), array('class' => 'span5')); ?>
         </div>
         <div class="span7">
-
             <?php echo $form->dropDownListRow(
                 $model,
                 'cyclic_commission_id',

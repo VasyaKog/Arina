@@ -117,7 +117,7 @@ FROM
 WHERE
     `tim`.`study_year_id` = $id
         AND `tim`.`semester` = "$semester"
-ORDER BY `tim`.`para` , `tim`.`type` ASC
+ORDER BY `tim`.`day`, `tim`.`para` , `tim`.`type` ASC
 SQL;
 
         $cmd = Yii::app()->db->createCommand($sql);
@@ -141,18 +141,74 @@ group By `g`.`id`
 ORDER BY `l`.`course` , `g`.`title` , `t`.`last_name` ASC
 SQL;
 
-
         $cmd = Yii::app()->db->createCommand($sql);
         $groups = $cmd->queryAll();
+
+        $sql = "SELECT `id`,`last_name`,`first_name`,`middle_name` FROM `employee`";
+        $cmd = Yii::app()->db->createCommand($sql);
+        $teachers = $cmd->queryAll();
+
+        $sql = "SELECT `id`,`number` FROM `audience`";
+        $cmd = Yii::app()->db->createCommand($sql);
+        $audiences = $cmd->queryAll();
+
         $list = array();
         foreach ($groups as $group) {
             if (!isset($list[$group['course']])) {
                 $list[$group['course']] = array();
             }
             $list[$group['course']][$group['group_id']] = $group['group'];
-        }/*
-        echo "<pre>";
-        print_r($list);
+        }
+
+        $arr_data = array();
+        foreach ($list as $key => $ls)
+            foreach ($ls as $k => $g) {
+                if (!isset($arr_data[$key])) {
+                    $arr_data[$key] = array();
+                }
+
+                $tmp_arr = array();
+                foreach ($data as $dat) {
+                    $tmp = array();
+                    if ($k == $dat['group_id']){
+                        $tmp['para'] = $dat['para'];
+                        $tmp['day'] = $dat['day'];
+                        $tmp['subject'] = $dat['subject'];
+                        $teach2_perevirka = false;
+                        foreach ($teachers as $teach){
+                            if($dat['teacher1_id']==$teach['id']) $tmp['teacher1'] = $teach['last_name'].' '.substr($teach['first_name'],0,2).'. '.substr($teach['middle_name'],0,2).'.';
+
+                            if(($dat['teacher2_id']==$teach['id'])&&($dat['teacher2_id']!='')) {$tmp['teacher2'] = $teach['last_name'].' '.substr($teach['first_name'],0,2).'. '.substr($teach['middle_name'],0,2).'.'; $teach2_perevirka = true;}
+                        }
+                        if ($teach2_perevirka==false) $tmp['teacher2'] = '';
+                        $aud1_perevirka = false; $aud2_perevirka = false;
+                        foreach ($audiences as $aud){
+                            if(($dat['audience1_id']==$aud['id'])&&($dat['audience1_id']!='')) {$tmp['audience1'] = $aud['number']; $aud1_perevirka=true;}
+                            if(($dat['audience2_id']==$aud['id'])&&($dat['audience2_id']!='')) {$tmp['audience2'] = $aud['number']; $aud2_perevirka=true;}
+                        }
+                        if ($aud1_perevirka==false) $tmp['audience1'] = '';
+                        if ($aud2_perevirka==false) $tmp['audience2'] = '';
+                        $tmp['type'] = $dat['type'];
+                        $tmp['double'] = false;
+                        $tmp_arr[] = $tmp;
+                    }
+                }
+
+                $ind = array();
+                for($i = 0; $i<count($tmp_arr)-1; $i++){
+                    if(($tmp_arr[$i]['day']==$tmp_arr[$i+1]['day'])&&($tmp_arr[$i]['para']==$tmp_arr[$i+1]['para'])&&($tmp_arr[$i]['subject']==$tmp_arr[$i+1]['subject'])&&($tmp_arr[$i]['teacher1']==$tmp_arr[$i+1]['teacher1'])&&($tmp_arr[$i]['teacher2']==$tmp_arr[$i+1]['teacher2'])&&($tmp_arr[$i]['type']==0)){
+                        $tmp_arr[$i]['type'] = '';
+                        $tmp_arr[$i]['double'] = true;
+                        $ind[] = $i+1;
+                    }
+                }
+                foreach ($ind as $i) unset($tmp_arr[$i]);
+
+                $arr_data[$key][$k] = $tmp_arr;
+            }
+
+       /* echo "<pre>";
+        print_r($arr_data);
         echo "</pre>";
         die;*/
 
@@ -174,9 +230,9 @@ SQL;
             $value = str_replace('<semester>', $this->rome($semester == 'fill' ? 1 : 2), $value);
             $value = str_replace('<course>', $this->rome($i), $value);
             $sheet->setCellValue('H3', $value);
-            $row = 12;
             $j = 0;
             foreach ($list[$i] as $id => $group) { //group
+                $row = 12;
                 $from = 4 + 3 * $j;
                 $col = PHPExcel_Cell::stringFromColumnIndex($from); //E
                 $end = PHPExcel_Cell::stringFromColumnIndex($from + 2); //G
@@ -186,9 +242,117 @@ SQL;
                 $style->getAlignment()
                     ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $style->getFont()->setBold(true);
+                $styleArray = array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_MEDIUM
+                        )
+                    )
+                );
+                $style->applyFromArray($styleArray);
+                $row++;
+                $count_para = 0;
+                for($f = 0; $f<20; $f++){
+                    if($count_para>3) $count_para=0;
+                    switch ($count_para) {
+                        case 0:
+                            $para = "1-2";
+                            break;
+                        case 1:
+                            $para = "3-4";
+                            break;
+                        case 2:
+                            $para = "5-6";
+                            break;
+                        case 3:
+                            $para = "7-8";
+                            break;
+                    }
+                    $day = $this->getDay($f);
+                    $tmp_data = array();
+                    foreach($arr_data[$i][$id] as $dat)
+                        if(($dat['day']==$day)&&($dat['para']==$para)) $tmp_data[] = $dat;
+
+                    if(count($tmp_data)==1){
+                        $sheet->setCellValue($col . $row, $tmp_data[0]['subject']);
+                        $sheet->mergeCells("$col$row:$end".($row+1));
+                        $sheet->getStyle("$col$row:$end".($row+1))->getFont()->setBold(true);
+
+                        $sheet->setCellValue($col . ($row+2), $tmp_data[0]['teacher1']);
+                        $sheet->getStyle($col . ($row+2))->getFont()->setItalic(true);
+                        $endTeach = PHPExcel_Cell::stringFromColumnIndex($from + 1);
+                        $sheet->mergeCells("$col".($row+2).":$endTeach".($row+2));
+
+                        $sheet->setCellValue($end . ($row+2), $tmp_data[0]['audience1']);
+
+                        $sheet->setCellValue($col . ($row+3), $tmp_data[0]['teacher2']);
+                        $sheet->getStyle($col . ($row+3))->getFont()->setItalic(true);
+                        $sheet->mergeCells("$col".($row+3).":$endTeach".($row+3));
+                        $sheet->setCellValue($end . ($row+3), $tmp_data[0]['audience2']);
+
+                        $style = $sheet->getStyle("$col$row:$end".($row+3));
+                        $style->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    }else if(count($tmp_data)==2){
+                        $teacer1_names = ''; $teacer2_names='';
+                        if($tmp_data[0]['teacher2']!='') $teacer1_names=stristr($tmp_data[0]['teacher1'], ' ', true).'-'.stristr($tmp_data[0]['teacher2'], ' ', true);
+                        else $teacer1_names=$tmp_data[0]['teacher1'];
+
+                        if($tmp_data[1]['teacher2']!='') $teacer2_names=stristr($tmp_data[1]['teacher1'], ' ', true).'-'.stristr($tmp_data[1]['teacher2'], ' ', true);
+                        else $teacer2_names=$tmp_data[1]['teacher1'];
+
+                        $audits1_numbers = ''; $audits2_numbers='';
+                        if(($tmp_data[0]['audience1']!='')&&($tmp_data[0]['audience2']!='')) $audits1_numbers=$tmp_data[0]['audience1'].'-'.$tmp_data[0]['audience2'];
+                        else $audits1_numbers=$tmp_data[0]['audience1'].$tmp_data[0]['audience2'];
+
+                        if(($tmp_data[1]['audience1']!='')&&($tmp_data[1]['audience2']!='')) $audits2_numbers=$tmp_data[1]['audience1'].'-'.$tmp_data[1]['audience2'];
+                        else $audits2_numbers=$tmp_data[1]['audience1'].$tmp_data[1]['audience2'];
+
+                        $sheet->setCellValue($col . $row, $tmp_data[0]['subject']);
+                        $sheet->getStyle("$col$row:$end$row")->getFont()->setBold(true);
+                        $sheet->mergeCells("$col$row:$end$row");
+
+                        $sheet->setCellValue($col . ($row+1), $teacer1_names);
+                        $sheet->getStyle($col . ($row+1))->getFont()->setItalic(true);
+                        $endTeach = PHPExcel_Cell::stringFromColumnIndex($from + 1);
+                        $sheet->mergeCells("$col".($row+1).":$endTeach".($row+1));
+
+                        $sheet->setCellValue($end . ($row+1), $audits1_numbers);
+                        $sheet->getStyle("$col".($row+1).":$end".($row+1))->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
+                        $sheet->setCellValue($col . ($row+2), $tmp_data[1]['subject']);
+                        $sheet->getStyle($col . ($row+2))->getFont()->setBold(true);
+                        $sheet->mergeCells("$col".($row+2).":$end".($row+2));
+
+                        $sheet->setCellValue($col . ($row+3), $teacer2_names);
+                        $sheet->getStyle($col . ($row+3))->getFont()->setItalic(true);
+                        $sheet->mergeCells("$col".($row+3).":$endTeach".($row+3));
+
+                        $sheet->setCellValue($end . ($row+3), $audits2_numbers);
+                    }
+
+                    $style = $sheet->getStyle("$col$row:$end".($row+3));
+                    $styleArray = array(
+                        'borders' => array(
+                            'right' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_MEDIUM
+                            ),
+                            'bottom' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_MEDIUM
+                            )
+                        )
+                    );
+                    $style->applyFromArray($styleArray);
+
+                    $count_para++;
+                    $row = $row+4;
+
+                }
+
                 $j++;
 
                 //@TODO classes
+
+
             }
 
         }
@@ -197,11 +361,445 @@ SQL;
         return $objPHPExcel;
     }
 
+    private function getDay($id){
+        $result = null;
+        if (($id>=0)&&($id<4)) $result=1;
+        if (($id>=4)&&($id<8)) $result=2;
+        if (($id>=8)&&($id<12)) $result=3;
+        if (($id>=12)&&($id<16)) $result=4;
+        if (($id>=16)&&($id<20)) $result=5;
+        return $result;
+    }
+
+    private function checkDenumerator(){
+
+    }
+
     /**
      *
      * @param $data Load[]
      * @return PHPExcel
      */
+
+    public function makeActualSchedule($data){
+        $date = $data['date'];
+        $objPHPExcel = $this->loadTemplate('replacements.xls');
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        /** @var StudyYear $studyYear */
+
+        $sql = <<<SQL
+SELECT
+    `sh`.`id`,
+    `sh`.`date`,
+    `sh`.`para`,
+    `sh`.`day`,
+    `sh`.`group_id`,
+    `sh`.`subject_id`,
+    `sb`.`title` AS `subject`,
+    `sh`.`teacher1_id`,
+    `sh`.`teacher2_id`,
+    `sh`.`audience1_id`,
+    `sh`.`audience2_id`,
+    `sh`.`type`
+FROM
+     `actual_shedule` `sh`
+        INNER JOIN
+     `subject` `sb` ON `sh`.`subject_id` = `sb`.`id`
+WHERE
+     `sh`.`date`  = '$date'
+ORDER BY `sh`.`para`, `sh`.`type` ASC
+SQL;
+        $cmd = Yii::app()->db->createCommand($sql);
+        $data_actualShedule = $cmd->queryAll();
+        if (count($data_actualShedule)>0){
+            $type = $data_actualShedule[0]['type'];
+            $day = $data_actualShedule[0]['day'];
+
+            $sql = "SELECT * FROM `study_year`";
+            $cmd = Yii::app()->db->createCommand($sql);
+            $arr_years = $cmd->queryAll();
+            $arr_date = explode('-', $date);
+            $id_stud_year = '';
+            if (($arr_date[1]>=9)&&($arr_date[1]<=12)) {
+                foreach($arr_years as $stud_yea)
+                    if($stud_yea['begin']==$arr_date[0]) {$id_stud_year=$stud_yea['id']; break;}
+                $semester = 'fill';
+            }
+            else{
+                foreach($arr_years as $stud_yea)
+                    if($stud_yea['end']==$arr_date[0]) {$id_stud_year=$stud_yea['id']; break;}
+                $semester = 'spring';
+            }
+
+            $sql = <<<SQL
+            SELECT
+              `tim`.`id`,
+              `tim`.`para`,
+              `tim`.`day`,
+              `tim`.`group_id`,
+              `tim`.`subject_id`,
+              `sb`.`title` AS `subject`,
+              `tim`.`teacher1_id`,
+              `tim`.`teacher2_id`,
+              `tim`.`audience1_id`,
+              `tim`.`audience2_id`,
+              `tim`.`type`
+            FROM
+              `timetable` `tim`
+                INNER JOIN
+              `subject` `sb` ON `tim`.`subject_id` = `sb`.`id`
+            WHERE
+             `tim`.`study_year_id` = $id_stud_year
+             AND `tim`.`semester` = "$semester"
+             AND `tim`.`day` = $day
+             AND `tim`.`type` = $type
+              ORDER BY `tim`.`day`, `tim`.`para` , `tim`.`type` ASC
+SQL;
+            $cmd = Yii::app()->db->createCommand($sql);
+            $arr_timetable = $cmd->queryAll();
+
+            foreach ($data_actualShedule as $key1 => $actual){
+                $data_actualShedule[$key1]['by_teacher1'] = ''; $data_actualShedule[$key1]['by_teacher2'] = '';
+                $uns = false;
+                foreach($arr_timetable as $key2 => $timetabl){
+                    if(($timetabl['para']==$actual['para'])&&($timetabl['day']==$actual['day'])&&($timetabl['group_id']==$actual['group_id'])&&($timetabl['subject_id']==$actual['subject_id'])&&($timetabl['teacher1_id']==$actual['teacher1_id'])&&($timetabl['teacher2_id']==$actual['teacher2_id'])&&($timetabl['audience1_id']==$actual['audience1_id'])&&($timetabl['audience2_id']==$actual['audience2_id'])){
+                        unset($arr_timetable[$key2]); $uns = true; break;
+                    } else {
+                        if(($timetabl['para']==$actual['para'])&&($timetabl['day']==$actual['day'])&&($timetabl['group_id']==$actual['group_id'])&&($timetabl['subject_id']!=$actual['subject_id'])) {
+                            $data_actualShedule[$key1]['by_teacher1'] = $timetabl['teacher1_id'];  $data_actualShedule[$key1]['by_teacher2'] = $timetabl['teacher2_id'];
+                            unset($arr_timetable[$key2]); break;
+                        }
+                        if(($timetabl['para']==$actual['para'])&&($timetabl['day']==$actual['day'])&&($timetabl['group_id']==$actual['group_id'])&&($timetabl['subject_id']==$actual['subject_id'])&&(($timetabl['audience1_id']!=$actual['audience1_id'])||($timetabl['audience2_id']!=$actual['audience2_id']))) {
+                            unset($arr_timetable[$key2]); break;
+                        }
+
+                    }
+                }
+                if ($uns) {unset($data_actualShedule[$key1]);  continue;}
+            }
+
+            if (count($arr_timetable)>0){
+                foreach($arr_timetable as $timetabl){
+                    $tmp = array();
+                    $tmp['date'] = $date;
+                    $tmp['para'] = $timetabl['para'];
+                    $tmp['day'] = $timetabl['day'];
+                    $tmp['group_id'] = $timetabl['group_id'];
+                    $tmp['subject_id'] = ''; $tmp['subject']="Немає пари"; $tmp['teacher1_id'] = ''; $tmp['teacher2_id'] = ''; $tmp['audience1_id'] = ''; $tmp['audience2_id'] = '';
+                    $tmp['type'] = $timetabl['type']; $tmp['by_teacher1'] = $timetabl['teacher1_id'];  $tmp['by_teacher2'] = $timetabl['teacher2_id'];
+                    $add = false;
+                    foreach($data_actualShedule as $key1 => $actual){
+                        if($timetabl['para']==$actual['para']) {
+                            $add = true;
+                            array_splice($data_actualShedule, $key1, 0, array($tmp));
+                            break;
+                        }
+                    }
+                    if ($add==false) $data_actualShedule[]=$tmp;
+                }
+            }
+
+            $sql = <<<SQL
+SELECT
+    `l`.`group_id`,
+    `g`.`title` AS `group`,
+    `l`.`course`
+FROM
+    `wp_plan` `pl`
+        INNER JOIN
+    (`subject` `sb`
+    INNER JOIN (`wp_subject` `wp`
+    INNER JOIN (`group` `g`
+    INNER JOIN (`load` `l`
+    INNER JOIN `employee` `t` ON `l`.`teacher_id` = `t`.`id`) ON `g`.`id` = `l`.`group_id`) ON `wp`.`id` = `l`.`wp_subject_id`) ON `sb`.`id` = `wp`.`subject_id`) ON `pl`.`id` = `wp`.`plan_id`
+WHERE
+    `l`.`study_year_id` = $id_stud_year
+group By `g`.`id`
+ORDER BY `l`.`course` , `g`.`title` ASC
+SQL;
+
+            $cmd = Yii::app()->db->createCommand($sql);
+            $groups = $cmd->queryAll();
+
+            $sql = "SELECT `id`,`last_name`,`first_name`,`middle_name` FROM `employee`";
+            $cmd = Yii::app()->db->createCommand($sql);
+            $teachers = $cmd->queryAll();
+
+            $sql = "SELECT `id`,`number` FROM `audience`";
+            $cmd = Yii::app()->db->createCommand($sql);
+            $audiences = $cmd->queryAll();
+
+            $list = array();
+            foreach ($groups as $group) {
+                if (!isset($list[$group['course']])) {
+                    $list[$group['course']] = array();
+                }
+                $list[$group['course']][$group['group_id']] = $group['group'];
+            }
+
+            foreach ($list as $key => $ls)
+                foreach ($ls as $k => $g){
+                    $arr_tmp=array();
+                    foreach($data_actualShedule as $dat){
+                        if($dat['group_id']==$k){
+                            $tmp = array();
+                            $tmp['group'] = $g;
+                            $tmp['para'] = $dat['para'];
+                            $tmp['subject'] = $dat['subject'];
+                            $teacher1 = ''; $teacher2 = '';
+                            $by_teacher1 = ''; $by_teacher2 = '';
+                            foreach($teachers as $teach){
+                                if (($dat['teacher1_id']!='')&&($dat['teacher1_id']==$teach['id'])) $teacher1=$teach['last_name'];
+                                if (($dat['teacher2_id']!='')&&($dat['teacher2_id']==$teach['id'])) $teacher2=$teach['last_name'];
+                                if (($dat['by_teacher1']!='')&&($dat['by_teacher1']==$teach['id'])) $by_teacher1=$teach['last_name'];
+                                if (($dat['by_teacher2']!='')&&($dat['by_teacher2']==$teach['id'])) $by_teacher2=$teach['last_name'];
+                            }
+
+                            $aud1 = ''; $aud2 = '';
+                            foreach($audiences as $audit){
+                                if (($dat['audience1_id']!='')&&($dat['audience1_id']==$audit['id'])) $aud1=$audit['number'];
+                                if (($dat['audience2_id']!='')&&($dat['audience2_id']==$audit['id'])) $aud2=$audit['number'];
+                            }
+                            $tmp['teach_title'] = '';
+                            if ($teacher2!='') $tmp['teach_title']=$teacher1.' - '.$teacher2;
+                            else $tmp['teach_title']=$teacher1;
+                            $tmp['kogo'] = '';
+                            if ($by_teacher2!='') $tmp['kogo']=$by_teacher1.' - '.$by_teacher2;
+                            else $tmp['kogo']=$by_teacher1;
+                            $tmp['auditor_title'] = '';
+                            if ($aud2!='') $tmp['auditor_title']=$aud1.' - '.$aud2;
+                            else $tmp['auditor_title']=$aud1;
+                            $arr_tmp[]=$tmp;
+                        }
+                    }
+                    $list[$key][$k]=$arr_tmp;
+                }
+
+            $str_mount = '';
+            switch($arr_date[1]){
+                case 1: $str_mount = "січня"; break; case 2: $str_mount = "лютого"; break; case 3: $str_mount = "березня"; break;
+                case 4: $str_mount = "квітня"; break; case 5: $str_mount = "травня"; break; case 6: $str_mount = "червня"; break;
+                case 7: $str_mount = "липня"; break; case 8: $str_mount = "серпня"; break; case 9: $str_mount = "вересня"; break;
+                case 10: $str_mount = "жовтня"; break; case 11: $str_mount = "листопада"; break; case 12: $str_mount = "грудня"; break;
+
+            }
+
+            $str_day = '';
+            $str_type = '';
+            switch($day){
+                case 1: $str_day = "Понеділок"; break; case 2: $str_day = "Вівторок"; break; case 3: $str_day = "Середа"; break;
+                case 4: $str_day = "Четвер"; break; case 5: $str_day = "Пятниця"; break;
+            }
+
+            if ($type == 0) $str_type='Чисельник'; else $str_type='Знаменник';
+
+            $str_date = $arr_date[2].' '.$str_mount.' '.$arr_date[0];
+            $str_info = $str_day.' - '.$str_type;
+
+            $this->setValue($sheet, 'D2', $str_date, '@value');
+            $sheet->setCellValue("D3", $str_info);
+
+            $row = 6;
+
+            foreach ($list as $key => $ls)
+                foreach ($ls as $k => $g)
+                    foreach($g as $key => $tmp){
+                        if($key==0) $sheet->setCellValue("B$row", $tmp['group']);
+                        $sheet->setCellValue("C$row", $tmp['para']);
+                        $sheet->setCellValue("D$row", $tmp['kogo']);
+                        $sheet->setCellValue("E$row", $tmp['subject']);
+                        $sheet->setCellValue("F$row", $tmp['teach_title']);
+                        $sheet->setCellValue("G$row", $tmp['auditor_title']);
+                        $sheet->insertNewRowBefore($row + 1, 1);
+                        $row++;
+                    }
+            $sheet->removeRow($row);
+        }
+        return $objPHPExcel;
+    }
+
+    public function makeScheduleTeachers($data){
+        $objPHPExcel = $this->loadTemplate('schedule_teachers.xls');
+        /** @var StudyYear $studyYear */
+        $studyYear = StudyYear::model()->findByPk($data['id']);
+        $id = $data['id'];
+        $semester = $data['semester'];
+        $sql = <<<SQL
+SELECT
+    `tim`.`id`,
+    `tim`.`study_year_id`,
+    `tim`.`semester`,
+    `tim`.`para`,
+    `tim`.`day`,
+    `tim`.`group_id`,
+    `g`.`title` AS `group`,
+    `tim`.`subject_id`,
+    `sb`.`short_name` AS `subject`,
+    `tim`.`teacher1_id`,
+    `tim`.`teacher2_id`,
+    `tim`.`audience1_id`,
+    `tim`.`audience2_id`,
+    `tim`.`type`
+FROM
+    `subject` `sb`
+        INNER JOIN
+     (`timetable` `tim` INNER JOIN `group` `g` ON `tim`.`group_id` = `g`.`id`) ON `tim`.`subject_id` = `sb`.`id`
+WHERE
+    `tim`.`study_year_id` = $id
+        AND `tim`.`semester` = "$semester"
+ORDER BY `tim`.`day`, `tim`.`para` , `tim`.`type` ASC
+SQL;
+
+        $cmd = Yii::app()->db->createCommand($sql);
+        $data = $cmd->queryAll();
+
+        $sql = <<<SQL
+SELECT
+    `t`.`id`,
+    `t`.`last_name`,
+    `t`.`first_name`,
+    `t`.`middle_name`
+FROM
+    `timetable` `tim` INNER JOIN `employee` `t` ON `tim`.`teacher1_id` = `t`.`id`
+WHERE
+    `tim`.`study_year_id` = $id
+        AND `tim`.`semester` = "$semester"
+GROUP BY `t`.`id`
+ORDER BY `t`.`last_name` ASC
+SQL;
+        $cmd = Yii::app()->db->createCommand($sql);
+        $teach1 = $cmd->queryAll();
+
+        $sql = <<<SQL
+SELECT
+    `t`.`id`,
+    `t`.`last_name`,
+    `t`.`first_name`,
+    `t`.`middle_name`
+FROM
+    `timetable` `tim` INNER JOIN `employee` `t` ON `tim`.`teacher2_id` = `t`.`id`
+WHERE
+    `tim`.`study_year_id` = $id
+        AND `tim`.`semester` = "$semester"
+GROUP BY `t`.`id`
+ORDER BY `t`.`last_name` ASC
+SQL;
+        $cmd = Yii::app()->db->createCommand($sql);
+        $teach2 = $cmd->queryAll();
+
+        $sql = "SELECT `id`,`number` FROM `audience`";
+        $cmd = Yii::app()->db->createCommand($sql);
+        $audiences = $cmd->queryAll();
+
+        $tmp_arr = array_merge($teach1,$teach2);
+        $arr_teacher = array();
+        foreach ($tmp_arr as $tmp){
+            $arr_teacher[$tmp['id']] = $tmp['last_name'].' '.$tmp['first_name'].' '.$tmp['middle_name'];
+        }
+        asort($arr_teacher);
+
+        foreach($arr_teacher as $key=>$teach){
+            $tmp_arr = array('name'=>$teach);
+            $arr_predmet_numerator = array();
+            $arr_predmet_denumerator = array();
+            foreach($data as $key2 => $dat){
+                if(($dat['teacher1_id']==$key)||($dat['teacher2_id']==$key)){
+                    $tmp = array();
+                    $tmp['para'] = $dat['para'];
+                    $tmp['day'] = $dat['day'];
+                    if($dat['teacher1_id']==$key)
+                        foreach ($audiences as $auditor) if($auditor['id']==$dat['audience1_id']) {$tmp['audience'] = $auditor['number']; break;}
+                    if($dat['teacher2_id']==$key)
+                        foreach ($audiences as $auditor) if($auditor['id']==$dat['audience2_id']) {$tmp['audience'] = $auditor['number']; break;}
+                    $tmp['subject'] = $dat['subject'];
+                    $tmp['group'] = $dat['group'];
+                    if($dat['type']==0) $arr_predmet_numerator[] = $tmp;
+                    else $arr_predmet_denumerator[] = $tmp;
+                }
+
+            }
+            $tmp_arr['data_numerator'] = $arr_predmet_numerator;
+            $tmp_arr['data_denumerator'] = $arr_predmet_denumerator;
+            $arr_teacher[$key] = $tmp_arr;
+        }
+
+        $objWorkSheetBase = $objPHPExcel->getSheet(0);
+        $objWorkSheetBase->setTitle('Чисельник');
+        $objWorkSheet1 = clone $objWorkSheetBase;
+        $objWorkSheet1->setTitle('Знаменник');
+        $objPHPExcel->addSheet($objWorkSheet1);
+
+        $sheet1 = $objPHPExcel->setActiveSheetIndex(0);
+        $sheet2 = $objPHPExcel->setActiveSheetIndex(1);
+        $row = 6;
+        foreach($arr_teacher as $teach){
+            $sheet1->setCellValue("B$row", $teach['name']);
+            $sheet2->setCellValue("B$row", $teach['name']);
+            foreach ($teach['data_denumerator'] as $dat){
+                if(($dat['para']=='1-2')&&($dat['day']==1))  {$sheet2->setCellValue("C$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("C$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==1))  {$sheet2->setCellValue("D$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("D$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==1))  {$sheet2->setCellValue("E$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("E$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==1))  {$sheet2->setCellValue("F$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("F$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==2))  {$sheet2->setCellValue("G$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("G$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==2))  {$sheet2->setCellValue("H$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("H$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==2))  {$sheet2->setCellValue("I$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("I$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==2))  {$sheet2->setCellValue("J$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("J$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==3))  {$sheet2->setCellValue("K$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("K$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==3))  {$sheet2->setCellValue("L$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("L$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==3))  {$sheet2->setCellValue("M$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("M$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==3))  {$sheet2->setCellValue("N$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("N$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==4))  {$sheet2->setCellValue("O$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("O$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==4))  {$sheet2->setCellValue("P$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("P$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==4))  {$sheet2->setCellValue("Q$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("Q$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==4))  {$sheet2->setCellValue("R$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("R$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==5))  {$sheet2->setCellValue("S$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("S$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==5))  {$sheet2->setCellValue("T$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("T$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==5))  {$sheet2->setCellValue("U$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("U$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==5))  {$sheet2->setCellValue("V$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet2->getStyle("V$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+            }
+
+            foreach ($teach['data_numerator'] as $dat){
+                if(($dat['para']=='1-2')&&($dat['day']==1))  {$sheet1->setCellValue("C$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("C$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==1))  {$sheet1->setCellValue("D$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("D$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==1))  {$sheet1->setCellValue("E$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("E$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==1))  {$sheet1->setCellValue("F$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("F$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==2))  {$sheet1->setCellValue("G$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("G$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==2))  {$sheet1->setCellValue("H$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("H$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==2))  {$sheet1->setCellValue("I$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("I$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==2))  {$sheet1->setCellValue("J$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("J$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==3))  {$sheet1->setCellValue("K$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("K$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==3))  {$sheet1->setCellValue("L$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("L$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==3))  {$sheet1->setCellValue("M$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("M$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==3))  {$sheet1->setCellValue("N$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("N$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==4))  {$sheet1->setCellValue("O$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("O$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==4))  {$sheet1->setCellValue("P$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("P$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==4))  {$sheet1->setCellValue("Q$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("Q$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==4))  {$sheet1->setCellValue("R$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("R$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+
+                if(($dat['para']=='1-2')&&($dat['day']==5))  {$sheet1->setCellValue("S$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("S$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='3-4')&&($dat['day']==5))  {$sheet1->setCellValue("T$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("T$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='5-6')&&($dat['day']==5))  {$sheet1->setCellValue("U$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("U$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+                if(($dat['para']=='7-8')&&($dat['day']==5))  {$sheet1->setCellValue("V$row", $dat['group'].' '.$dat['subject'].' ('.$dat['audience'].')'); $sheet1->getStyle("V$row")->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'FDD495')))); }
+            }
+
+            $sheet1->insertNewRowBefore($row + 2, 1);
+            $sheet2->insertNewRowBefore($row + 2, 1);
+            $row = $row+1;
+        }
+
+        $sheet1->removeRow($row); $sheet1->removeRow($row);
+        $sheet2->removeRow($row); $sheet2->removeRow($row);
+
+        return $objPHPExcel;
+    }
+
     public function makeLoad($data)
     {
         $objPHPExcel = $this->loadTemplate('load.xls');
@@ -296,7 +894,7 @@ SQL;
         $this->setValue($sheet, 'C17', GlobalHelper::getCurrentYear(1), '@value1');
         $this->setValue($sheet, 'C17', GlobalHelper::getCurrentYear(2), '@value2');
         $k = $i = 40;
-        foreach ($group->students as $item) {
+        foreach ($group->getStudentArray() as $item) {
             /**@var Student $item */
             $sheet->setCellValue("A$i", $i - $k + 1);
             $sheet->setCellValue("B$i", $item->getShortFullName());

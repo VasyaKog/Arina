@@ -218,7 +218,7 @@ class PlanController extends Controller
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
         $model = StudyPlan::model()->loadContent($id);
-        if (!Yii::app()->user->checkAccess('manageStudyPlan',
+      /**  if (!Yii::app()->user->checkAccess('manageStudyPlan',
             array(
                 'id' => $model->speciality->department->head_id,
                 'type' => User::ROLE_ADMIN,
@@ -228,6 +228,7 @@ class PlanController extends Controller
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
+       **/
         $model->delete();
         if (!isset($_GET['ajax'])) {
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));

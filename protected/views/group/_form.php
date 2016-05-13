@@ -2,7 +2,7 @@
 /**
  *
  * @var GroupController $this
- * @var \Group $model
+ * @var Group $model
  * @var TbActiveForm $form
  */
 ?>
@@ -19,7 +19,6 @@
 <?php echo $form->textFieldRow($model, 'title'); ?>
 
 <?php echo $form->dropDownListRow($model, 'speciality_id', Speciality::getList(Yii::app()->user->identityId), array('empty' => Yii::t('group', 'Select speciality'), 'class' => 'span6')); ?>
-<?php echo $form->dropDownListRow($model, 'curator_id', Teacher::getList(), array('empty' => Yii::t('group', 'Select curator'), 'class' => 'span6')); ?>
 <?php
 if (!$model->isNewRecord) {
     echo $form->dropDownListRow($model, 'monitor_id', $model->getStudentsList(), array('empty' => Yii::t('group', 'Select prefect'), 'class' => 'span6'));

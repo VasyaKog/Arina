@@ -45,6 +45,7 @@ $('.search-form form').submit(function(){
 </div>
 
 <?php
+
 $this->widget(BoosterHelper::GRID_VIEW, array(
     'id' => 'student-grid',
     'dataProvider' => $model->search(),
@@ -52,22 +53,29 @@ $this->widget(BoosterHelper::GRID_VIEW, array(
     'responsiveTable' => true,
     'type' => 'striped condensed bordered hover',
     'columns' => array(
-        'code',
+        array(
+            'name'=>'code',
+            'htmlOptions' => array('width'=>'100px'),
+        ),
         array(
             'name' => 'fullName',
             'value' => '$data->getFullName()',
         ),
-        array(
-            'name' => 'group_id',
-            'value' => '$data->group->title',
-            'htmlOptions' => array('width' => '50px'),
-            'filter' => CHtml::dropDownList('Student[group_id]',
+       array(
+            'header' => 'Group',
+            'type' => 'raw',
+            'value' => '$data->getGroupListLinks()',
+            'htmlOptions' => array('width' => '190px'),
+            /*'filter' => CHtml::dropDownList('Student[f]',
                     $model->group_id,
                     CHtml::listData(Group::model()->findAll(), 'id', 'title'),
-                    array('empty' => ''))
-
-        ),
-
+                    array('empty' => '')),
+            */
+       ),
+//        array(
+//            'header'=>'Lists',
+//            'value'=>'$data->getListArray()'
+//        ),
         array(
             'header' => Yii::t('base', 'Actions'),
             'htmlOptions' => array('nowrap' => 'nowrap'),

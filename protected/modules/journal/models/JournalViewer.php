@@ -1,19 +1,17 @@
 <?php
-Yii::import('modules.studyPlan.models.*');
+Yii::import('modules.load.models.*');
 class JournalViewer extends CFormModel
 {
 
     public $groupId;
     public $subjectId;
-    public $studentId;
     public $isEmpty = true;
-    public $dateStart;
-    public $dateEnd;
+    public $studyYearId;
 
     public function rules()
     {
         return array(
-            array('subjectId', 'required'),
+            array('subjectId studyYearId', 'required'),
             array('groupId', 'required', 'on' => 'group'),
             array('studentId', 'required', 'on' => 'student'),
         );
@@ -25,10 +23,26 @@ class JournalViewer extends CFormModel
             'subjectId' => Yii::t('terms', 'Subject'),
             'groupId' => Yii::t('terms', 'Group'),
             'studentId' => Yii::t('terms', 'Student'),
+            'studyYearId'=>Yii::t('terms','Study year'),
         );
     }
 
-    public function getData()
+
+
+
+    public static function getGroupListByYearId($yearId=null){
+        $Groups=Group::getGroupsByYearId($yearId);
+        /**
+         *
+         **/
+        $res=array();
+        foreach($Groups as $item){
+            $res[$item->id]=$item->title;
+        }
+        return $res;
+    }
+
+   /* public function getData()
     {
         switch ($this->scenario) {
             case 'student' :
@@ -68,7 +82,7 @@ class JournalViewer extends CFormModel
         /**
          * @var $group Group
          */
-        $group = Group::model()->findByPk($this->groupId);
+        /*group = Group::model()->findByPk($this->groupId);
         
         $classes = ActualClass::model()->with(array(
                 'load' => array(
@@ -80,7 +94,7 @@ class JournalViewer extends CFormModel
         /**
          * @var $student Student
          */
-        foreach ($group->students as $student) {
+       /* foreach ($group->students as $student) {
             foreach($classes as $item) {
                 $tmp = array();
                 foreach($student->marks as $mark) {
@@ -102,5 +116,6 @@ class JournalViewer extends CFormModel
         );
         return $list;
     }
+       */
 
 }
