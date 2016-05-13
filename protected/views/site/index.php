@@ -26,7 +26,7 @@ if (isset(Yii::app()->user->identityType)) {
                     echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', студент<br>';
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_SUPER) {
-                     echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
                     echo 'Адміністратор<br>';
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {

@@ -91,6 +91,8 @@ class User extends ActiveRecord
         return array(
             'employee' => array(self::BELONGS_TO, 'Employee', 'identity_id'),
             'roles' => array(self::BELONGS_TO, 'RolesModel', 'identity_type'),
+            
+        'active' => array(self::BELONGS_TO, 'Active', 'role'),
             );
     }
 
@@ -104,7 +106,7 @@ class User extends ActiveRecord
             'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
             'email' => Yii::t('user', 'Email'),
-            'role' => Yii::t('user', 'Role'),
+            'role' => Yii::t('user', 'role'),
             'identity_id' => Yii::t('user', 'Identity ID'),
             'identity_type' => Yii::t('user', 'Identity Type'),
         );
@@ -131,7 +133,7 @@ class User extends ActiveRecord
         //$criteria->compare('password', $this->password, true);
         $criteria->compare('email', $this->email, true);
         $criteria->compare('role', $this->role);
-        // $criteria->compare('asd', $this->employee->last_name, true);
+        //$criteria->compare('asd', $this->employee->last_name, true);
         $criteria->compare('identity_type', $this->identity_type);
 
         return new CActiveDataProvider($this, array(
