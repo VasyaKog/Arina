@@ -98,9 +98,9 @@ class ExcelMaker extends CComponent
         $sql = <<<SQL
 SELECT
     `tim`.`id`,
-    `tim`.`study_year_id`,
     `tim`.`semester`,
     `tim`.`para`,
+    `tim`.`study_year_id`,
     `tim`.`day`,
     `tim`.`group_id`,
     `tim`.`subject_id`,
@@ -1405,7 +1405,13 @@ SQL;
     }
 
     protected function makeGroupHoursList($data){
+        /**
+         * @var JournalRecord $data
+         */
         $objPHPExcel = $this->loadTemplate('report_group.xls');
+        $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $i=8;
+
         return $objPHPExcel;
     }
 }

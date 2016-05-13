@@ -88,14 +88,10 @@ class SpecialityController extends Controller
      */
     public function actionIndex()
     {
-        
         $model = new Speciality('search');
         $model->unsetAttributes();
         if (isset($_GET['Speciality']))
             $model->attributes = $_GET['Speciality'];
-
-        $this->render('index', array(
-            'model' => $model,
-        ));
+        $this->render('index', array('model' => $model,));
     }
 }

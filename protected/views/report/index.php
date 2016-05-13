@@ -1,18 +1,34 @@
 <?php
 /**
  * @var ReportController $this
- * @var Teacher $model
+ * @var GroupReport $model
  */
 $this->breadcrumbs = array(
-    Yii::t('group', 'Groups'),
+    Yii::t('report', 'Reports'),
 );
-$this->menu = array(
-    array(
-        'type' => BoosterHelper::TYPE_PRIMARY,
-        'label' => 'download',
-        'url' => $this->createUrl('MakeGroupList'),
-    ),
-);
-echo CHtml::dropDownList('listname', 'empty',  array('sdss'=>'afsafssa'), array('empty' => '(Select a teacher)'));
-echo CHtml::dropDownList('listname', 'empty',  Teacher::getList(), array('empty' => '(Select a teacher)'));
+?>
+<div id="report-form">
+    <?
+$form=$this->beginWidget(BoosterHelper::FORM);
+    ?>
+<div class="row">
+    <?php
+    echo $form->dropDownList($model, 'group_id',  Group::getTreeList(),
+        array('empty'=>Yii::t('report','Choose group')));
+    ?>
+</div>
+    <div class="row buttons">
+        <?php $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'submit',
+            'type' => 'primary',
+
+            'label' => Yii::t('terms','Open'),
+        )); ?>
+
+</div>
+</div>
+    <?
+$this->endWidget();
 ?>
