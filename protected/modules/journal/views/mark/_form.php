@@ -16,13 +16,11 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
 		<?php if($type->present)
-			 echo $form->toggleButtonRow($model,'present',array('enabledLabel'=>Yii::t('base','Yes'),'disabledLabel'=>Yii::t('base','No')));else
+			 echo $form->toggleButtonRow($model,'present',array('enabledLabel'=>Yii::t('journal','NP'),'disabledLabel'=>Yii::t('base',' ')));else
 		?>
 	</div>
 
@@ -67,7 +65,7 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->dropDownListRow($model,'retake_value_id',array('0'=>Yii::t('journal','Select'))); ?>
+		<?php echo $form->dropDownListRow($model,'retake_value_id',array('0'=>Yii::t('journal','Select mark'))); ?>
 	</div>
 
 	<div class="row">
@@ -90,8 +88,8 @@
 
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Submit'); ?>
-	</div>
+		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('base','Create') : Yii::t('base','Save')); ?>
+	</div>	
 
 <?php $this->endWidget(); ?>
 

@@ -17,6 +17,7 @@ class WebUser extends CWebUser
      */
     public function getUsername()
     {
+
         if ($user = $this->getModel()) {
             return $user->username;
         }

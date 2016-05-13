@@ -2,6 +2,7 @@
 /** @var User $model  */
 /** @var UserController $this  */
 /** @var TbActiveForm $form */
+/* <?php echo $form->textFieldRow($model, 'email', array('class' => 'span5', 'maxlength' => 255)); ?> */
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'user-form',
     'enableAjaxValidation' => false,
@@ -15,7 +16,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span5', 'maxlength' => 255)); ?>
 
-<?php echo $form->textFieldRow($model, 'email', array('class' => 'span5', 'maxlength' => 255)); ?>
+
 
 <?php
 if (Yii::app()->user->checkAccess('admin')) {
@@ -32,6 +33,7 @@ if (!empty($list))
 
 echo $form->dropDownListRow($model, 'identity_type', RolesModel::getList(), array('id' => 'type-select', 'options' => array( $index =>array('selected'=>true))));
 ?>
+
 <script>
                         jQuery(function () {
                             var typeSelect = $('#type-select'),
@@ -41,10 +43,16 @@ echo $form->dropDownListRow($model, 'identity_type', RolesModel::getList(), arra
                                 student.hide();
                             function typeSelectChange() {
                                 if (typeSelect.val() === '2') {
-                                	employee.hide();
+                                	employee.hide()
+                                  employee.detach();
+                                  student.appendTo('section');
                                    student.show();
                                 } else {
+
                                     student.hide();
+                                    student.detach();
+                                  employee.appendTo('section');
+                                   
                                     employee.show();
                                 }
 
@@ -54,9 +62,10 @@ echo $form->dropDownListRow($model, 'identity_type', RolesModel::getList(), arra
                             typeSelect.change(typeSelectChange);
                         });
                     </script>
-                    
+                   <section name="outputlist"></section>
+                  
                 <div id="student" class="hide">
-                      <?php echo $form->dropDownListRow($model, 'identity_id', Student::getList());  ?>
+                      <?php echo $form->dropDownListRow($model, 'identity_id', Student::getList('id', 'fullname'));  ?>
                  </div>
                  <div id="employee" class="hide">
                       <?php echo $form->dropDownListRow($model, 'identity_id', Employee::getList('id', 'fullname'));  ?>

@@ -11,7 +11,6 @@
  * @property string $home_work
  * @property integer $load_id
  * @property string $teacher_id
- * @property string $n_pp
  * @property integer $hours
  *
  * @property Mark[] $marks
@@ -30,7 +29,8 @@ class JournalRecord extends CActiveRecord
 	}
 
 	public function getName(){
-		if($this->types->date==1) return $this->date; else return $this->types->title;
+
+		if($this->types->date==1) return date("d",strtotime($this->date)).'<br>'.date("m",strtotime($this->date)); else return $this->types->title;
    	}
 
 	public function getLink()
@@ -47,9 +47,9 @@ class JournalRecord extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'required'),
-			array('type_id, load_id, numer_in_day', 'numerical', 'integerOnly'=>true),
+			array('type_id, load_id, numer_in_day, hours', 'numerical', 'integerOnly'=>true),
 			array('description, home_work', 'length', 'max'=>255),
-			array('teacher_id, n_pp', 'length', 'max'=>10),
+			array('teacher_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'safe', 'on'=>'search'),
@@ -77,16 +77,15 @@ class JournalRecord extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Ідентифікатор',
-			'type_id' => 'Тип запису',
-			'date' => 'Дата створення',
-			'description' => 'Тема',
-			'home_work' => 'Домашнє завдання',
+			'id' => 'ID',
+			'type_id' => Yii::t('journal','type_id'),
+			'date' => Yii::t('journal','Date create'),
+			'description' => Yii::t('journal','Theme'),
+			'home_work' => Yii::t('journal','Home task'),
 			'load_id' => 'По навантаженю',
-			'teacher_id' => 'Teacher',
-			'n_pp' => 'N Pp',
-			'numer_in_day' => 'Numer In Day',
-			'hours'=>'Кількість годин'
+			'teacher_id' => Yii::t('base','Teacher'),
+			'numer_in_day' => Yii::t('journal','Nubmer In Day'),
+			'hours'=>Yii::t('journal','Hours count'),
 		);
 	}
 
