@@ -1,0 +1,273 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "291d29ddfb7a0f84ed318a3210d06d2f",
+    "content-hash": "326f1368196a652d8e875eb736c25d7b",
+    "packages": [
+        {
+            "name": "clevertech/yii-booster",
+            "version": "3.0.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clevertech/YiiBooster.git",
+                "reference": "e7e7025482cb86a7bc68779724f2df5923acc39c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clevertech/YiiBooster/zipball/e7e7025482cb86a7bc68779724f2df5923acc39c",
+                "reference": "e7e7025482cb86a7bc68779724f2df5923acc39c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "ardem/yii-coding-standard": "dev-master",
+                "mayflower/php-codebrowser": "1.*",
+                "ncuesta/pinocchio": "dev-master",
+                "phploc/phploc": "2.*",
+                "phpunit/phpunit": "3.7.*",
+                "sebastian/phpcpd": "2.*",
+                "squizlabs/php_codesniffer": "1.*",
+                "yiisoft/yii": "1.1.14"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Saphronov Mark",
+                    "email": "hijarian@gmail.com",
+                    "homepage": "http://about.me/hijarian"
+                },
+                {
+                    "name": "Ruslan Fadeev"
+                },
+                {
+                    "name": "Antonio Ramirez Cobos",
+                    "email": "amigo.cobos@gmail.com",
+                    "homepage": "http://www.ramirezcobos.com"
+                }
+            ],
+            "description": "Widget toolkit for Yii framework",
+            "homepage": "http://yiibooster.clevertech.biz/",
+            "keywords": [
+                "bootstrap",
+                "yii"
+            ],
+            "time": "2014-07-24 14:39:27"
+        },
+        {
+            "name": "phpexcel/phpexcel",
+            "version": "v1.7.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/phpexcel.git",
+                "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ddeboer/phpexcel/zipball/de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
+                "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": "Classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "description": "PHPExcel - OpenXML - Create Excel2007 documents in PHP - Spreadsheet engine",
+            "homepage": "http://phpexcel.codeplex.com",
+            "keywords": [
+                "excel",
+                "xls"
+            ],
+            "abandoned": "phpoffice/phpexcel",
+            "time": "2012-09-04 18:29:37"
+        },
+        {
+            "name": "phpword/phpword",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/kkula/phpword.git",
+                "reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/kkula/phpword/get/4ba9cb7f65618ec6990ecefa5edc6a992db04429.zip",
+                "reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPWord": "Library"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "description": "PHPWord is a library written in PHP that create word documents.",
+            "homepage": "http://phpword.codeplex.com",
+            "keywords": [
+                "doc",
+                "docx",
+                "word"
+            ],
+            "time": "2012-12-25 21:55:12"
+        },
+        {
+            "name": "yiiext/activerecord-relation-behavior",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiiext/activerecord-relation-behavior",
+                "reference": "eec992615a289818a319b4bbff467cd501728ea1"
+            },
+            "require": {
+                "php": ">=5.1.0",
+                "yiisoft/yii": ">=1.1.6"
+            },
+            "require-dev": {
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "yii-extension",
+            "autoload": {
+                "classmap": [
+                    "EActiveRecordRelationBehavior.php"
+                ]
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc"
+                }
+            ],
+            "description": "Inspired by and put together the awesomeness of many yii extensions that aim to improve saving of related records. Comes with 100% test coverage and well structured and clean code so it can savely be used in enterprise production enviroment.",
+            "homepage": "https://github.com/yiiext/activerecord-relation-behavior",
+            "keywords": [
+                "active-record",
+                "extension",
+                "yii"
+            ],
+            "time": "2015-02-07 21:25:14"
+        },
+        {
+            "name": "yiisoft/yii",
+            "version": "1.1.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii.git",
+                "reference": "f0fee98ee84f70f1f3652f65562c9670e919cb4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii/zipball/f0fee98ee84f70f1f3652f65562c9670e919cb4e",
+                "reference": "f0fee98ee84f70f1f3652f65562c9670e919cb4e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.1.0"
+            },
+            "bin": [
+                "framework/yiic"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Qiang Xue",
+                    "email": "qiang.xue@gmail.com",
+                    "homepage": "http://www.yiiframework.com/",
+                    "role": "Founder and project lead"
+                },
+                {
+                    "name": "Alexander Makarov",
+                    "email": "sam@rmcreative.ru",
+                    "homepage": "http://rmcreative.ru/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Maurizio Domba",
+                    "homepage": "http://mdomba.info/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc",
+                    "homepage": "http://cebe.cc/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Wei Zhuo",
+                    "email": "weizhuo@gmail.com",
+                    "role": "Project site maintenance and development"
+                },
+                {
+                    "name": "Sebastián Thierer",
+                    "email": "sebas@artfos.com",
+                    "role": "Component development"
+                },
+                {
+                    "name": "Jeffrey Winesett",
+                    "email": "jefftulsa@gmail.com",
+                    "role": "Documentation and marketing"
+                },
+                {
+                    "name": "Timur Ruziev",
+                    "email": "resurtm@gmail.com",
+                    "homepage": "http://resurtm.com/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com",
+                    "role": "Core framework development"
+                }
+            ],
+            "description": "Yii Web Programming Framework",
+            "homepage": "http://www.yiiframework.com/",
+            "keywords": [
+                "framework",
+                "yii"
+            ],
+            "time": "2013-08-12 00:12:08"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "yiiext/activerecord-relation-behavior": 20,
+        "phpword/phpword": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -30,7 +30,7 @@
     ))
     );
     echo $form->dropDownListRow($model, 'subjectId', array(), array('empty' => Yii::t('journal','Select group')));
-    ?>
+    ?>  
     <div class="row buttons">
         <?php $this->widget(
             'bootstrap.widgets.TbButton',

@@ -54,7 +54,7 @@ class GroupController extends Controller
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
-        /**@var $excel ExcelMaker */
+        
         $excel = Yii::app()->getComponent('excel');
         $group = Group::model()->loadContent($id);
         $excel->getDocument($group, 'simpleGroupList');
