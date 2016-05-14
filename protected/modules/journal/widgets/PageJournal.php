@@ -34,6 +34,16 @@ class PageJournal extends CWidget
 
     public $t=true;
 
+    /**
+     * @param $a Student
+     * @param $b Student
+     * @return int
+     */
+    function cmp($a, $b)
+    {
+        return strcmp($a->getFullName(), $b->getFullName());
+    }
+
     public function init(){
         $this->load=Load::model()->findByPk($this->load_id);
         $group =Group::model()->findByPk($this->load->group_id);

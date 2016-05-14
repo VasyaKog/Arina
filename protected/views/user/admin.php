@@ -45,18 +45,24 @@ return false;
     'columns' => array(
         'id',
         'username',        
-        'email',        
-        array(
-            'name' => 'employee.last_name',
-            'value' => 'CHtml::link($data->employee->fullname, array("view", "id"=>$data->id))',
-            'type' => 'raw'
-        ),        
+        'email', 
         array(
             'name' => 'roles.title',
             'value' => 'CHtml::link($data->roles["title"], array("view", "id"=>$data->id))',
             'type' => 'raw'
+        ),         
+        array(
+            'name' => 'employee.last_name',
+            'value' => 'CHtml::link($data->employee->fullname, array("view", "id"=>$data->id))',
+            'type' => 'raw'
         ),     
-        'role',
+        
+
+        array(
+            'name' => 'active.name',
+            'value' => 'CHtml::link($data->active["name"], array("view", "id"=>$data->id))',
+            'type' => 'raw'
+        ),   
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
         ),

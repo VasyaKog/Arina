@@ -20,6 +20,7 @@
  *
  * @property $journal_record JournalRecord
  * @property $system EvaluationSystem
+ * @property $student Student
  */
 class Mark extends CActiveRecord
 {
@@ -59,6 +60,7 @@ class Mark extends CActiveRecord
 		return array(
 			'system' => array(self::BELONGS_TO,'EvaluationSystem','system_id'),
 			'journal_record'=>array(self::BELONGS_TO,'JournalRecord','journal_record_id'),
+			'student'=>array(self::BELONGS_TO,'Student','student_id'),
 		);
 	}
 
@@ -96,18 +98,18 @@ class Mark extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'journal_record_id' => 'Journal Record',
-			'present' => 'Present',
-			'fail_no_present_id' => 'Fail No Present',
-			'date' => 'Date',
-			'value_id' => 'Value',
-			'retake_date' => 'Retake Date',
-			'retake_value_id' => 'Retake Value',
-			'ticket_numb' => 'Ticket Numb',
-			'retake_ticket_numb' => 'Retake Ticket Numb',
-			'system_id' => 'System',
-			'student_id' => 'Student',
-			'comment'=>'Note'
+			'journal_record_id' => Yii::t('journal','Journal Record'),
+			'present' => Yii::t('journal','Present'),
+			'fail_no_present_id' => Yii::t('journal','Fail No Present'),
+			'date' => Yii::t('base','Date'),
+			'value_id' => Yii::t('journal','Mark'),
+			'retake_date' => Yii::t('journal','Retake Date'),
+			'retake_value_id' => Yii::t('journal','Retake Mark'),
+			'ticket_numb' => Yii::t('journal','Ticket Numb'),
+			'retake_ticket_numb' => Yii::t('journal','Retake Ticket Numb'),
+			'system_id' => Yii::t('journal','Evaluation System'),
+			'student_id' => Yii::t('journal','Student'),
+			'comment'=>Yii::t('journal','Note')
 		);
 	}
 

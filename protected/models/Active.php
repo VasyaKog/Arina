@@ -23,6 +23,13 @@ class Active extends ActiveRecord
     {
         return CHtml::listData(self::model()->findAll(array('order' => 'id')), 'id', 'name');
     }
+    public function relations()
+    {
+        return array(
+            'user' => array(self::HAS_MANY, 'User', 'role'),
+            // 'employee' => array(self::BELONGS_TO, 'Employee', 'identity_id'),
+            );
+    }
      public function search()
     {
         // @todo Please modify the following code to remove attributes that should not be searched.

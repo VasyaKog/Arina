@@ -39,7 +39,7 @@ class MarkController extends Controller
                 /**
                  * $journal_record JournalRecord
                  */
-               // $this->redirect('../default/view/'.$journal_record->load_id);
+                $this->redirect('views/'.$model->id);
             }
         }
         $this->render('create',
@@ -66,7 +66,8 @@ class MarkController extends Controller
         /**
          * @var $model Mark
          */
-        $model=Mark::model()->findByPk($id);
+
+        $model=Mark::model()->findByPk($id);   
         $type=$model->journal_record->types;
         if(isset($_POST['Mark']))
         {

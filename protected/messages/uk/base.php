@@ -100,4 +100,5 @@ return array(
     'users'=>'Користувачі',
     'Main Settings' =>'Головні налаштування',
     'Settings benefits' =>'Налаштування пільг',
+    'Teacher'=>'Викладач',
 );

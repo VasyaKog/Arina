@@ -115,8 +115,8 @@ class UserController extends Controller
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
-            $model->role = 1;
             $i_t = $_POST['User']['identity_type'];
+         
             $model->identity_type=$i_t;
             if ($model->save()){
                 

@@ -15,8 +15,6 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
@@ -42,7 +40,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->dropDownListRow($model,'numer_in_day',array(1,2,3,4),array(
+		<?php echo $form->dropDownListRow($model,
+			'numer_in_day',array('1'=>'1','2'=>'2','3'=>'3','4'=>'4'),array(
 			'empty'=>Yii::t('journal','Select'),
 		)); ?>
 	</div>
