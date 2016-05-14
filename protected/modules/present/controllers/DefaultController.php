@@ -2,6 +2,17 @@
 
 class DefaultController extends Controller
 {
+    public function actionExcelList()
+    {
+        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
+        /**@var $excel ExcelMaker */
+        $excel = Yii::app()->getComponent('excel');
+        $excel->getDocument(NULL, 'employeesList');
+    }
+    
     public function actionIndex()
     {
         $model = new PresentViewer();

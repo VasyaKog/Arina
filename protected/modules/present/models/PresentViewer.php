@@ -10,14 +10,14 @@ class PresentViewer extends CFormModel
 {
 
     public $groupId;
-    public $subjectId;
+    public $studyWeekId;
     public $isEmpty = true;
     public $studyYearId;
 
     public function rules()
     {
         return array(
-            array('subjectId studyYearId', 'required'),
+            array('studyWeekId studyYearId', 'required'),
             array('groupId', 'required', 'on' => 'group'),
             array('studentId', 'required', 'on' => 'student'),
         );
@@ -26,7 +26,7 @@ class PresentViewer extends CFormModel
     public function attributeLabels()
     {
         return array(
-            'subjectId' => Yii::t('terms', 'Subject'),
+            'studyWeekId' => Yii::t('present', 'Study Week'),
             'groupId' => Yii::t('terms', 'Group'),
             'studentId' => Yii::t('terms', 'Student'),
             'studyYearId'=>Yii::t('terms','Study year'),
