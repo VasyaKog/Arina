@@ -27,6 +27,10 @@ $this->menu=array(
 			'value'=>$model->teacher->getFullName(),
 		),
 		'hours',
+		array(
+			'name'=>'audience_id',
+			'value'=>Audience::model()->getNumber($model->audience_id),
+		),
 		'numer_in_day',
 	),
 )); ?>

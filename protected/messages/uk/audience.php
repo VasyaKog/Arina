@@ -13,4 +13,5 @@ return array(
     'Number' => 'Номер',
     'Update audience' => 'Оновлення даних аудиторії',
     'Teacher' => 'Викладач',
+    'Audience'=> 'Аудиторія',
 );

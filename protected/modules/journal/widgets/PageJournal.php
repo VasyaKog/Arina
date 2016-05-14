@@ -39,10 +39,7 @@ class PageJournal extends CWidget
      * @param $b Student
      * @return int
      */
-    function cmp($a, $b)
-    {
-        return strcmp($a->getFullName(), $b->getFullName());
-    }
+
 
     public function init(){
         $this->load=Load::model()->findByPk($this->load_id);
@@ -59,10 +56,22 @@ class PageJournal extends CWidget
         /*
              * @var $item Student
         */
-
+        /**
+         * @param $a Student
+         * @param $b Student
+         * @return int
+         */
+        function cmp($a, $b)
+        {
+            return strcmp($a->getFullName(), $b->getFullName());
+        }
+        usort($this->students,'cmp');
         foreach ($this->students as $item){
             array_push($this->rows,$item->getLink());
         }
+
+
+        
         $this->records=JournalRecord::model()->findAllByAttributes(array('load_id'=> $this->load_id));
         foreach($this->records as $item){
             array_push($this->list,$item->getLink());

@@ -8,7 +8,7 @@
 <div class="form">
 
 <?php $form=$this->beginWidget(BoosterHelper::FORM, array(
-	'id'=>'mark-_form-form',
+	'id'=>'mark-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// See class documentation of CActiveForm for details on this,
@@ -25,7 +25,7 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->dropDownListRow(
+		<?php  echo $form->dropDownListRow(
 			$model,
 			'system_id',
 			EvaluationSystem::getListAll('id','title'),

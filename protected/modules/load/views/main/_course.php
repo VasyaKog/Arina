@@ -159,7 +159,7 @@ $fallSemester = $springSemester - 1;
                     $fall['classes'] += intval($classes); ?>
                 </td>
                 <td class="fall">
-                    <?php echo $lectures = $data->getLectures($fallSemester-1);
+                    v;
                     $fall['lectures'] += intval($lectures); ?>
                 </td>
                 <td class="fall">

@@ -64,4 +64,11 @@ return array(
     'Select mark'=>'Вкажіть оцінку',
     'Select ticket numb'=>'Записом у журналі передбачено номер білета',
     'Create mark' => 'Оцінити',
+    'Select JournalRecordType'=>'Оберіть тип пари',
+    'Select number in day'=>'Оберіть номер пари у дні',
+    'is required' => 'обов\'язкове для заповнення',
+    'Description'=>'Зміст заняття',
+    'Select audience'=>'Вкажіть аудиторію',
+    'Record that has hours must has audience'=>'Запис, що має години повинна мати аудиторію',
+    'Create JournalRecord'=>'Записати пару',
 );

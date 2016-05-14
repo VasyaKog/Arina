@@ -46,19 +46,89 @@ class JournalRecordController extends Controller
 	}
 */
 
-	public function actionIndex($id)
-	{
-		$this->render('views',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionViews($id)
 	{
+		$model =$this->loadModel($id);
+		$access=false;
+		if (isset(Yii::app()->user->identityType)) {
+			if (isset(Yii::app()->user->identityId)) {
+				if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+					/**
+					 * @var $teacher Teacher
+					 */
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
+					$student=Student::model()->findByPk(Yii::app()->user->identityId);
+					if(in_array($model->load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($model->journal_record->load))){
+						$access=true;
+						$t=false;
+					} else {
+						/** @var $group Group*/
+						$group=Group::model()->findByPk($model->load->group_id);
+						if($student->id==$group->monitor_id) $access=true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+			}
+		}
+		if(!$access)
+		{
+			throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+		}
 		$this->render('views',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -72,11 +142,76 @@ class JournalRecordController extends Controller
 	{
 		$model=new JournalRecord;
 		$model->load_id=$id;
-
+		$access=false;
+		if (isset(Yii::app()->user->identityType)) {
+			if (isset(Yii::app()->user->identityId)) {
+				if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+					/**
+					 * @var $teacher Teacher
+					 */
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
+						$access = true;
+					}
+				}
+			}
+		}
+		if(!$access)
+		{
+			throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+		}
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		$model->date=date('Y-m-d');
 		$model->teacher_id=Yii::app()->user->identityId;
+		$this->ajaxValidation('journal-record-form', $model);
 		if(isset($_POST['JournalRecord']))
 		{
 			$model->attributes=$_POST['JournalRecord'];
@@ -97,10 +232,62 @@ class JournalRecordController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		$access=false;
+		if (isset(Yii::app()->user->identityType)) {
+			if (isset(Yii::app()->user->identityId)) {
+				if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+					/**
+					 * @var $teacher Teacher
+					 */
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+			}
+		}
+		if(!$access)
+		{
+			throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+		}
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+		$this->ajaxValidation('journal-record-form', $model);
 		if(isset($_POST['JournalRecord']))
 		{
 			$model->attributes=$_POST['JournalRecord'];
@@ -125,6 +312,59 @@ class JournalRecordController extends Controller
 		 */
 		$model=JournalRecord::model()->findByPk($id);
 		$model->delete();
+		$access=false;
+		if (isset(Yii::app()->user->identityType)) {
+			if (isset(Yii::app()->user->identityId)) {
+				if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+					/**
+					 * @var $teacher Teacher
+					 */
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+				if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+					$access=true;
+					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+					if ($model->load->teacher_id == Yii::app()->user->identityId) {
+						$access = true;
+					}
+				}
+			}
+		}
+		if(!$access)
+		{
+			throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+		}
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		///if(!isset($_GET['ajax']))
 	//		$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));

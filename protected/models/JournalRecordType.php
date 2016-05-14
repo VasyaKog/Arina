@@ -31,6 +31,7 @@ class JournalRecordType extends ActiveRecord
 	public static function  getName($int){
 		if($int) return Yii::t('journal','True'); else return Yii::t('journal','False');
 	}
+	
 	public function rules()
 	{
 		// NOTE: you should only define rules for those attributes that
