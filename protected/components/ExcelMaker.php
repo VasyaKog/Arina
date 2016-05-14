@@ -1404,16 +1404,34 @@ SQL;
         return $objPHPExcel;
     }
 
+    function getNameFromNumber($num) {
+        $numeric = $num % 26;
+        $letter = chr(65 + $numeric);
+        $num2 = intval($num / 26);
+        if ($num2 > 0) {
+            return $this->getNameFromNumber($num2 - 1) . $letter;
+        } else {
+            return $letter;
+        }
+    }
+
     protected function makeGroupHoursList($data){
         /**
          * @var JournalRecord $data
          */
         $objPHPExcel = $this->loadTemplate('report_group.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        $i=8;
         $days = cal_days_in_month(CAL_GREGORIAN, substr($data[0]->date,5,2), substr($data[0]->date,0,4));
-        $sheet->setCellValue("E7",$days);
         $sheet->insertNewColumnBefore("E",$days-1);
+        PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
+        $d=1;
+        foreach(range(4,3+$days) as $i) {
+            $sheet->getColumnDimension($this->getNameFromNumber($i))
+                ->setAutoSize(true);
+            $sheet->setCellValue($this->getNameFromNumber($i)."7",$d);
+            $d++;
+        }
+        $sheet->mergeCells("E6:".$this->getNameFromNumber($days+3)."6");
         return $objPHPExcel;
     }
 }
