@@ -1411,9 +1411,9 @@ SQL;
         $objPHPExcel = $this->loadTemplate('report_group.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
         $i=8;
-        $month = substr($data[0]->date,5,2);
-
-        $sheet->setCellValue("A1",$month);
+        $days = cal_days_in_month(CAL_GREGORIAN, substr($data[0]->date,5,2), substr($data[0]->date,0,4));
+        $sheet->setCellValue("E7",$days);
+        $sheet->insertNewColumnBefore("E",$days-1);
         return $objPHPExcel;
     }
 }
