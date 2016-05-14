@@ -1,7 +1,9 @@
 <?php
 /**
  * @author Serhiy Vinichuk <serhiyvinichuk@gmail.com>
+ * @author makskarv <makskarv@mail.ru>
  */
+
 class MainController extends Controller
 {
     public $name = 'Навчальні плани';
