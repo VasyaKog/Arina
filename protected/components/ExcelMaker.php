@@ -1411,7 +1411,9 @@ SQL;
         $objPHPExcel = $this->loadTemplate('report_group.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
         $i=8;
+        $month = substr($data[0]->date,5,2);
 
+        $sheet->setCellValue("A1",$month);
         return $objPHPExcel;
     }
 }

@@ -39,7 +39,7 @@ $form=$this->beginWidget(BoosterHelper::FORM);
                 '11'=>Yii::t('month','November'),
                 '12'=>Yii::t('month','December'),
             ),
-            array('empty'=>Yii::t('report','Choose month'),'onchange'=>'test_fun()'));
+            array('empty'=>Yii::t('report','Choose month')));
         ?>
     </div>
     <div class="row buttons">

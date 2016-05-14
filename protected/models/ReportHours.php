@@ -17,14 +17,4 @@ class ReportHours extends CFormModel
             array('type_id', 'required', 'on' => 'type'),
         );
     }
-
-    public function attributeLabels()
-    {
-        return array(
-            'subjectId' => Yii::t('terms', 'Subject'),
-            'groupId' => Yii::t('terms', 'Group'),
-            'studentId' => Yii::t('terms', 'Student'),
-            'studyYearId' => Yii::t('terms', 'Study year'),
-        );
-    }
 }

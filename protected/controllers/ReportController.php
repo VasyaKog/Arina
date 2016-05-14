@@ -18,7 +18,7 @@ class ReportController extends Controller{
          * @var $data JournalRecord[]
          * @var $item JournalRecord
          * @var $temp string
-         * @var $datarez JournalRecord[]
+         * @var $datarez string[]
          */
         $model = new ReportHours();
         if (isset($_POST['ReportHours']['group_id'])&&isset($_POST['ReportHours']['month'])) {
@@ -26,23 +26,15 @@ class ReportController extends Controller{
             $data = JournalRecord::model()->findAll();
             $datarez =array();
             foreach ($data as $item){
-                if (substr($item->date,5,2)==$_POST['ReportHours']['month'])
+                if ($item->load->group_id==$_POST['ReportHours']['group_id']&&substr($item->date,5,2)==$_POST['ReportHours']['month'])
                     array_push($datarez,$item);
-
-            //    if ($item->load->group_id==$_POST['GroupReport']['group_id']){
-            //        array_push($datarez,$item);
-            //    }
-                //var_dump($item->date);
             }
-            var_dump($datarez);
-            //var_dump($_POST['ReportHours']['group_id']);
-            //var_dump($_POST['ReportHours']['month']);
-
-            //data = JournalRecord::model()->findAllByAttributes(array('' => $_POST['GroupReport']['group_id']));
+            //var_dump($datarez);
             //var_dump($data);
-            //$excel->getDocument($data, 'GroupHoursList');
+            $excel->getDocument($datarez, 'GroupHoursList');
+            return;
         }
-        $this->render('index', 
+        $this->render('index',
             array('model' => $model,)
         );
     }
