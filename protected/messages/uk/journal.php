@@ -60,4 +60,8 @@ return array(
     'Select evolution'=>'Оберіть оцінку',
     'Select EvaluationSystem'=>'Оберіть систему оцінювання',
     'Select mark'=>'Оберіть оцінку',
+    'Select present or set mark'=>'Вкажіть про відсутність або вкажіть оцінку',
+    'Select mark'=>'Вкажіть оцінку',
+    'Select ticket numb'=>'Записом у журналі передбачено номер білета',
+    'Create mark' => 'Оцінити',
 );

@@ -84,7 +84,7 @@ class PageJournal extends CWidget
                 } elseif(!in_array($this->load_id,$student->getListArray($study->date))){
                     array_push($this->map[$i], 'Відраховано');
                 } elseif ($this->t) {
-                    array_push($this->map[$i], CHtml::link(Yii::t('journal','Create'),array("/journal/mark/create/","student_id"=>$student->id,"journal_record_id"=>$study->id)));
+                    array_push($this->map[$i], CHtml::link(Yii::t('journal','Create mark'),array("/journal/mark/create/","student_id"=>$student->id,"journal_record_id"=>$study->id)));
                 } else {
                     array_push($this->map[$i], '');
                 }

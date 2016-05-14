@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'mark':
  * @property string $id
  * @property string $journal_record_id
- * @property integer $present
+ * @property string $present
  * @property string $fail_no_present_id
  * @property string $date
  * @property string $value_id
@@ -41,15 +41,78 @@ class Mark extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('journal_record_id, student_id', 'required'),
-			array('present, ticket_numb, retake_ticket_numb', 'numerical', 'integerOnly'=>true),
-			array('journal_record_id, fail_no_present_id, value_id, retake_value_id, system_id, student_id', 'length', 'max'=>10),
-			array('date, retake_date', 'safe'),
+			//array('present, ticket_numb, retake_ticket_numb', 'numerical', 'integerOnly'=>true),
+			array('journal_record_id, fail_no_present_id, present, value_id, retake_value_id, system_id, student_id', 'length', 'max'=>10),
+			//array('date, retake_date', 'safe'),
+			array('value_id','check_all'),
+			array('ticket_numb','check_ticket'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, journal_record_id, present, fail_no_present_id, date, value_id, retake_date, retake_value_id, ticket_numb, retake_ticket_numb, system_id, student_id', 'safe', 'on'=>'search'),
+			//array('id, journal_record_id, present, fail_no_present_id, date, value_id, retake_date, retake_value_id, ticket_numb, retake_ticket_numb, system_id, student_id', 'safe', 'on'=>'search'),
 		);
 	}
 
+	public function check_ticket(){
+		$valid = true;
+		if(isset($this->journal_record->types->ticket)) {
+			if($this->journal_record->types->present==1){
+				if(isset($this->present)) {
+					if($this->present!=1) {
+						if ($this->journal_record->types->ticket == 1) {
+							$valid = false;
+							if (isset($this->value_id)) {
+								if ($this->value_id != 0) {
+									if (isset($this->ticket_numb)) $valid = true;
+									else $valid = false;
+								}
+							}
+							if (isset($this->retake_value_id)) {
+								if ($this->retake_value_id != 0) {
+									if (isset($this->retake_ticket_numb)) $valid = true;
+									else $valid = false;
+								}
+							}
+						}
+					} else $valid = true;
+				}
+			}
+		}
+		if (!$valid) {
+			$this->addError('ticket_numb', Yii::t('journal','Select ticket numb or select present student'));
+		}
+	}
+
+	public function check_all(){
+		$valid=false;
+		if($this->journal_record->types->present==1){
+			if(isset($this->value_id))
+			{
+				if($this->value_id!=0) $valid=true;
+				else
+					if(isset($this->present))
+					{
+
+						if($this->present==1) $valid=true;
+					}
+			}  else
+			if(isset($this->present))
+			{
+
+				if($this->present==1) $valid=true;
+			}
+		} else {
+			if(isset($this->value_id))
+			{
+				if($this->value_id!=0) $valid=true;
+			}
+		}
+		if (!$valid) {
+			if($this->journal_record->types->present==1) {
+				$this->addError('valid_id', Yii::t('journal','Select present or set mark'));
+			} else $this->addError('valid_id', Yii::t('journal','Select mark'));
+
+		}
+	}
 	/**
 	 * @return array relational rules.
 	 */
@@ -63,6 +126,7 @@ class Mark extends CActiveRecord
 			'student'=>array(self::BELONGS_TO,'Student','student_id'),
 		);
 	}
+
 
 
 	public static function getLink($record_id,$student_id) {

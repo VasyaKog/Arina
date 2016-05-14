@@ -30,7 +30,7 @@ class JournalRecord extends CActiveRecord
 
 	public function getName(){
 
-		if($this->types->date==1) return date("d",strtotime($this->date)).'<br>'.date("m",strtotime($this->date)); else return $this->types->title;
+		if($this->types->date==1) return '<u>'.date("d",strtotime($this->date)).'</u><br>'.date("m",strtotime($this->date)); else return $this->types->title;
    	}
 
 	public function getLink()

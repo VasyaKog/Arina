@@ -31,10 +31,22 @@ class MarkController extends Controller
         $type=$model->journal_record->types;
         if(isset($_POST['Mark'])){
             $model->attributes=$_POST['Mark'];
-            if(isset($model->value_id))
-                $model->date=date('Y-m-d');
-            if(isset($model->retake_value_id))
-                $model->retake_date=date('Y-m-d');
+            if(isset($model->value_id)){
+                    if(is_null($model->date)){
+                        if($model->value_id!=0)
+                        {
+                        $model->date=date('Y-m-d');
+                        }
+                    }
+            }
+            if(isset($model->retake_value_id)){
+                if(is_null($model->retake_date)){
+                    if($model->retake_value_id!=0)
+                    {
+                        $model->retake_date=date('Y-m-d');
+                    }
+                }
+            }
             if($model->save()) {
                 /**
                  * $journal_record JournalRecord
@@ -53,6 +65,7 @@ class MarkController extends Controller
         /**
          * @var $model Mark
          */
+
         $model=Mark::model()->findByPk($id);
         $type=$model->journal_record->types;
         $this->render('view',
@@ -72,6 +85,22 @@ class MarkController extends Controller
         if(isset($_POST['Mark']))
         {
             $model->attributes=$_POST['Mark'];
+            if(isset($model->value_id)){
+                if(is_null($model->date)){
+                    if($model->value_id!=0)
+                    {
+                        $model->date=date('Y-m-d');
+                    }
+                }
+            }
+            if(isset($model->retake_value_id)){
+                if(is_null($model->retake_date)){
+                    if($model->retake_value_id!=0)
+                    {
+                        $model->retake_date=date('Y-m-d');
+                    }
+                }
+            }
             if($model->save())
                 $this->redirect('../views/'.$model->id);
         }
