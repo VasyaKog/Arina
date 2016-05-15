@@ -12,6 +12,15 @@
  * </pre>
  * @author Dmytro Karpovych <ZAYEC77@gmail.com>
  */
+class UniqueSubjectTeacher{
+    public $subject;
+    public $teacher;
+
+    function __construct($sid,$tid) {
+        $this->subject=$sid;
+        $this->teacher=$tid;
+    }
+}
 class ExcelMaker extends CComponent
 {
     /**
@@ -1417,7 +1426,10 @@ SQL;
 
     protected function makeGroupHoursList($data){
         /**
-         * @var JournalRecord $data
+         * @var JournalRecord[] $data
+         * @var JournalRecord[] $sort
+         * @var $temp UniqueSubjectTeacher
+         * @var $uniques UniqueSubjectTeacher[]
          */
         $objPHPExcel = $this->loadTemplate('report_group.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
@@ -1431,7 +1443,38 @@ SQL;
             $sheet->setCellValue($this->getNameFromNumber($i)."7",$d);
             $d++;
         }
+        $sheet->setCellValue("A1",'adsad');
         $sheet->mergeCells("E6:".$this->getNameFromNumber($days+3)."6");
+        $begin = 8;
+        $uniques = array();
+        $subject_out = array();
+        $teacher_out = array();
+        foreach ($data as $item){
+            //$item->load->subject_id;
+            //$sheet->setCellValue("C".$begin,$item->load->wp_subject_id);
+            $subject_temp = Subject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
+            //$sheet->setCellValue("C".$begin,$subject_temp->title);
+            $teacher_temp = Teacher::model()->findByPk(array('id'=>$item->teacher_id));
+            //$sheet->setCellValue("D".$begin,$teacher_temp->last_name);
+            $temp = new UniqueSubjectTeacher($subject_temp,$teacher_temp);
+            if(!in_array($temp,$uniques))
+                array_push($uniques, $temp);
+            else
+                continue;
+        }
+        foreach ($uniques as $item){
+            $sheet->setCellValue("B".$begin,$begin-7);
+            $sheet->setCellValue("C".$begin,$item->subject->title);
+            $sheet->setCellValue("D".$begin,$item->teacher->last_name);
+            foreach ($data as $record){
+                if(($record->teacher_id==$item->teacher->id)&&($record->load->wp_subject_id==$item->subject->id)){
+                    $day=intval(substr($record->date,8,2));
+                    $t=intval($sheet->getCell($this->getNameFromNumber($day+3)."$begin")->getValue());
+                    $sheet->setCellValue($this->getNameFromNumber($day+3)."$begin",$t+$record->hours);
+                }
+            }
+            $begin++;
+        }
         return $objPHPExcel;
     }
 }

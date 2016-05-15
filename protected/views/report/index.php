@@ -12,12 +12,6 @@ $this->breadcrumbs = array(
 $form=$this->beginWidget(BoosterHelper::FORM);
     ?>
     <div class="row">
-    <?php
-    echo $form->dropDownList($model, 'type_id',  array('teacher'=>'Teacher report','group'=>'Group report'),
-        array('empty'=>Yii::t('report','Choose type')));
-    ?>
-</div>
-    <div class="row">
         <?php
         echo $form->dropDownList($model, 'group_id',  Group::getTreeList(),
             array('empty'=>Yii::t('report','Choose group')));
