@@ -25,16 +25,17 @@
             'empty'=>Yii::t('present','Select Study Year'),
             'ajax'=> array(
                 'type'=>'POST',
-                'url'=>$this->createUrl('default/changeSubjectList'),
+                'url'=>$this->createUrl('default/changeMonthList'),
                 'update'=> '#PresentViewer_subjectId',
     ))
     );
     echo $form->dropDownListRow(
         $model,
-        'studyWeekId',
-        array(),
-        array('empty' => Yii::t('present','Select Study Week')));
-    ?>  
+        'studyMonthId',
+        PresentViewer::getMonthList(),
+        array('empty' => Yii::t('present','Select Study Month')));
+    ?>
+
     <div class="row buttons">
         <?php $this->widget(
             'bootstrap.widgets.TbButton',

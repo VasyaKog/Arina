@@ -6,10 +6,10 @@
  * Time: 14:12
  */
 return array(
-    'Present' => 'Журнал відвідувань',
+    'Present' => 'Облік відвідувань занять',
     'Select Study Year' => 'Виберіть навчальний рік',
     'Select group' => 'Виберіть групу',
-    'Study Week' => 'Навчальний тиждень',
-    'Select Study Week' => 'Виберіть навчальний тиждень',
+    'Study Month' => 'Навчальний місяць',
+    'Select Study Month' => 'Виберіть навчальний місяць',
     'Generate excel list' => 'Генерувати список в Excel',
 );

@@ -101,4 +101,5 @@ return array(
     'Main Settings' =>'Головні налаштування',
     'Settings benefits' =>'Налаштування пільг',
     'Teacher'=>'Викладач',
+    'Present' => 'Облік відвідувань',
 );

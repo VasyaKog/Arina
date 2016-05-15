@@ -10,7 +10,7 @@ class PresentViewer extends CFormModel
 {
 
     public $groupId;
-    public $studyWeekId;
+    public $studyMonthId;
     public $isEmpty = true;
     public $studyYearId;
 
@@ -26,7 +26,7 @@ class PresentViewer extends CFormModel
     public function attributeLabels()
     {
         return array(
-            'studyWeekId' => Yii::t('present', 'Study Week'),
+            'studyMonthId' => Yii::t('present', 'Study Month'),
             'groupId' => Yii::t('terms', 'Group'),
             'studentId' => Yii::t('terms', 'Student'),
             'studyYearId'=>Yii::t('terms','Study year'),
@@ -43,6 +43,28 @@ class PresentViewer extends CFormModel
             $res[$item->id]=$item->title;
         }
         return $res;
+    }
+
+    public static function getMonthList()
+    {
+        return array(
+            'Осінь'=>array(
+                '09' => Yii::t('base','September'),
+                '10' => Yii::t('base','October'),
+                '11' => Yii::t('base','November'),
+                '12' => Yii::t('base','December'),
+            ),
+            'Весна'=>array(
+                '01' => Yii::t('base','January'),
+                '02' => Yii::t('base','February'),
+                '03' => Yii::t('base','March'),
+                '04' => Yii::t('base','April'),
+                '05' => Yii::t('base','May'),
+                '06' => Yii::t('base','June'),
+                '07' => Yii::t('base','July'),
+                '08' => Yii::t('base','August'),
+            ),
+        );
     }
 
     /**

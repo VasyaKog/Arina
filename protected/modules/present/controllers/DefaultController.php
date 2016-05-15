@@ -12,21 +12,19 @@ class DefaultController extends Controller
         $excel = Yii::app()->getComponent('excel');
         $excel->getDocument(NULL, 'employeesList');
     }
-    
+
     public function actionIndex()
     {
         $model = new PresentViewer();
 
-        if(isset($_POST['PresentViewer']['studyYearId'])&&isset($_POST['PresentViewer']['groupId'])&&isset($_POST['PresentViewer']['subjectId'])){
+        if(isset($_POST['PresentViewer']['studyYearId'])&&isset($_POST['PresentViewer']['groupId'])&&isset($_POST['PresentViewer']['studyMonthId'])){
             /**
              * @var $loadmas Load[]
              * @var $load Load
              **/
             $load=null;
-            $load=Load::model()->findByAttributes(array('study_year_id'=>$_POST['PresentViewer']['studyYearId'],'group_id'=>$_POST['PresentViewer']['groupId'],'wp_subject_id'=>$_POST['PresentViewer']['subjectId']));
+            $load=Load::model()->findByAttributes(array('study_year_id'=>$_POST['PresentViewer']['studyYearId'],'group_id'=>$_POST['PresentViewer']['groupId'],'wp_subject_id'=>$_POST['PresentViewer']['studyMonthId']));
             if(!is_null($load)){
-
-               // $this->actionViews($load->id);
                 $this->redirect('/present/default/views/'.$load->id);
             }
             return;
@@ -35,21 +33,17 @@ class DefaultController extends Controller
         $this->render('index', array(
             'model' => $model,
         ));
-
-
-
-
     }
 
     public function actionChangeGroupList()
     {
-        $selectedyear = $_POST['PresentViewer']['studyYearId'];
-        var_dump($selectedyear);
-        if ($selectedyear == 0) {
+        $selectedYear = $_POST['PresentViewer']['studyYearId'];
+        var_dump($selectedYear);
+        if ($selectedYear == 0) {
             echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select Study Year'), true);
             return;
         }
-        $data = Group::getGroupsByYearId($selectedyear);
+        $data = Group::getGroupsByYearId($selectedYear);
         echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select group'), true);
         foreach ($data as $item) {
             echo CHtml::tag('option', array('value' => $item->id), $item->title, true);
@@ -57,10 +51,10 @@ class DefaultController extends Controller
     }
 
 
-    public function actionChangeSubjectList(){
+    public function actionChangeMonthList(){
 
-        $selectedyear=$_POST['PresentViewer']['studyYearId'];
-        $selectedgroup=$_POST['PresentViewer']['groupId'];
+        $selectedYear=$_POST['PresentViewer']['studyYearId'];
+        $selectedGroup=$_POST['PresentViewer']['groupId'];
 
       /**
          * @var $dat Load[]
@@ -75,14 +69,14 @@ class DefaultController extends Controller
             echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select group'), true);
             return;
         };
-        echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select subject'), true);
+        echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select Study Month'), true);
        foreach ($dat as $item){
-           if($item->group_id==$selectedgroup&&$item->study_year_id==$selectedyear){
+           if($item->group_id==$selectedGroup&&$item->study_year_id==$selectedYear){
                 echo CHtml::tag('option', array('value' => $item->wp_subject_id), WorkSubject::getNameSubject($item->wp_subject_id), true);
                 }
             }
         }
-
+    
     public function actionViews($id)
     {
         $t=false;
