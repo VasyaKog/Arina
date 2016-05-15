@@ -21,11 +21,13 @@
 class StudyPlan extends ActiveRecord
 {
     /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return StudyPlan the static model class
+     *  Returns the static model of the specified AR class.
+     *  Please note that you should have this exact method in all your CActiveRecord descendants!
+
+     *     *  @param string $className active record class name.
+     *  @return StudyPlan the static model class
      */
+    // access to the objects of class and manipulate with db
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -73,7 +75,7 @@ class StudyPlan extends ActiveRecord
     }
 
     /**
-     * @return string the associated database table name
+     * @return string the associated database table name/
      */
     public function tableName()
     {
