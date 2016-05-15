@@ -8,12 +8,6 @@ $this->breadcrumbs = array(
     Yii::t('report', 'Reports'),
 );
 ?>
-<? function checkAccess(){
-    if (Yii::app()->user->checkAccess('student')) {
-    throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-}
-}
-?>
 <div id="report-form">
     <?
 $form=$this->beginWidget(BoosterHelper::FORM);

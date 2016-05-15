@@ -1482,18 +1482,6 @@ SQL;
         return $objPHPExcel;
     }
 
-    public function getStudyYear(){
-        $date = date('y-m-d');
-        $month = date("m",strtotime($date));
-        $year = intval("20".date("y",strtotime($date)));
-        $py=$year-1;
-        $ny=$year+1;
-        if ($month<9)
-            return "$py/"."$year";
-        else
-            return "$year/"."$ny";
-    }
-
     public function makeTeacherHoursList($data){
         /**
          * @var JournalRecord[] $data
@@ -1513,7 +1501,6 @@ SQL;
                 continue;
         }
         $column = 2;
-        $sheet->setCellValue("E5","в ".$this->getStudyYear());
         foreach ($uniques as $item){
             $sheet->setCellValue($this->getNameFromNumber($column)."10",$item->group->title);
             //$sheet->getStyle('A')->getBorders()

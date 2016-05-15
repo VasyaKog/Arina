@@ -3,6 +3,7 @@ Yii::import('modules.load.models.*');
 ?>
 <?
 class TeacherController extends Controller{
+    
     public function actionIndex()
     {
         /**
@@ -29,7 +30,8 @@ class TeacherController extends Controller{
             if (Yii::app()->user->checkAccess('student')) {
                 throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
             }
-            $excel->getDocument($datarez, 'TeacherHoursList');
+            if (!empty($datarez))
+                $excel->getDocument($datarez, 'TeacherHoursList');
             return;
         }
 
