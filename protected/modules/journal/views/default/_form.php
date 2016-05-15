@@ -14,7 +14,7 @@
             'ajax'=> array(
                 'type'=>'POST',
                 'url'=>$this->createUrl('default/changeGroupList'),
-                'update'=> '#JournalViewer_groupId',
+                 'update'=> '#JournalViewer_groupId',
             ))
     );
     echo $form->dropDownListRow(
@@ -30,7 +30,7 @@
     ))
     );
     echo $form->dropDownListRow($model, 'subjectId', array(), array('empty' => Yii::t('journal','Select group')));
-    ?>  
+    ?>
     <div class="row buttons">
         <?php $this->widget(
             'bootstrap.widgets.TbButton',

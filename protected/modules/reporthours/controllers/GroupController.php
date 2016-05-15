@@ -10,10 +10,7 @@ class GroupController extends Controller{
          * @var ReportHours $model
          * @var ExcelMaker $excel
          * @var $data JournalRecord[]
-         * @var $item JournalRecord
-         * @var $temp string
          * @var $datarez string[]
-         * @var $load Load
          */
         $model = new ReportHours();
         if (isset($_POST['ReportHours']['group_id'])&&isset($_POST['ReportHours']['month'])) {

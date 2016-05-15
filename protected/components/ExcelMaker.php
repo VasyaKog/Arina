@@ -1439,7 +1439,6 @@ SQL;
     protected function makeGroupHoursList($data){
         /**
          * @var JournalRecord[] $data
-         * @var JournalRecord[] $sort
          * @var $temp UniqueSubjectTeacher
          * @var $uniques UniqueSubjectTeacher[]
          */
@@ -1482,15 +1481,27 @@ SQL;
         }
         return $objPHPExcel;
     }
+
+    public function getStudyYear(){
+        $date = date('y-m-d');
+        $month = date("m",strtotime($date));
+        $year = intval("20".date("y",strtotime($date)));
+        $py=$year-1;
+        $ny=$year+1;
+        if ($month<9)
+            return "$py/"."$year";
+        else
+            return "$year/"."$ny";
+    }
+
     public function makeTeacherHoursList($data){
         /**
          * @var JournalRecord[] $data
          * @var $uniques UniqueGroupSubject[]
+         * @var $date DateTime
          */
         $objPHPExcel = $this->loadTemplate('report_teacher.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        $monthes = array('09','10','11','12','01','02','03','04','05','06','07','08');
-        $column = 2;
         $uniques = array();
         foreach ($data as $item){
             $group_temp = Group::model()->findByPk(array('id'=>$item->load->group_id));
@@ -1501,8 +1512,11 @@ SQL;
             else
                 continue;
         }
+        $column = 2;
+        $sheet->setCellValue("E5","в ".$this->getStudyYear());
         foreach ($uniques as $item){
             $sheet->setCellValue($this->getNameFromNumber($column)."10",$item->group->title);
+            //$sheet->getStyle('A')->getBorders()
             $sheet->setCellValue($this->getNameFromNumber($column)."11",$item->subject->title);
             foreach ($data as $record){
                if(($record->load->group_id==$item->group->id)&&($record->load->wp_subject_id==$item->subject->id)){
@@ -1518,6 +1532,7 @@ SQL;
             }
             $column++;
         }
+
         //var_dump($uniques);
         return $objPHPExcel;
     }
