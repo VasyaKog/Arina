@@ -34,6 +34,7 @@ return CMap::mergeArray(
         'modules' => array(
             'studyPlan',
             'student',
+            'reporthours',
             'hr',
             'dictionaries',
             'admin',

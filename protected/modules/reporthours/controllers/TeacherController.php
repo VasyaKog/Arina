@@ -8,7 +8,7 @@
 Yii::import('modules.load.models.*');
 ?>
 <?
-class ReportController extends Controller{
+class TeacherController extends Controller{
 
     public function actionIndex()
     {
@@ -22,7 +22,7 @@ class ReportController extends Controller{
          * @var $load Load
          */
         $model = new ReportHours();
-        if (isset($_POST['ReportHours']['group_id'])&&isset($_POST['ReportHours']['month'])) {
+        /*if (isset($_POST['ReportHours']['group_id'])&&isset($_POST['ReportHours']['month'])) {
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll();
             $datarez =array();
@@ -32,9 +32,8 @@ class ReportController extends Controller{
             }
             //var_dump(Subject::model()->findByPk(array('id'=>$datarez[0]->load->wp_subject_id)));
             $excel->getDocument($datarez, 'GroupHoursList');
-
             return;
-        }
+        }*/
 
         $this->render('index',
             array('model' => $model,)

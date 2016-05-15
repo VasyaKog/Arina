@@ -1,6 +1,6 @@
 <?php
 /**
- * @var ReportController $this
+ * @var GroupController $this
  * @var ReportHours $model
  */
 $this->breadcrumbs = array(
