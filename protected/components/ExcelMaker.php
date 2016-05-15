@@ -13,14 +13,26 @@
  * @author Dmytro Karpovych <ZAYEC77@gmail.com>
  */
 class UniqueSubjectTeacher{
+
     public $subject;
     public $teacher;
 
-    function __construct($sid,$tid) {
-        $this->subject=$sid;
-        $this->teacher=$tid;
+    function __construct($s,$t) {
+        $this->subject=$s;
+        $this->teacher=$t;
     }
 }
+class UniqueGroupSubject{
+
+    public $group;
+    public $subject;
+
+    function __construct($g,$s) {
+        $this->group=$g;
+        $this->subject=$s;
+    }
+}
+
 class ExcelMaker extends CComponent
 {
     /**
@@ -1443,19 +1455,12 @@ SQL;
             $sheet->setCellValue($this->getNameFromNumber($i)."7",$d);
             $d++;
         }
-        $sheet->setCellValue("A1",'adsad');
         $sheet->mergeCells("E6:".$this->getNameFromNumber($days+3)."6");
         $begin = 8;
         $uniques = array();
-        $subject_out = array();
-        $teacher_out = array();
         foreach ($data as $item){
-            //$item->load->subject_id;
-            //$sheet->setCellValue("C".$begin,$item->load->wp_subject_id);
             $subject_temp = Subject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
-            //$sheet->setCellValue("C".$begin,$subject_temp->title);
             $teacher_temp = Teacher::model()->findByPk(array('id'=>$item->teacher_id));
-            //$sheet->setCellValue("D".$begin,$teacher_temp->last_name);
             $temp = new UniqueSubjectTeacher($subject_temp,$teacher_temp);
             if(!in_array($temp,$uniques))
                 array_push($uniques, $temp);
@@ -1475,6 +1480,45 @@ SQL;
             }
             $begin++;
         }
+        return $objPHPExcel;
+    }
+    public function makeTeacherHoursList($data){
+        /**
+         * @var JournalRecord[] $data
+         * @var $uniques UniqueGroupSubject[]
+         */
+        $objPHPExcel = $this->loadTemplate('report_teacher.xls');
+        $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $monthes = array('09','10','11','12','01','02','03','04','05','06','07','08');
+        $column = 2;
+        $uniques = array();
+        foreach ($data as $item){
+            $group_temp = Group::model()->findByPk(array('id'=>$item->load->group_id));
+            $subject_temp = Subject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
+            $temp = new UniqueGroupSubject($group_temp,$subject_temp);
+            if(!in_array($temp,$uniques))
+                array_push($uniques, $temp);
+            else
+                continue;
+        }
+        foreach ($uniques as $item){
+            $sheet->setCellValue($this->getNameFromNumber($column)."10",$item->group->title);
+            $sheet->setCellValue($this->getNameFromNumber($column)."11",$item->subject->title);
+            foreach ($data as $record){
+               if(($record->load->group_id==$item->group->id)&&($record->load->wp_subject_id==$item->subject->id)){
+                   $m=intval(substr($record->date,5,2));//+10;
+                   if($m<9)
+                       $b=15;
+                   else
+                       $b=3;
+                   $m+=$b;
+                   $t=intval($sheet->getCell($this->getNameFromNumber($column).$m)->getValue());
+                   $sheet->setCellValue($this->getNameFromNumber($column).$m,$t+$record->hours);
+               }
+            }
+            $column++;
+        }
+        //var_dump($uniques);
         return $objPHPExcel;
     }
 }

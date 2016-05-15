@@ -2,6 +2,7 @@
 /**
  * @var TeacherController $this
  * @var ReportHours $model
+ * @var TbActiveForm $form
  */
 $this->breadcrumbs = array(
     Yii::t('report', 'Reports'),

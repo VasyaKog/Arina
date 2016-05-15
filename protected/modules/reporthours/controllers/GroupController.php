@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retard
- * Date: 5/10/2016
- * Time: 2:07 PM
- */
 Yii::import('modules.load.models.*');
 ?>
 <?
