@@ -7,6 +7,7 @@ class ReportHours extends CFormModel
     public $teacher_id;
     public $month;
     public $years;
+    public $subject_id;
 
     public function rules()
     {
@@ -15,6 +16,7 @@ class ReportHours extends CFormModel
             array('group_id', 'required', 'on' => 'group'),
             array('month', 'required', 'on' => 'month'),
             array('years', 'required', 'on' => 'year'),
+            array('subject_id', 'required', 'on' => 'subject'),
         );
     }
 }

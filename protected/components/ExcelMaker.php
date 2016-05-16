@@ -1,4 +1,7 @@
 <?php
+Yii::import('modules.studyPlan.models.*');
+?>
+<?php
 
 /**
  * Class for generation excel documents
@@ -12,26 +15,6 @@
  * </pre>
  * @author Dmytro Karpovych <ZAYEC77@gmail.com>
  */
-class UniqueSubjectTeacher{
-
-    public $subject;
-    public $teacher;
-
-    function __construct($s,$t) {
-        $this->subject=$s;
-        $this->teacher=$t;
-    }
-}
-class UniqueGroupSubject{
-
-    public $group;
-    public $subject;
-
-    function __construct($g,$s) {
-        $this->group=$g;
-        $this->subject=$s;
-    }
-}
 
 class ExcelMaker extends CComponent
 {
@@ -1458,7 +1441,7 @@ SQL;
         $begin = 8;
         $uniques = array();
         foreach ($data as $item){
-            $subject_temp = Subject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
+            $subject_temp = WorkSubject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
             $teacher_temp = Teacher::model()->findByPk(array('id'=>$item->teacher_id));
             $temp = new UniqueSubjectTeacher($subject_temp,$teacher_temp);
             if(!in_array($temp,$uniques))
@@ -1468,7 +1451,7 @@ SQL;
         }
         foreach ($uniques as $item){
             $sheet->setCellValue("B".$begin,$begin-7);
-            $sheet->setCellValue("C".$begin,$item->subject->title);
+            $sheet->setCellValue("C".$begin,WorkSubject::getNameSubject($item->subject->id));
             $sheet->setCellValue("D".$begin,$item->teacher->last_name);
             foreach ($data as $record){
                 if(($record->teacher_id==$item->teacher->id)&&($record->load->wp_subject_id==$item->subject->id)){
@@ -1493,7 +1476,7 @@ SQL;
         $uniques = array();
         foreach ($data as $item){
             $group_temp = Group::model()->findByPk(array('id'=>$item->load->group_id));
-            $subject_temp = Subject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
+            $subject_temp = WorkSubject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
             $temp = new UniqueGroupSubject($group_temp,$subject_temp);
             if(!in_array($temp,$uniques))
                 array_push($uniques, $temp);
@@ -1504,7 +1487,7 @@ SQL;
         foreach ($uniques as $item){
             $sheet->setCellValue($this->getNameFromNumber($column)."10",$item->group->title);
             //$sheet->getStyle('A')->getBorders()
-            $sheet->setCellValue($this->getNameFromNumber($column)."11",$item->subject->title);
+            $sheet->setCellValue($this->getNameFromNumber($column)."11",WorkSubject::getNameSubject($item->subject->id));
             foreach ($data as $record){
                if(($record->load->group_id==$item->group->id)&&($record->load->wp_subject_id==$item->subject->id)){
                    $m=intval(substr($record->date,5,2));//+10;
@@ -1521,6 +1504,35 @@ SQL;
         }
 
         //var_dump($uniques);
+        return $objPHPExcel;
+    }
+
+    public function makeSubjectHoursList($data){
+        /**
+         * @var $load Load
+         * @var JournalRecord[] $data
+         * @var JournalRecord $item
+         */
+        $objPHPExcel = $this->loadTemplate('report_subject.xls');
+        $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $begin=7;
+        PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
+        $d=1;
+        foreach(range('C','F') as $i) {
+            $sheet->getColumnDimension($i)->setAutoSize(true);
+            $d++;
+        }
+        $sheet->setCellValue("D2",StudyYear::getTitleById($data[0]->load->study_year_id));
+        $sheet->setCellValue("D3",Teacher::model()->findByPk(array('id'=>$data[0]->teacher_id))->getFullName());
+        $sheet->setCellValue("D4",WorkSubject::getNameSubject($data[0]->load->wp_subject_id));
+        $sheet->setCellValue("D5",Group::getNameGroup($data[0]->load->group_id));
+        foreach ($data as $item){
+            $sheet->setCellValue("B".$begin,$begin-6);
+            $sheet->setCellValue("C".$begin,JournalRecordType::getTypeTitle($item->type_id));
+            $sheet->setCellValue("D".$begin,$item->description);
+            $sheet->setCellValue("E".$begin,$item->home_work);
+            $sheet->setCellValue("F".$begin,$item->date);
+        }
         return $objPHPExcel;
     }
 }

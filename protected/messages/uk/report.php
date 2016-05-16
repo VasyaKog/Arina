@@ -11,4 +11,6 @@ return array(
     'Choose month'=>'Виберіть місяць',
     'Report'=>'Звіт',
     'Reports'=>'Звіти',
+    'There are no data to generate a report'=>'Немає даних для генерації звіту',
+    'Fill all fields'=>'Заповніть усі поля',
 );

@@ -145,4 +145,14 @@ class StudyYear extends ActiveRecord
     {
         return CHtml::listData(StudyYear::model()->findAll(), 'id', 'title');
     }
+
+    public static function getTitleById($id)
+    {
+        /**
+         * @var $item StudyYear
+         */
+        $item=StudyYear::model()->findByPk(array('id'=>$id));
+        return "$item->begin/$item->end";
+    }
+
 }

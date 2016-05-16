@@ -15,7 +15,7 @@ class GroupController extends Controller{
         $model = new ReportHours();
         if (isset($_POST['ReportHours']['group_id']) and $_POST['ReportHours']['group_id']!="" and
             isset($_POST['ReportHours']['month']) and $_POST['ReportHours']['month']!="" and
-            isset($_POST['ReportHours']['years']) and $_POST['ReportHours']['month']!="") {
+            isset($_POST['ReportHours']['years']) and $_POST['ReportHours']['years']!="") {
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll();
             $years=StudyYear::model()->findByPk(array('id'=>$_POST['ReportHours']['years']));
@@ -33,9 +33,9 @@ class GroupController extends Controller{
             }
             if (!empty($datarez))
                 $excel->getDocument($datarez, 'GroupHoursList');
-            //var_dump(Subject::model()->findByPk(array('id'=>$datarez[0]->load->wp_subject_id)));
+            else
+                echo "<script>alert(Yii:t('report','There are no data to generate a report'););</script>";
         }
-
         $this->render('index',
             array('model' => $model,)
         );
