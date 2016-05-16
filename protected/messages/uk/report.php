@@ -1,7 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: retard
- * Date: 5/13/2016
- * Time: 6:27 PM
+ * Localization file uk/report
  */
+return array(
+    'Download'=>'Завантажити',
+    'Choose study year'=>'Виберіть навчальний рік',
+    'Choose teacher'=>'Виберіть вчителя',
+    'Choose group'=>'Виберіть групу',
+    'Choose subject'=>'Виберіть предмет',
+    'Choose month'=>'Виберіть місяць',
+    'Report'=>'Звіт',
+    'Reports'=>'Звіти',
+);

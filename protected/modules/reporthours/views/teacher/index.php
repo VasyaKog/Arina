@@ -30,7 +30,7 @@ $form=$this->beginWidget(BoosterHelper::FORM);
         array(
             'buttonType' => 'submit',
             'type' => 'primary',
-            'label' => Yii::t('terms','Open'),
+            'label' => Yii::t('report','Download'),
         )); ?>
 </div>
 </div>

@@ -28,6 +28,9 @@ class GroupController extends Controller{
                     }
                 }
             }
+            if (Yii::app()->user->checkAccess('student')) {
+                throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+            }
             if (!empty($datarez))
                 $excel->getDocument($datarez, 'GroupHoursList');
             //var_dump(Subject::model()->findByPk(array('id'=>$datarez[0]->load->wp_subject_id)));

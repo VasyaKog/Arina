@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Localization file uk/group
+ * Localization file uk/month
  */
 return array(
     'January' => 'Січень',
@@ -17,3 +16,4 @@ return array(
     'November' => 'Листопад',
     'December' => 'Грудень',
 );
+?>
