@@ -143,7 +143,7 @@
 
                         <?php echo $form->textFieldRow($model, 'military_accounting_group', array('size' => 40, 'maxlength' => '40')); ?>
 
-                        <?php echo $form->textFieldRow($model, 'military_accounting_category', array('size' => 40, 'maxlength' => '40')); ?>
+                        <?php echo $form->textFieldRow($model, 'military_accounting_category', array('size' => 60, 'maxlength' => '60')); ?>
 
                         <?php echo $form->textFieldRow($model, 'military_composition', array('size' => 40, 'maxlength' => '40')); ?>
 

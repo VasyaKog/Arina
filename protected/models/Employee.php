@@ -215,9 +215,11 @@ class Employee extends ActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => 20,
+                'pageSize' => 80,
             ),
+
         ));
+
     }
 
     /**

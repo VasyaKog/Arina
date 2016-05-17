@@ -91,4 +91,5 @@ return array(
     'Experience months' => 'Стаж (місяців)',
     'Experience days' => 'Стаж (днів)',
     'Get list in excel'=>'Генерувати список в Excel',
+    'Create personal card' => 'Створити особову картку працівника',
 );

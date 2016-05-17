@@ -2,10 +2,11 @@
 
 class DefaultController extends Controller
 {
+    //public global $model;
     public function actionView($id)
     {
         $this->render('view', array(
-            'model' => Employee::model()->loadContent($id),
+            'model' =>  Employee::model()->loadContent($id),
         ));
     }
 
@@ -14,6 +15,17 @@ class DefaultController extends Controller
         /**@var $excel ExcelMaker */
         $excel = Yii::app()->getComponent('excel');
         $excel->getDocument(NULL, 'employeesList');
+
+
+        (count(Yii::app()->session['arr_id']));
+    }
+
+    public function actionExcelCard($id)
+    {
+        $excel = Yii::app()->getComponent('excel');
+        Yii::app()->session['curent_id_employee'] = $id;
+        $excel->getDocument(NULL,'employeeCard');   
+
     }
 
 
