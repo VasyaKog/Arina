@@ -1404,7 +1404,6 @@ SQL;
         $i += 2;
         $sheet->setCellValue("A$i", "Директор інституту, декан факультету, завідувач відділення ______________ ______________");
         $sheet->setCellValue("E$i", "     (прізвище та ініціали)");
-
         return $objPHPExcel;
     }
 
@@ -1419,42 +1418,47 @@ SQL;
         }
     }
 
+
+
     protected function makeGroupHoursList($data){
         /**
          * @var JournalRecord[] $data
          * @var $temp UniqueSubjectTeacher
          * @var $uniques UniqueSubjectTeacher[]
+         * @var $group Group
+         * @var $spec Speciality
          */
         $objPHPExcel = $this->loadTemplate('report_group.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
         $days = cal_days_in_month(CAL_GREGORIAN, substr($data[0]->date,5,2), substr($data[0]->date,0,4));
         $sheet->insertNewColumnBefore("E",$days-1);
         PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
-        $d=1;
-        foreach(range(4,3+$days) as $i) {
-            $sheet->getColumnDimension($this->getNameFromNumber($i))
-                ->setAutoSize(true);
-            $sheet->setCellValue($this->getNameFromNumber($i)."7",$d);
+        $d=-1;
+        foreach(range(2,3+$days) as $i) {
+            $sheet->getColumnDimension($this->getNameFromNumber($i))->setAutoSize(true);
+            $sheet->setCellValue($this->getNameFromNumber($i)."4",$d);
             $d++;
         }
-        $sheet->mergeCells("E6:".$this->getNameFromNumber($days+3)."6");
-        $begin = 8;
+        $sheet->mergeCells("E3:".$this->getNameFromNumber($days+3)."3");
+        //creating unique array
         $uniques = array();
         foreach ($data as $item){
             $subject_temp = WorkSubject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
             $teacher_temp = Teacher::model()->findByPk(array('id'=>$item->teacher_id));
-            $temp = new UniqueSubjectTeacher($subject_temp,$teacher_temp);
+            $temp = new UniqueSubjectTeacher($subject_temp->id,$teacher_temp->id);
             if(!in_array($temp,$uniques))
                 array_push($uniques, $temp);
             else
                 continue;
         }
+        //generating data
+        $begin = 5;
         foreach ($uniques as $item){
-            $sheet->setCellValue("B".$begin,$begin-7);
-            $sheet->setCellValue("C".$begin,WorkSubject::getNameSubject($item->subject->id));
-            $sheet->setCellValue("D".$begin,$item->teacher->last_name);
+            $sheet->setCellValue("B".$begin,$begin-4);
+            $sheet->setCellValue("C".$begin,WorkSubject::getNameSubject($item->subject));
+            $sheet->setCellValue("D".$begin,Teacher::getTeacherLastNamebyId($item->teacher));
             foreach ($data as $record){
-                if(($record->teacher_id==$item->teacher->id)&&($record->load->wp_subject_id==$item->subject->id)){
+                if(($record->teacher_id==$item->teacher)&&($record->load->wp_subject_id==$item->subject)){
                     $day=intval(substr($record->date,8,2));
                     $t=intval($sheet->getCell($this->getNameFromNumber($day+3)."$begin")->getValue());
                     $sheet->setCellValue($this->getNameFromNumber($day+3)."$begin",$t+$record->hours);
@@ -1462,6 +1466,30 @@ SQL;
             }
             $begin++;
         }
+        $begin--;
+        //designing table
+        $thin_all = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN)));
+        $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)));
+        $main_cell = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),
+            'font'  => array('bold'  => true, 'size'  => 14,));
+        $day_cell = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),'font' => array('size'  => 12));
+        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$begin)->applyFromArray($thin_all);
+        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$begin)->applyFromArray($bold_out);
+        $sheet->getStyle('B3:'.'B'.$begin)->applyFromArray($bold_out);
+        $sheet->getStyle('C3:'.'C'.$begin)->applyFromArray($bold_out);
+        $sheet->getStyle('D3:'.'D'.$begin)->applyFromArray($bold_out);
+        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).'4')->applyFromArray($bold_out);
+        $sheet->getStyle('E4:'.$this->getNameFromNumber($days+3).'4')->applyFromArray($bold_out);
+        $sheet->getStyle($this->getNameFromNumber($days+4).'3:'.$this->getNameFromNumber($days+4).$begin)->applyFromArray($bold_out);
+        $sheet->getStyle($this->getNameFromNumber($days+5).'3:'.$this->getNameFromNumber($days+5).$begin)->applyFromArray($bold_out);
+        $sheet->mergeCells("B1:".$this->getNameFromNumber($days+5)."1");
+        $month = Yii::t('month',date("m",strtotime($data[0]->date)));
+        $year = StudyYear::getTitleById($data[0]->load->study_year_id);
+        $group = Group::model()->findByPk(array('id'=>$data[0]->load->group_id));
+        $sheet->setCellValue("B1","Облік годин навчальної роботи по групі $group->title за $month $year навчального року");
+        $sheet->getStyle('B1')->applyFromArray($main_cell);
+        $sheet->setCellValue("E3","Дні місяця");
+        $sheet->getStyle('E3')->applyFromArray($day_cell);
         return $objPHPExcel;
     }
 
@@ -1477,33 +1505,31 @@ SQL;
         foreach ($data as $item){
             $group_temp = Group::model()->findByPk(array('id'=>$item->load->group_id));
             $subject_temp = WorkSubject::model()->findByPk(array('id'=>$item->load->wp_subject_id));
-            $temp = new UniqueGroupSubject($group_temp,$subject_temp);
+            $temp = new UniqueGroupSubject($group_temp->id,$subject_temp->id);
             if(!in_array($temp,$uniques))
                 array_push($uniques, $temp);
             else
                 continue;
         }
         $column = 2;
-        foreach ($uniques as $item){
-            $sheet->setCellValue($this->getNameFromNumber($column)."10",$item->group->title);
+        foreach ($uniques as $item) {
+            $sheet->setCellValue($this->getNameFromNumber($column) . "10", Group::model()->getNameGroup($item->group));
             //$sheet->getStyle('A')->getBorders()
-            $sheet->setCellValue($this->getNameFromNumber($column)."11",WorkSubject::getNameSubject($item->subject->id));
-            foreach ($data as $record){
-               if(($record->load->group_id==$item->group->id)&&($record->load->wp_subject_id==$item->subject->id)){
-                   $m=intval(substr($record->date,5,2));//+10;
-                   if($m<9)
-                       $b=15;
-                   else
-                       $b=3;
-                   $m+=$b;
-                   $t=intval($sheet->getCell($this->getNameFromNumber($column).$m)->getValue());
-                   $sheet->setCellValue($this->getNameFromNumber($column).$m,$t+$record->hours);
-               }
+            $sheet->setCellValue($this->getNameFromNumber($column) . "11", WorkSubject::getNameSubject($item->subject));
+            foreach ($data as $record) {
+                if (($record->load->group_id == $item->group) && ($record->load->wp_subject_id == $item->subject)) {
+                    $m = intval(substr($record->date, 5, 2));//+10;
+                    if ($m < 9)
+                        $b = 15;
+                    else
+                        $b = 3;
+                    $m += $b;
+                    $t = intval($sheet->getCell($this->getNameFromNumber($column) . $m)->getValue());
+                    $sheet->setCellValue($this->getNameFromNumber($column) . $m, $t + $record->hours);
+                }
             }
             $column++;
         }
-
-        //var_dump($uniques);
         return $objPHPExcel;
     }
 

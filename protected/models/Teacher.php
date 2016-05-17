@@ -208,4 +208,12 @@ class Teacher extends Employee
         );
     }
 
+    public static function getTeacherLastNamebyId($id){
+        /**
+         * @var Teacher $teacher
+         */
+        $teacher = Teacher::model()->findByPk(array('id'=>$id));
+        return $teacher->last_name;
+    }
+
 }
