@@ -13,4 +13,7 @@ return array(
     'Reports'=>'Звіти',
     'There are no data to generate a report'=>'Немає даних для генерації звіту',
     'Fill all fields'=>'Заповніть усі поля',
+    'Hours teacher report'=>'Звіт з вичитки викладача',
+    'Hours subject report'=>'Звіт з вичитки предмету',
+    'Hours group report'=>'Звіт з вичитки групи',
 );

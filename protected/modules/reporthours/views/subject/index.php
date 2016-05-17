@@ -8,7 +8,7 @@ Yii::import('modules.studyPlan.models.*');
  * @var TbActiveForm $form
  */
 $this->breadcrumbs = array(
-    Yii::t('report', 'Reports'),
+    Yii::t('report', 'Hours subject report'),
 );
 ?>
 <div id="report-form">

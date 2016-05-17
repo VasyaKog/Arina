@@ -10,7 +10,8 @@ class GroupController extends Controller{
          * @var ReportHours $model
          * @var ExcelMaker $excel
          * @var $data JournalRecord[]
-         * @var $datarez string[]
+         * @var $datarez JournalRecord[]
+         * @var $years StudyYear
          */
         $model = new ReportHours();
         if (isset($_POST['ReportHours']['group_id']) and $_POST['ReportHours']['group_id']!="" and
@@ -21,12 +22,11 @@ class GroupController extends Controller{
             $years=StudyYear::model()->findByPk(array('id'=>$_POST['ReportHours']['years']));
             $datarez =array();
             foreach ($data as $item){
-                if ($item->load->group_id==$_POST['ReportHours']['group_id']&&substr($item->date,5,2)==$_POST['ReportHours']['month']) {
-                    if ((substr($item->date, 0, 4) == $years->begin and intval(substr($item->date, 5, 2)) >= 9) or
-                        (substr($item->date, 0, 4) == $years->end and intval(substr($item->date, 5, 2)) < 9)) {
+                if ($item->load->group_id==$_POST['ReportHours']['group_id'] and
+                    substr($item->date,5,2)==$_POST['ReportHours']['month'] and
+                    $item->load->study_year_id==$years->id) {
                         array_push($datarez, $item);
                     }
-                }
             }
             if (Yii::app()->user->checkAccess('student')) {
                 throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));

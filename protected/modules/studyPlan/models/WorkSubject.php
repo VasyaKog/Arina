@@ -48,8 +48,7 @@
     {
         return parent::model($className);
     }
-
-
+    
     public function getTitle()
     {
         return (!(empty($this->diploma_name) && empty($this->certificate_name)) ? '* ' : '') . $this->subject->title . (($this->dual_labs || $this->dual_practice) ? ' *' : '');

@@ -20,11 +20,9 @@ class TeacherController extends Controller{
             $datarez = array();
             $years=StudyYear::model()->findByPk(array('id'=>$_POST['ReportHours']['years']));
             foreach ($data as $item) {
-                if ($item->teacher_id == $_POST['ReportHours']['teacher_id']) {
-                    if ((substr($item->date, 0, 4) == $years->begin and intval(substr($item->date, 5, 2)) >= 9) or
-                        (substr($item->date, 0, 4) == $years->end and intval(substr($item->date, 5, 2)) < 9)) {
+                if ($item->teacher_id == $_POST['ReportHours']['teacher_id']  and
+                    $item->load->study_year_id==$years->id) {
                         array_push($datarez, $item);
-                    }
                 }
             }
             if (Yii::app()->user->checkAccess('student')) {

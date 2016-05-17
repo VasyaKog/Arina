@@ -5,7 +5,7 @@
  * @var TbActiveForm $form
  */
 $this->breadcrumbs = array(
-    Yii::t('report', 'Reports'),
+    Yii::t('report', 'Hours group report'),
 );
 ?>
 <div id="report-form">
