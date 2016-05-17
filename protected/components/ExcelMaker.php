@@ -1558,6 +1558,8 @@ SQL;
             $sheet->setCellValue("D".$begin,$item->description);
             $sheet->setCellValue("E".$begin,$item->home_work);
             $sheet->setCellValue("F".$begin,$item->date);
+            $begin++;
+            //var_dump($item);
         }
         return $objPHPExcel;
     }

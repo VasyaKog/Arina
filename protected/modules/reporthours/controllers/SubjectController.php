@@ -22,12 +22,12 @@ class SubjectController extends Controller{
             isset($_POST['ReportHours']['group_id']) and $_POST['ReportHours']['group_id']!="") {
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll(array('order'=>'date ASC'));
+
             $group = Group::model()->findByPk(array('id'=>$_POST['ReportHours']['group_id']));
             $years=StudyYear::model()->findByPk(array('id'=>$_POST['ReportHours']['years']));
             $plan = WorkPlan::model()->findByAttributes(array('speciality_id'=>$group->speciality_id,'year_id'=>$years->id));
             $work_subject = WorkSubject::model()->findByAttributes(array('subject_id'=>$_POST['ReportHours']['subject_id'],
                 'plan_id'=>$plan->id));
-
             $datarez =array();
             foreach ($data as $item) {
                 if ($item->teacher_id == $_POST['ReportHours']['teacher_id'] and
@@ -42,7 +42,7 @@ class SubjectController extends Controller{
             if (!empty($datarez))
                 $excel->getDocument($datarez, 'SubjectHoursList');
             else
-                echo "<script>alert(Yii:t('report','There are no data to generate a report'););</script>";
+                echo "<script language='javascript'>alert('There are no data to generate a report');</script>";
         }
         $this->render('index',
             array('model' => $model,)

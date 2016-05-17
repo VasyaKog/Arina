@@ -16,4 +16,5 @@ return array(
     'Hours teacher report'=>'Звіт з вичитки викладача',
     'Hours subject report'=>'Звіт з вичитки предмету',
     'Hours group report'=>'Звіт з вичитки групи',
+    'Fill all fields, sorry, page will reload'=>'Заповніть усі поля, вибачте, сторінка перевантажиться'
 );

@@ -16,8 +16,9 @@ class GroupController extends Controller{
         $model = new ReportHours();
         if (isset($_POST['ReportHours']['group_id']) and isset($_POST['ReportHours']['month']) and isset($_POST['ReportHours']['years'])) {
             if($_POST['ReportHours']['group_id']=="" or $_POST['ReportHours']['month']=="" or $_POST['ReportHours']['years']==""){
-                echo "<script language='javascript'>alert('Fill all fields');</script>";
+                echo "<script language='javascript'>alert('Fill all fields, sorry, page will reload');</script>";
                 $this->render('index', array('model' => $model,));
+                return;
             }
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll();
