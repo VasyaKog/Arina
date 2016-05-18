@@ -18,6 +18,7 @@ class ExcelMaker extends CComponent
      * @var string alias of path to directory with templates
      */
     public $templatesPath = 'public.files.templates';
+    public $tmp_id;
 
     /**
      * Load PHPExcel
@@ -1376,6 +1377,346 @@ SQL;
             $sheet->mergeCells("$index1$row:$index2$row");
         }
     }
+    
+    public function makeEmployeeCard()
+    {
+        $id = Yii::app()->session['curent_id_employee'];
+        unset(Yii::app()->session['curent_id_employee']);
+        $employee=Employee::model()->findByPk($id);
+        $objPHPExcel = $this->loadTemplate('fe.xls');
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $sheet->setCellValue("A2",'Хмельницький політехнічний коледж НУ"ЛП"');
+
+        //curent_time
+        $sheet->setCellValue("A13", yii::app()->dateFormatter->format('dd - MMMM - yyyy', date('dd - MMMM - yyyy')));
+
+        //gender
+        if($employee->gender==1){ $gender = 'жіноча'; }else{$gender='чоловіча';}
+        $sheet->setCellValue("CW13",$gender);
+
+        //pib and nationality
+        $sheet->setCellValue("W19", $employee->last_name);
+        $sheet->setCellValue("CJ19",$employee->first_name);
+        $sheet->setCellValue("FL19",$employee->middle_name);
+        $sheet->setCellValue("EG20",$employee->nationality);
+
+        //date_birth
+        $sheet->setCellValue("AO20", yii::app()->dateFormatter->format('dd', $employee->birth_date) );
+        $sheet->setCellValue("AX20", yii::app()->dateFormatter->format('MMMM', $employee->birth_date) );
+        $sheet->setCellValue("CC20", yii::app()->dateFormatter->format('yyyy', $employee->birth_date) );
+
+        
+
+        //education
+        if($employee->education==0){$education='Відсутня';}
+        if($employee->education==1){$education='Базова вища';}
+        if($employee->education==2){$education='Повна загальна середня';}
+        if($employee->education==3){$education='Професіно-технічна';}
+        if($employee->education==4){$education='Неповна вища';}
+        if($employee->education==5){$education='Базова вища';}
+        if($employee->education==6){$education='Повна вища';}
+        $sheet->setCellValue("A22", $education); 
+        //educations_list
+        $educations_list = $employee->educations_list;
+        $rows=25;
+        $col=0;
+        $column=0;
+        $previous=0;
+        for($i = 0; $i<strlen($educations_list); $i++)
+        {
+            if(!strcasecmp(substr($educations_list,$i,1),","))
+                {
+                    if($column!=1 && $column!=2 )
+                    {
+                        $arr[$col]=substr($educations_list, $previous, $i-$previous); 
+                        $column=0; 
+                        $col++;
+                        $previous=$i+1;
+                    } 
+                    if($col<=1)$column++;
+                }
+            if(!strcasecmp(substr($educations_list,$i,1),"|") )
+                {
+                    $arr[$col]=substr($educations_list, $previous, $i-$previous);
+                    $previous=$i+1; 
+                    $col=0; 
+                    $column=0;
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("DK".$rows,$arr[1]);
+                    $sheet->setCellValue("GI".$rows,$arr[2]);    
+                    $sheet->setCellValue("A".($rows+7),$arr[3]);
+                    $sheet->setCellValue("DK".($rows+7),$arr[4]);
+                    $sheet->setCellValue("GI".($rows+7),$arr[5]);  
+                    $rows++;
+                }
+            if($i==(strlen($educations_list)-1))
+            {
+                 $arr[$col]=substr($educations_list, $previous, $i-$previous);
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("DK".$rows,$arr[1]);
+                    $sheet->setCellValue("GI".$rows,$arr[2]);    
+                    $sheet->setCellValue("A".($rows+7),$arr[3]);
+                    $sheet->setCellValue("DK".($rows+7),$arr[4]);
+                    $sheet->setCellValue("GI".($rows+7),$arr[5]);    
+            }
+        }
+
+
+
+        //postgraduete training
+        if($employee->postgraduate_training==1){$sheet->setCellValue("CI37","X");}
+        if($employee->postgraduate_training==2){$sheet->setCellValue("DJ37","X");}
+        if($employee->postgraduate_training==3){$sheet->setCellValue("EG37","X");}
+        $postgraduate_trainings = $employee->postgraduate_trainings;
+        $rows=41;
+        $col=0;
+        $column=0;
+        $previous=0;
+        for($i = 0; $i<strlen($postgraduate_trainings); $i++)
+        {
+            if(!strcasecmp(substr($postgraduate_trainings,$i,1),","))
+                {
+                    if($column!=1 && $column!=2 )
+                    {
+                        $arr[$col]=substr($postgraduate_trainings, $previous, $i-$previous); 
+                        $column=0; 
+                        $col++;
+                        $previous=$i+1;
+                    } 
+                    if($col<=1)$column++;
+                }
+            if(!strcasecmp(substr($postgraduate_trainings,$i,1),"|") )
+                {
+                    $arr[$col]=substr($postgraduate_trainings, $previous, $i-$previous);
+                    $previous=$i+1; 
+                    $col=0; 
+                    $column=0;
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("BT".$rows,$arr[1]);
+                    $sheet->setCellValue("EL".$rows,$arr[2]);    
+                    $sheet->setCellValue("FV".$rows,$arr[3]);
+                    $rows++;
+                }
+            if($i==(strlen($postgraduate_trainings)-1))
+            {
+                 $arr[$col]=substr($postgraduate_trainings, $previous, $i-$previous);
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("BT".$rows,$arr[1]);
+                    $sheet->setCellValue("EL".$rows,$arr[2]);    
+                    $sheet->setCellValue("FV".$rows,$arr[3]);
+            }
+        }
+
+
+
+        //experience
+        $sheet->setCellValue("AV45", yii::app()->dateFormatter->format('dd', $employee->start_date) );
+        $sheet->setCellValue("BE45", yii::app()->dateFormatter->format('MMMM', $employee->start_date) );
+        $sheet->setCellValue("CM45", yii::app()->dateFormatter->format('yyyy', $employee->start_date) );
+        $sheet->setCellValue("FL45",$employee->experience_years);
+        $sheet->setCellValue("EP45",$employee->experience_months);
+        $sheet->setCellValue("DZ45",$employee->experience_days);
+        $sheet->setCellValue("DZ46","-");
+        $sheet->setCellValue("EP46","-");
+        $sheet->setCellValue("FL46","-");
+
+        //last job
+        $sheet->setCellValue("AR44",$employee->last_job);
+
+        //position
+        $sheet->setCellValue("EW44", $employee->last_job_position);
+
+        //passport
+        if(strlen($employee->passport_issued_by)<54){$sheet->setCellValue("FM63",$employee->passport_issued_by);}else
+        {
+            $sheet->setCellValue("FM63",substr($employee->passport_issued_by,0,54)."-");
+            $sheet->setCellValue("A64",substr($employee->passport_issued_by,54,strlen($employee->passport_issued_by)));
+            
+        }
+        $sheet->setCellValue("CX63", substr($employee->passport,0,4));
+        $sheet->setCellValue("DL63", substr($employee->passport,4,strlen($employee->passport)));
+
+        //dismissal
+        $sheet->setCellValue("AA48", yii::app()->dateFormatter->format('dd', $employee->dismissal_date) );
+        $sheet->setCellValue("AJ48", yii::app()->dateFormatter->format('MMMM', $employee->dismissal_date) );
+        $sheet->setCellValue("BR48", yii::app()->dateFormatter->format('yyyy', $employee->dismissal_date) );        
+        if($employee->dismissal_reason==1){$sheet->setCellValue("CG48", "Скорочення штатів");}
+        if($employee->dismissal_reason==2){$sheet->setCellValue("CG48","За власним бажаням");}
+        if($employee->dismissal_reason==3){$sheet->setCellValue("CG48","За прогули");}
+        if($employee->dismissal_reason==4){$sheet->setCellValue("CG48","Інші порушення");}
+
+        //pension
+        $sheet->setCellValue("A50",$employee->pension_data);
+
+        //family
+        $sheet->setCellValue("AG51", $employee->family_status);
+        $family_data = $employee->family_data;
+        $rows=55;
+        $col=0;
+        $previous=0;
+        for($i = 0; $i<strlen($family_data); $i++)
+        {
+            if(!strcasecmp(substr($family_data,$i,1),",")){$arr[$col]=substr($family_data, $previous, $i-$previous); $col++;$previous=$i+1;}
+            if(!strcasecmp(substr($family_data,$i,1),"|") )
+                {
+                    $arr[$col]=substr($family_data, $previous, $i-$previous);
+                    $previous=$i+1; 
+                    $col=0; 
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("AY".$rows,$arr[1]);
+                    $sheet->setCellValue("GC".$rows,$arr[2]);    
+                    $rows++;
+                }
+            if($i==(strlen($family_data)-1))
+            {
+                    $arr[$col]=substr($family_data, $previous, $i+1);                    
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("AY".$rows,$arr[1]);
+                    $sheet->setCellValue("GC".$rows,$arr[2]);    
+            }
+        }
+
+
+        //place of residence
+        $sheet->setCellValue("AF61", $employee->place_of_residence);
+
+        //place country registration
+        if(strlen($employee->place_of_registration)<172){
+        $sheet->setCellValue("CF62", $employee->place_of_registration);
+        }else
+        {
+            $sheet->setCellValue("CF62", substr($employee->place_of_registration,0,172)."-");
+            $sheet->setCellValue("A63", substr($employee->place_of_registration,172,strlen($employee->place_of_registration)));
+
+        }
+
+        //military
+        $sheet->setCellValue("X66", $employee->military_accounting_group);
+        if(strlen($employee->military_accounting_category)>90)
+        {
+            $sheet->setCellValue("AD67", substr($employee->military_accounting_category,0,90)."-");
+            $sheet->setCellValue("B68", substr($employee->military_accounting_category,90,strlen($employee->military_accounting_category)));
+        }else
+        {
+            $sheet->setCellValue("AD67", $employee->military_accounting_category);               
+        }
+        $sheet->setCellValue("L69", $employee->military_composition);
+        $sheet->setCellValue("AD70", $employee->military_rank);
+        $sheet->setCellValue("BD71", $employee->military_accounting_speciality_number);
+        if($employee->military_suitability==0){
+            if($employee->gender==1){ $military_suitability="Не придатна"; }else{$military_suitability="Не придатний";}
+        }else{
+            if($employee->gender==1){ $military_suitability="Придатна"; }else{$military_suitability="Придатний";}
+        }
+        $sheet->setCellValue("FV66", $military_suitability);
+        if(strlen($employee->military_accounting_category)>32)
+        {
+            $sheet->setCellValue("GL67", substr($employee->military_district_office_registration_name,0,32)."-");
+            $sheet->setCellValue("DQ68", substr($employee->military_district_office_registration_name,32,strlen($employee->military_district_office_registration_name)));
+        }else
+        {
+            $sheet->setCellValue("GL67",$employee->military_district_office_registration_name);
+        }
+        $sheet->setCellValue("DQ70", $employee->military_district_office_residence_name);
+
+        //profession_education
+        $professional_education = $employee->professional_education;
+        $rows=75;
+        $col=0;
+        $previous=0;
+        for($i = 0; $i<strlen($professional_education); $i++)
+        {
+            if(!strcasecmp(substr($professional_education,$i,1),",")){$arr[$col]=substr($professional_education, $previous, $i-$previous); $col++;$previous=$i+1;}
+            if(!strcasecmp(substr($professional_education,$i,1),"|") )
+                {
+                    $arr[$col]=substr($professional_education, $previous, $i-$previous);
+                    $previous=$i+1; 
+                    $col=0; 
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("V".$rows,$arr[1]);
+                    $sheet->setCellValue("CB".$rows,$arr[2]);   
+                    $sheet->setCellValue("CY".$rows,$arr[3]);
+                    $sheet->setCellValue("EF".$rows,$arr[4]);
+                    $sheet->setCellValue("FH".$rows,$arr[5]);    
+                    $rows++;
+                }
+            if($i==(strlen($professional_education)-1))
+            {
+                    $arr[$col]=substr($professional_education, $previous, $i+1);                    
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("V".$rows,$arr[1]);
+                    $sheet->setCellValue("CB".$rows,$arr[2]);   
+                    $sheet->setCellValue("CY".$rows,$arr[3]);
+                    $sheet->setCellValue("EF".$rows,$arr[4]);
+                    $sheet->setCellValue("FH".$rows,$arr[5]);   
+            }
+        }
+        //apointments
+        $appointments_and_transfers = $employee->appointments_and_transfers;
+        $rows=91;
+        $col=0;
+        $previous=0;
+        for($i = 0; $i<strlen($appointments_and_transfers); $i++)
+        {
+            if(!strcasecmp(substr($appointments_and_transfers,$i,1),",")){$arr[$col]=substr($appointments_and_transfers, $previous, $i-$previous); $col++;$previous=$i+1;}
+            if(!strcasecmp(substr($appointments_and_transfers,$i,1),"|") )
+                {
+                    $arr[$col]=substr($appointments_and_transfers, $previous, $i-$previous);
+                    $previous=$i+1; 
+                    $col=0; 
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("AB".$rows,$arr[1]);
+                    $sheet->setCellValue("BZ".$rows,$arr[2]);   
+                    $sheet->setCellValue("DM".$rows,$arr[3]);
+                    $sheet->setCellValue("EP".$rows,$arr[4]);
+                    $sheet->setCellValue("FJ".$rows,$arr[5]);    
+                    $rows++;
+                }
+            if($i==(strlen($appointments_and_transfers)-1))
+            {
+                    $arr[$col]=substr($appointments_and_transfers, $previous, $i+1);                    
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("AB".$rows,$arr[1]);
+                    $sheet->setCellValue("BZ".$rows,$arr[2]);   
+                    $sheet->setCellValue("DM".$rows,$arr[3]);
+                    $sheet->setCellValue("EP".$rows,$arr[4]);
+                    $sheet->setCellValue("FJ".$rows,$arr[5]);     
+            }
+        }
+
+        //VACATIONS
+        $vacations = $employee->vacations;
+        $rows=111;
+        $col=0;
+        $previous=0;
+        for($i = 0; $i<strlen($vacations); $i++)
+        {
+            if(!strcasecmp(substr($vacations,$i,1),",")){$arr[$col]=substr($vacations, $previous, $i-$previous); $col++;$previous=$i+1;}
+            if(!strcasecmp(substr($vacations,$i,1),"|") )
+                {
+                    $arr[$col]=substr($vacations, $previous, $i-$previous);
+                    $previous=$i+1; 
+                    $col=0; 
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("BX".$rows,$arr[1]);
+                    $sheet->setCellValue("DE".$rows,$arr[2]);   
+                    $sheet->setCellValue("EW".$rows,$arr[3]);
+                    $sheet->setCellValue("GL".$rows,$arr[4]);
+                    $rows++;
+                }
+            if($i==(strlen($vacations)-1))
+            {
+                    $arr[$col]=substr($vacations, $previous, $i+1);                    
+                    $sheet->setCellValue("A".$rows,$arr[0]);
+                    $sheet->setCellValue("BX".$rows,$arr[1]);
+                    $sheet->setCellValue("DE".$rows,$arr[2]);   
+                    $sheet->setCellValue("EW".$rows,$arr[3]);
+                    $sheet->setCellValue("GL".$rows,$arr[4]);    
+            }
+        }
+
+        return $objPHPExcel;
+    }
 
     protected function makeEmployeesList($data)
     {
@@ -1387,14 +1728,13 @@ SQL;
 
         $i = 9;
         /** @var $employee Employee */
-        foreach ($employees as $employee) {
-            $sheet->setCellValue("A$i", $i - 8);
-            $sheet->setCellValue("B$i", $employee->getFullName());
-            $sheet->setCellValue("C$i", isset($employee->position) ? $employee->position->title : '');
 
-            //$sheet->insertNewRowBefore($i + 1, 1);
+        for($k=0; $k<count(YII::app()->session['arr_id']); $k++)
+        {
+            $sheet->setCellValue("A$i", $i-8);
+            $sheet->setCellValue("B$i", YII::app()->session['arr_id'][$k]->getFullName());
+            $sheet->setCellValue("C$i", (isset(YII::app()->session['arr_id'][$k]->position))?YII::app()->session['arr_id'][$k]->position->title:'');
             $i++;
-            $sheet->getStyle("A$i:C$i")->applyFromArray(self::getBorderStyle());
         }
 
         $i += 2;
