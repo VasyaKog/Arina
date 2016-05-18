@@ -13,8 +13,12 @@ class TeacherController extends Controller{
          * @var $years StudyYear
          */
         $model = new ReportHours();
-        if ((isset($_POST['ReportHours']['teacher_id'])) and ($_POST['ReportHours']['teacher_id']!="") and
-            (isset($_POST['ReportHours']['years'])) and ($_POST['ReportHours']['years'])!=""){
+        if ((isset($_POST['ReportHours']['teacher_id'])) and (isset($_POST['ReportHours']['years']))){
+            if (($_POST['ReportHours']['teacher_id']=="") or ($_POST['ReportHours']['years'])==""){
+                echo "<script language='javascript'>alert('Fill all fields, sorry, page will reload');</script>";
+                $this->render('index', array('model' => $model,));
+                return;
+            }
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll();
             $datarez = array();
@@ -30,7 +34,8 @@ class TeacherController extends Controller{
             }
             if (!empty($datarez))
                 $excel->getDocument($datarez, 'TeacherHoursList');
-            return;
+            else
+                echo "<script language='javascript'>alert('There are no data to generate a report');</script>";
         }
 
         $this->render('index',array('model' => $model));

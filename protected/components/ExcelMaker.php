@@ -1517,11 +1517,13 @@ SQL;
 
         PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
         foreach ($uniques as $item) {
+            $exam=0;
             $group = Group::model()->findByPk($item->group);
-            $sheet->setCellValue($this->getNameFromNumber($column) . "9", $group->getCourse($data[0]->load->study_year_id));
-            $sheet->setCellValue($this->getNameFromNumber($column) . "10",$group->title );
-            $sheet->setCellValue($this->getNameFromNumber($column) . "11", WorkSubject::getNameSubject($item->subject));
-            $sheet->getStyle($this->getNameFromNumber($column) . "9:".$this->getNameFromNumber($column) . "11")->getAlignment()->setTextRotation(90);
+            $col=$this->getNameFromNumber($column);
+            $sheet->setCellValue($col."9", $group->getCourse($data[0]->load->study_year_id));
+            $sheet->setCellValue($col."10",$group->title );
+            $sheet->setCellValue($col."11", WorkSubject::getNameSubject($item->subject));
+            $sheet->getStyle($col. "10:".$col. "11")->getAlignment()->setTextRotation(90);
             foreach ($data as $record) {
                 if (($record->load->group_id == $item->group) && ($record->load->wp_subject_id == $item->subject)) {
                     $m = intval(substr($record->date, 5, 2));//+10;
@@ -1530,10 +1532,17 @@ SQL;
                     else
                         $b = 3;
                     $m += $b;
-                    $t = intval($sheet->getCell($this->getNameFromNumber($column) . $m)->getValue());
-                    $sheet->setCellValue($this->getNameFromNumber($column) . $m, $t + $record->hours);
+                    $t = intval($sheet->getCell($col.$m)->getValue());
+                    $sheet->setCellValue($col. $m, $t + $record->hours);
+                    if($record->type_id==4)
+                        $exam+=$record->hours;
                 }
             }
+            $sheet->setCellValue($col."28",$exam);
+            $sheet->setCellValue($col."24","=SUM(".$col."12:".$col."23)");
+            $sheet->setCellValue($col."26","=IF(".$col."24<".$col."25,".$col."25-".$col."24,0)");
+            $sheet->setCellValue($col."27","=IF(".$col."24>".$col."25,".$col."24-".$col."25,0)");
+
             $column++;
         }
         foreach(range(10,11) as $i)
@@ -1544,7 +1553,13 @@ SQL;
             'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
             'font'  => array('name'=>'Times New Roman', 'size'  => 10,));
+        $teacher_style = array('alignment' => array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
+            'font'  => array('name'=>'Calibri', 'size'  => 11,));
         $sheet->getStyle("B9:O29")->applyFromArray($bold_out);
+        $sheet->setCellValue("E5","у ".StudyYear::getTitleById($data[0]->load->study_year_id));
+        $sheet->getStyle("E5")->getFont()->setBold(true)->setSize(11)->setName('Calibri');
+        $sheet->setCellValue("C7",Teacher::model()->findByPk(array("id"=>$data[0]->teacher_id))->getFullName());
+        $sheet->getStyle("C7")->applyFromArray($teacher_style);
         return $objPHPExcel;
     }
 

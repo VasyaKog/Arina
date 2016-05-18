@@ -16,13 +16,16 @@ class SubjectController extends Controller{
          * @var $years StudyYear
          */
         $model = new ReportHours();
-        if (isset($_POST['ReportHours']['years']) and $_POST['ReportHours']['years']!="" and
-            isset($_POST['ReportHours']['teacher_id']) and $_POST['ReportHours']['teacher_id']!="" and
-            isset($_POST['ReportHours']['subject_id']) and $_POST['ReportHours']['subject_id']!="" and
-            isset($_POST['ReportHours']['group_id']) and $_POST['ReportHours']['group_id']!="") {
+        if (isset($_POST['ReportHours']['years']) and isset($_POST['ReportHours']['teacher_id']) and
+            isset($_POST['ReportHours']['subject_id']) and isset($_POST['ReportHours']['group_id']) ) {
+            if($_POST['ReportHours']['years']=="" or $_POST['ReportHours']['teacher_id']=="" or
+                $_POST['ReportHours']['subject_id']=="" or $_POST['ReportHours']['group_id']==""){
+                echo "<script language='javascript'>alert('Fill all fields, sorry, page will reload');</script>";
+                $this->render('index', array('model' => $model,));
+                return;
+            }
             $excel = Yii::app()->getComponent('excel');
             $data = JournalRecord::model()->findAll(array('order'=>'date ASC'));
-
             $group = Group::model()->findByPk(array('id'=>$_POST['ReportHours']['group_id']));
             $years=StudyYear::model()->findByPk(array('id'=>$_POST['ReportHours']['years']));
             $plan = WorkPlan::model()->findByAttributes(array('speciality_id'=>$group->speciality_id,'year_id'=>$years->id));
