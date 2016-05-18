@@ -53,6 +53,17 @@ if($model->present!=0) {?>
 ); ?>
 <br/>
     </div>
+        <div class="row">
+            <b><?php echo CHtml::encode($model->getAttributeLabel('date')); ?>:</b>
+            <?php echo CHtml::textField(
+                $model->getAttributeLabel('date'),
+                $model->date,
+                array(
+                    'readonly'=>true,
+                )
+            ); ?>
+            <br/>
+        </div>
     <?}?>
     <?php if($model->retake_value_id!=0) {?>
     <div class="row">
@@ -67,6 +78,17 @@ if($model->present!=0) {?>
 
         <br/>
     </div>
+        <div class="row">
+            <b><?php echo CHtml::encode($model->getAttributeLabel('retake_date')); ?>:</b>
+            <?php echo CHtml::textField(
+                $model->getAttributeLabel('retake_date'),
+                $model->date,
+                array(
+                    'readonly'=>true,
+                )
+            ); ?>
+            <br/>
+        </div>
     <?}?>
     <?php if($type->ticket) {
     if(!is_null($model->ticket_numb)) {?>

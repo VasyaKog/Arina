@@ -100,27 +100,7 @@ class JournalStudents extends CActiveRecord
 		foreach($studentsid as $item){
 			array_push($students,Student::model()->findByPk($item));
 		}
-		/**
-		 * @param $a Student
-		 * @param $b Student
-		 * @return int
-		 */
-		function cmpFirstName($a, $b)
-		{
-			return strcmp($a->first_name, $b->first_name);
-		}
-		/**
-		 * @param $a Student
-		 * @param $b Student
-		 * @return int
-		 */
-		function cmpLastName($a, $b)
-		{
-			return strcmp($a->last_name, $b->last_name);
-		}
 
-		usort($students, "cmpLastName");
-		usort($students, "cmpFirstName");
 		return $students;
 	}
 	public static function getAllStudentsInArray($load){
@@ -135,12 +115,8 @@ class JournalStudents extends CActiveRecord
 		foreach($records as $record) {
 			if(!in_array($record->student_id,$studentsid)) array_push($studentsid, $record->student_id);
 		}
-		function cmp($a, $b)
-		{
-			return strcmp($a[""], $b["title"]);
-		}
 		
-		return $students;
+		return $studentsid;
 	}
 	public function search()
 	{

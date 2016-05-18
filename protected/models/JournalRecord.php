@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @author VasyaKog
+ */
 /**
  * This is the model class for table "journal_record".
  *
@@ -62,14 +64,21 @@ class JournalRecord extends CActiveRecord
 
 
 	public function check_all(){
-		if($this->types->description){
-			if(empty($this->description)){
-				$this->addError('description',Yii::t('journal','Description').' '.Yii::t('journal','is required'));
+		if(isset($this->types)){
+			if($this->type_id==0) $this->addError('type_id', Yii::t('journal', 'Select EvaluationSystem'));
+		} else $this->addError('type_id', Yii::t('journal', 'Select JournalRecordType'));
+		if(isset($this->types->description)){
+			if($this->types->description==1) {
+				if (empty($this->description)) {
+					$this->addError('description', Yii::t('journal', 'Description') . ' ' . Yii::t('journal', 'is required'));
+				}
 			}
 		}
-		if($this->types->homework){
-			if(empty($this->home_work)){
-				$this->addError('home_work',Yii::t('journal','Home task').' '.Yii::t('journal','is required'));
+		if(isset($this->types->homework)){
+			if($this->types->description==1) {
+				if (empty($this->home_work)) {
+					$this->addError('home_work', Yii::t('journal', 'Home task') . ' ' . Yii::t('journal', 'is required'));
+				}
 			}
 		}
 		/**

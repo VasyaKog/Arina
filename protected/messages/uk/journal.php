@@ -71,4 +71,6 @@ return array(
     'Select audience'=>'Вкажіть аудиторію',
     'Record that has hours must has audience'=>'Запис, що має години повинна мати аудиторію',
     'Create JournalRecord'=>'Записати пару',
+    'Select JournalRecordType'=>'Оберіть тип запису журналу',
+    'Retake Date'=>'Дата перездачі',
 );

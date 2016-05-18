@@ -19,7 +19,7 @@ class PageJournal extends CWidget
     /**
      * @var $students Student[]
      */
-    public $students;
+    public $students=array();
     public $rows=array();
     /**
      * @var $records JournalRecord[]
@@ -31,7 +31,10 @@ class PageJournal extends CWidget
      */
     public $teacher;
     public $teacherName;
-
+    /**
+     * @var $student Student
+     */
+    public $student_view=null;
     public $t=true;
 
     /**
@@ -44,7 +47,11 @@ class PageJournal extends CWidget
     public function init(){
         $this->load=Load::model()->findByPk($this->load_id);
         $group =Group::model()->findByPk($this->load->group_id);
-        $this->students=JournalStudents::getAllStudentsInList($this->load);
+        if(isset($this->student_view)){
+            array_push($this->students,Student::model()->findByPk($this->student_view->id));
+        } else {
+            $this->students = JournalStudents::getAllStudentsInList($this->load);
+        }
         $this->teacher=Teacher::model()->findByPk($this->load->teacher_id);
         if(!isset($this->teacher)) {
             $this->teacherName=Yii::t('base','Not selected');
@@ -66,13 +73,13 @@ class PageJournal extends CWidget
             return strcmp($a->getFullName(), $b->getFullName());
         }
         usort($this->students,'cmp');
-        foreach ($this->students as $item){
-            array_push($this->rows,$item->getLink());
-        }
+            foreach ($this->students as $item) {
+                array_push($this->rows, $item->getLink());
+            }
 
 
         
-        $this->records=JournalRecord::model()->findAllByAttributes(array('load_id'=> $this->load_id));
+        $this->records=JournalRecord::model()->findAllByAttributes(array('load_id'=> $this->load_id),array("order"=>"date"));
         foreach($this->records as $item){
             array_push($this->list,$item->getLink());
         }

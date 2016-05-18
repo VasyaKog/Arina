@@ -114,9 +114,9 @@ class DefaultController extends Controller
          */
         $load=Load::model()->findByPk($id);
         /**
-        * @var $student Student
+        * @var $student_view Student
          */
-        $student=null;
+        $student_view=null;
         if (isset(Yii::app()->user->identityType)) {
             if (isset(Yii::app()->user->identityId)) {
                 if (Yii::app()->user->identityType == User::TYPE_SUPER) {
@@ -148,9 +148,13 @@ class DefaultController extends Controller
                 }
                 if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
                     $student=Student::model()->findByPk(Yii::app()->user->identityId);
+
                     if(in_array($load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($load))){
                         $access=true;
                         $t=false;
+                        /** @var $group Group*/
+                        $group=Group::model()->findByPk($load->group_id);
+                        if($student->id!=$group->monitor_id) $student_view=$student;
                     } else {
                         /** @var $group Group*/
                         $group=Group::model()->findByPk($load->group_id);
@@ -209,7 +213,7 @@ class DefaultController extends Controller
         }
         $this->render('view', array(
             't'=>$t,
-            'student_id_view'=>$student,
+            'student'=>$student_view,
             'id' => $id,
         ));
     }

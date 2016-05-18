@@ -29,7 +29,9 @@ if($t) $k =0; else $k=1;
         align-items: center;
     }
 
-
+    .journal  {
+        width: auto;
+    }
     #back{
         background-color: gainsboro;
     }
@@ -38,28 +40,22 @@ if($t) $k =0; else $k=1;
         text-orientation:upright;
     }
 
-    .mytable{
-        width: auto;
-        display: block;
-    }
-
     #center{
         text-align: center;
     }
-    .prokrutka{
-        height: 50%; /* Just for the demo          */
-        overflow-y: auto;    /* Trigger vertical scroll    */
-        overflow-x: auto;  /* Hide the horizontal scroll */
+
+    table{
+        display: block;
+        overflow: auto;
     }
 </style>
 <h3><?php echo Yii::t('subject','Subject').': '.$subject.'  '.Yii::t('teacher','Teacher').': '.$teacherName;?></h3>
-<div class="prokrutka">
-<table class="journal mytable table ">
-        <tr>
-            <td rowspan="2"><?echo Yii::t('terms','N p/p');?></td>
-            <td class="name" rowspan="2"><? echo Yii::t('terms','Surname and initials');?></td>
-            <td colspan="<? echo count($list)+$k; ?> " id="center"><?echo Yii::t('terms','Day, month') ?></td>
-        </tr>
+<table class="journal graph table items table-striped table-condensed table-bordered table-hover">
+    <tr>
+        <td rowspan="2"><?echo Yii::t('terms','N p/p');?></td>
+        <td class="name" rowspan="2"><? echo Yii::t('terms','Surname and initials');?></td>
+        <td colspan="<? echo count($list)+$k; ?> " id="center"><?echo Yii::t('terms','Day, month') ?></td>
+    </tr>
     <tr>
     <?php
     $krecords=0;
@@ -99,28 +95,11 @@ if($t) $k =0; else $k=1;
     if($t)echo '<td></td>';
     ?>
     </tr>
+
     <?
 
 $i++;
 }
 ?>
 </table>
-    </div>
-<script>
-    var $table = $('.prokrutka'),
-        $bodyCells = $table.find('table tr:first').children(),
-        colWidth;
 
-    // Adjust the width of thead cells when window resizes
-    $(window).resize(function() {
-        // Get the tbody columns width array
-        colWidth = $bodyCells.map(function() {
-            return $(this).width();
-        }).get();
-
-        // Set the width of thead columns
-        $table.find('thead tr').children().each(function(i, v) {
-            $(v).width(colWidth[i]);
-        });
-    }).
-</script>
