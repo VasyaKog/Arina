@@ -1418,8 +1418,6 @@ SQL;
         }
     }
 
-
-
     protected function makeGroupHoursList($data){
         /**
          * @var JournalRecord[] $data
@@ -1452,36 +1450,36 @@ SQL;
                 continue;
         }
         //generating data
-        $begin = 5;
+        $row = 5;
         foreach ($uniques as $item){
-            $sheet->setCellValue("B".$begin,$begin-4);
-            $sheet->setCellValue("C".$begin,WorkSubject::getNameSubject($item->subject));
-            $sheet->setCellValue("D".$begin,Teacher::getTeacherLastNamebyId($item->teacher));
+            $sheet->setCellValue("B".$row,$row-4);
+            $sheet->setCellValue("C".$row,WorkSubject::getNameSubject($item->subject));
+            $sheet->setCellValue("D".$row,Teacher::getTeacherLastNamebyId($item->teacher));
             foreach ($data as $record){
                 if(($record->teacher_id==$item->teacher)&&($record->load->wp_subject_id==$item->subject)){
                     $day=intval(substr($record->date,8,2));
-                    $t=intval($sheet->getCell($this->getNameFromNumber($day+3)."$begin")->getValue());
-                    $sheet->setCellValue($this->getNameFromNumber($day+3)."$begin",$t+$record->hours);
+                    $t=intval($sheet->getCell($this->getNameFromNumber($day+3)."$row")->getValue());
+                    $sheet->setCellValue($this->getNameFromNumber($day+3)."$row",$t+$record->hours);
                 }
             }
-            $begin++;
+            $row++;
         }
-        $begin--;
+        $row--;
         //designing table
         $thin_all = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN)));
         $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)));
         $main_cell = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),
             'font'  => array('bold'  => true, 'size'  => 14,));
         $day_cell = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),'font' => array('size'  => 12));
-        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$begin)->applyFromArray($thin_all);
-        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$begin)->applyFromArray($bold_out);
-        $sheet->getStyle('B3:'.'B'.$begin)->applyFromArray($bold_out);
-        $sheet->getStyle('C3:'.'C'.$begin)->applyFromArray($bold_out);
-        $sheet->getStyle('D3:'.'D'.$begin)->applyFromArray($bold_out);
+        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($thin_all);
+        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($bold_out);
+        $sheet->getStyle('B3:'.'B'.$row)->applyFromArray($bold_out);
+        $sheet->getStyle('C3:'.'C'.$row)->applyFromArray($bold_out);
+        $sheet->getStyle('D3:'.'D'.$row)->applyFromArray($bold_out);
         $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).'4')->applyFromArray($bold_out);
         $sheet->getStyle('E4:'.$this->getNameFromNumber($days+3).'4')->applyFromArray($bold_out);
-        $sheet->getStyle($this->getNameFromNumber($days+4).'3:'.$this->getNameFromNumber($days+4).$begin)->applyFromArray($bold_out);
-        $sheet->getStyle($this->getNameFromNumber($days+5).'3:'.$this->getNameFromNumber($days+5).$begin)->applyFromArray($bold_out);
+        $sheet->getStyle($this->getNameFromNumber($days+4).'3:'.$this->getNameFromNumber($days+4).$row)->applyFromArray($bold_out);
+        $sheet->getStyle($this->getNameFromNumber($days+5).'3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($bold_out);
         $sheet->mergeCells("B1:".$this->getNameFromNumber($days+5)."1");
         $month = Yii::t('month',date("m",strtotime($data[0]->date)));
         $year = StudyYear::getTitleById($data[0]->load->study_year_id);
@@ -1514,7 +1512,6 @@ SQL;
                 continue;
         }
         $column = 2;
-
         PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
         foreach ($uniques as $item) {
             $exam=0;
@@ -1526,7 +1523,7 @@ SQL;
             $sheet->getStyle($col. "10:".$col. "11")->getAlignment()->setTextRotation(90);
             foreach ($data as $record) {
                 if (($record->load->group_id == $item->group) && ($record->load->wp_subject_id == $item->subject)) {
-                    $m = intval(substr($record->date, 5, 2));//+10;
+                    $m = intval(substr($record->date, 5, 2));
                     if ($m < 9)
                         $b = 15;
                     else
@@ -1542,7 +1539,6 @@ SQL;
             $sheet->setCellValue($col."24","=SUM(".$col."12:".$col."23)");
             $sheet->setCellValue($col."26","=IF(".$col."24<".$col."25,".$col."25-".$col."24,0)");
             $sheet->setCellValue($col."27","=IF(".$col."24>".$col."25,".$col."24-".$col."25,0)");
-
             $column++;
         }
         foreach(range(10,11) as $i)
@@ -1571,26 +1567,41 @@ SQL;
          */
         $objPHPExcel = $this->loadTemplate('report_subject.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        $begin=7;
         PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
-        $d=1;
-        foreach(range('C','F') as $i) {
-            $sheet->getColumnDimension($i)->setAutoSize(true);
-            $d++;
-        }
+        foreach(range('C','F') as $i)
+            $sheet->getColumnDimension($i)->setAutoSize(false);
+        $row=8;
         $sheet->setCellValue("D2",StudyYear::getTitleById($data[0]->load->study_year_id));
         $sheet->setCellValue("D3",Teacher::model()->findByPk(array('id'=>$data[0]->teacher_id))->getFullName());
         $sheet->setCellValue("D4",WorkSubject::getNameSubject($data[0]->load->wp_subject_id));
         $sheet->setCellValue("D5",Group::getNameGroup($data[0]->load->group_id));
         foreach ($data as $item){
-            $sheet->setCellValue("B".$begin,$begin-6);
-            $sheet->setCellValue("C".$begin,JournalRecordType::getTypeTitle($item->type_id));
-            $sheet->setCellValue("D".$begin,$item->description);
-            $sheet->setCellValue("E".$begin,$item->home_work);
-            $sheet->setCellValue("F".$begin,$item->date);
-            $begin++;
-            //var_dump($item);
+            $sheet->setCellValue("B".$row,$row-7);
+            $sheet->setCellValue("C".$row,JournalRecordType::getTypeTitle($item->type_id));
+            $sheet->setCellValue("D".$row,$item->description);
+            $sheet->setCellValue("E".$row,$item->home_work);
+            $sheet->setCellValue("F".$row,$item->date);
+            $row++;
         }
+        $row--;
+        foreach(range(8,$row) as $i)
+            $sheet->getRowDimension($i)->setRowHeight(-1);
+        $thin_all = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN)),
+            'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
+            'font'  => array('name'=>'Calibri', 'size'  => 11,));
+        $header_style = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)),
+            'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
+            'font'  => array('name'=>'Calibri', 'size'  => 12,'bold'=>true));
+        $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)));
+        $sheet->getStyle("B8:F".$row)->applyFromArray($thin_all);
+        $sheet->getStyle("B7:F".$row)->applyFromArray($bold_out);
+        $sheet->getStyle("C7:E".$row)->applyFromArray($bold_out);
+        $sheet->getStyle("D7:D".$row)->applyFromArray($bold_out);
+        $sheet->getStyle("B7:F7")->applyFromArray($bold_out);
+        $sheet->getStyle("B7:F7")->applyFromArray($header_style);
+        $sheet->getStyle("B8:F".$row)->getAlignment()->setWrapText(true);
         return $objPHPExcel;
     }
 }
