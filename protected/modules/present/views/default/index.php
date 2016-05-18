@@ -9,8 +9,9 @@ $this->breadcrumbs = array(
 $this->menu = array(
     array(
         'type' => BoosterHelper::TYPE_INFO,
-        'label' => Yii::t('present', 'Generate excel list'),
-        'url' => $this->createUrl('excelList'),
+        'label' => Yii::t('present', 'Generate excel stat'),
+        'url' => array('/present/presentExcel'),
+        //$this->createUrl('excelList'),
     ),
 );
 

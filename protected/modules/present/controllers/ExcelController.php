@@ -1,6 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Arhangel
+ * Date: 16.05.2016
+ * Time: 10:16
+ */
 
-class DefaultController extends Controller
+class ExcelController extends Controller
 {
     public function actionExcelList()
     {
@@ -22,14 +28,19 @@ class DefaultController extends Controller
              * @var $loadmas Load[]
              * @var $load Load
              **/
-                $this->actionViews($_POST['PresentViewer']['studyYearId'],$_POST['PresentViewer']['groupId'],$_POST['PresentViewer']['studyMonthId']);
+            $load=null;
+            $load=Load::model()->findByAttributes(array('study_year_id'=>$_POST['PresentViewer']['studyYearId'],'group_id'=>$_POST['PresentViewer']['groupId'],'wp_subject_id'=>$_POST['PresentViewer']['studyMonthId']));
+            if(!is_null($load)){
+                $this->redirect('/present/default/views/'.$load->id);
+            }
             return;
         }
+
         $this->render('index', array(
             'model' => $model,
         ));
     }
-    
+
     public function actionChangeGroupList()
     {
         $selectedYear = $_POST['PresentViewer']['studyYearId'];
@@ -46,44 +57,39 @@ class DefaultController extends Controller
     }
 
 
-//    public function actionChangeMonthList(){
-//
-//        $selectedYear=$_POST['PresentViewer']['studyYearId'];
-//        $selectedGroup=$_POST['PresentViewer']['groupId'];
-//
-//        /**
-//         * @var $dat PresentViewer[]
-//        **/
-//
-//        $dat=PresentViewer::getMonthList();
-//
-//        if ($selectedGroup == 0) {
-//             echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select group'), true);
-//             return;
-//        };
-//
-//        echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select Study Month'), true);
-//
-//        foreach ($dat as $item){
-//           if($item->group_id==$selectedGroup&&$item->study_year_id==$selectedYear){
-//                echo CHtml::tag('option', array('value' => $item->studyMonthId), $item->studyMonthId, true);
-//                }
-//            }
-//        }
-    
-    public function actionViews($study_year_id,$group_id,$study_month_id)
+    public function actionChangeMonthList(){
+
+        $selectedYear=$_POST['PresentViewer']['studyYearId'];
+        $selectedGroup=$_POST['PresentViewer']['groupId'];
+
+        /**
+         * @var $dat Load[]
+         **/
+        $dat=array();
+        $dat=PresentViewer::getMonthList();
+
+        if ($_POST['PresentViewer']['groupId'] == 0) {
+            echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select group'), true);
+            return;
+        };
+        echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select Study Month'), true);
+        foreach ($dat as $item){
+            if($item->group_id==$selectedGroup&&$item->study_year_id==$selectedYear){
+                echo CHtml::tag('option', array('value' => $item->id), PresentViewer::getMonthList($item->id), true);
+            }
+        }
+    }
+
+    public function actionViews($id)
     {
         $t=false;
-        $access=true;
+        $access=false;
         /**
          * @var $load Load
-         * @var $teacher_id journalRecord
          */
-        $load=null;
-        $load=Load::model()->findByAttributes(array('study_year_id' => $study_year_id,'group_id' => $group_id));
-        $teacher_id=Load::model()->findByPk($load->teacher_id);
+        $load=Load::model()->findByPk($id);
         /**
-        * @var $student Student
+         * @var $student Student
          */
         $student=null;
         if (isset(Yii::app()->user->identityType)) {
@@ -93,17 +99,17 @@ class DefaultController extends Controller
                      * @var $teacher Teacher
                      */
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
-                    if ($teacher_id == Yii::app()->user->identityId) {
+                    if ($load->teacher_id == Yii::app()->user->identityId) {
                         $access = true;
                         $t = true;
-                    } elseif(in_array($group_id,$teacher->getGroupListArray())) {
+                    } elseif(in_array($load->group_id,$teacher->getGroupListArray())) {
                         $access = true;
                         $t = false;
                     }
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
                     $student=Student::model()->findByPk(Yii::app()->user->identityId);
-                    if(in_array($group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($load))){
+                    if(in_array($load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($load))){
                         $access=true;
                         $t=false;
                     } else {
@@ -118,10 +124,10 @@ class DefaultController extends Controller
                 else if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
                     $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
-                    if ($teacher_id == Yii::app()->user->identityId) {
+                    if ($load->teacher_id == Yii::app()->user->identityId) {
                         $access = true;
                         $t = true;
-                    } elseif(in_array($group_id,$teacher->getGroupListArray())) {
+                    } elseif(in_array($load->group_id,$teacher->getGroupListArray())) {
                         $access = true;
                         $t = false;
                     }
@@ -129,21 +135,21 @@ class DefaultController extends Controller
                 else if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
                     $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
-                    if ($teacher_id == Yii::app()->user->identityId) {
+                    if ($load->teacher_id == Yii::app()->user->identityId) {
                         $access = true;
                         $t = true;
-                    } elseif(in_array($group_id,$teacher->getGroupListArray())) {
+                    } elseif(in_array($load->group_id,$teacher->getGroupListArray())) {
                         $access = true;
                         $t = false;
                     }
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
-                   $access=true;
+                    $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
-                    if ($teacher_id == Yii::app()->user->identityId) {
+                    if ($load->teacher_id == Yii::app()->user->identityId) {
                         $access = true;
                         $t = true;
-                    } elseif(in_array($group_id,$teacher->getGroupListArray())) {
+                    } elseif(in_array($load->group_id,$teacher->getGroupListArray())) {
                         $access = true;
                         $t = false;
                     }
@@ -151,10 +157,10 @@ class DefaultController extends Controller
                 else if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
                     $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
-                    if ($teacher_id == Yii::app()->user->identityId) {
+                    if ($load->teacher_id == Yii::app()->user->identityId) {
                         $access = true;
                         $t = true;
-                    } elseif(in_array($group_id,$teacher->getGroupListArray())) {
+                    } elseif(in_array($load->group_id,$teacher->getGroupListArray())) {
                         $access = true;
                         $t = false;
                     }
@@ -168,8 +174,7 @@ class DefaultController extends Controller
         $this->render('view', array(
             't'=>$t,
             'student_id_view'=>$student,
-            'id' => $load->id,
-            'month' => $study_month_id,
+            'id' => $id,
         ));
     }
 }

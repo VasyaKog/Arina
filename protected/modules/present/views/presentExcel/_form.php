@@ -1,6 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Arhangel
+ * Date: 16.05.2016
+ * Time: 10:07
+ */
 /* @var $model PresentViewer */
-/* @var $this DefaultController */
+/* @var $this ExcelController */
 ?>
 <div id="present-form">
     <?php
@@ -27,12 +33,12 @@
                 'type'=>'POST',
                 'url'=>$this->createUrl('default/changeMonthList'),
                 'update'=> '#PresentViewer_studyMonthId',
-    ))
+            ))
     );
     echo $form->dropDownListRow(
         $model,
         'studyMonthId',
-        PresentViewer::getMonthList(),
+        array(),
         array('empty' => Yii::t('present','Select Study Month')));
     ?>
 
@@ -42,8 +48,8 @@
             array(
                 'buttonType' => 'submit',
                 'type' => 'primary',
-                'label' => Yii::t('terms','Open'),
-                )); ?>
+                'label' => Yii::t('terms','Create'),
+            )); ?>
 
     </div><?
     $this->endWidget();

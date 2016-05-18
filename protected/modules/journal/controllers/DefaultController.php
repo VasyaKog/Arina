@@ -108,7 +108,7 @@ class DefaultController extends Controller
     public function actionViews($id)
     {
         $t=false;
-        $access=false;
+        $access=true;
         /**
          * @var $load Load
          */

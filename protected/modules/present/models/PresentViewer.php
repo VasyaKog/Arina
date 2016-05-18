@@ -5,6 +5,9 @@
  * Date: 14.05.2016
  * Time: 14:08
  */
+/**
+ * @property integer $id
+ */
 Yii::import('modules.load.models.*');
 class PresentViewer extends CFormModel
 {
@@ -17,7 +20,7 @@ class PresentViewer extends CFormModel
     public function rules()
     {
         return array(
-            array('studyWeekId studyYearId', 'required'),
+            array('studyMonthId studyYearId', 'required'),
             array('groupId', 'required', 'on' => 'group'),
             array('studentId', 'required', 'on' => 'student'),
         );
@@ -48,27 +51,22 @@ class PresentViewer extends CFormModel
     public static function getMonthList()
     {
         return array(
-            'Осінь'=>array(
-                '09' => Yii::t('base','September'),
+            Yii::t('present','Autumn semester')=>array(
+                '9' =>Yii::t('base','September'),
                 '10' => Yii::t('base','October'),
                 '11' => Yii::t('base','November'),
                 '12' => Yii::t('base','December'),
             ),
-            'Весна'=>array(
-                '01' => Yii::t('base','January'),
-                '02' => Yii::t('base','February'),
-                '03' => Yii::t('base','March'),
-                '04' => Yii::t('base','April'),
-                '05' => Yii::t('base','May'),
-                '06' => Yii::t('base','June'),
-                '07' => Yii::t('base','July'),
-                '08' => Yii::t('base','August'),
+            Yii::t('present','Spring semester')=>array(
+                '1' => Yii::t('base','January'),
+                '2' => Yii::t('base','February'),
+                '3' => Yii::t('base','March'),
+                '4' => Yii::t('base','April'),
+                '5' => Yii::t('base','May'),
+                '6' => Yii::t('base','June'),
+                '7' => Yii::t('base','July'),
+                '8' => Yii::t('base','August'),
             ),
         );
     }
-
-    /**
-     * @var $group Group
-     */
-    
 }

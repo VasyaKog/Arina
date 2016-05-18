@@ -7,6 +7,7 @@
  * @property integer $id
  * @property integer $type_id
  * @property string $date
+ * @property integer $numer_in_day
  * @property string $description
  * @property string $home_work
  * @property integer $load_id
@@ -36,6 +37,11 @@ class JournalRecord extends CActiveRecord
 	public function getLink()
 	{
 		return CHtml::link($this->getName(),array('/journal/journalRecord/views/'.$this->id));
+	}
+
+	public function getNumber()
+	{
+		return $this->numer_in_day;
 	}
 
 	/**
