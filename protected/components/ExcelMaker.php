@@ -1498,6 +1498,8 @@ SQL;
          * @var JournalRecord[] $data
          * @var $uniques UniqueGroupSubject[]
          * @var $date DateTime
+         * @var $group Group
+         * @var $year StudyYear
          */
         $objPHPExcel = $this->loadTemplate('report_teacher.xls');
         $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
@@ -1512,10 +1514,14 @@ SQL;
                 continue;
         }
         $column = 2;
+
+        PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
         foreach ($uniques as $item) {
-            $sheet->setCellValue($this->getNameFromNumber($column) . "10", Group::model()->getNameGroup($item->group));
-            //$sheet->getStyle('A')->getBorders()
+            $group = Group::model()->findByPk($item->group);
+            $sheet->setCellValue($this->getNameFromNumber($column) . "9", $group->getCourse($data[0]->load->study_year_id));
+            $sheet->setCellValue($this->getNameFromNumber($column) . "10",$group->title );
             $sheet->setCellValue($this->getNameFromNumber($column) . "11", WorkSubject::getNameSubject($item->subject));
+            $sheet->getStyle($this->getNameFromNumber($column) . "9:".$this->getNameFromNumber($column) . "11")->getAlignment()->setTextRotation(90);
             foreach ($data as $record) {
                 if (($record->load->group_id == $item->group) && ($record->load->wp_subject_id == $item->subject)) {
                     $m = intval(substr($record->date, 5, 2));//+10;
@@ -1530,6 +1536,15 @@ SQL;
             }
             $column++;
         }
+        foreach(range(10,11) as $i)
+            $sheet->getRowDimension($i)->setRowHeight(-1);
+        foreach(range(12,29) as $i)
+            $sheet->getRowDimension($i)->setRowHeight(22);
+        $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)),
+            'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
+            'font'  => array('name'=>'Times New Roman', 'size'  => 10,));
+        $sheet->getStyle("B9:O29")->applyFromArray($bold_out);
         return $objPHPExcel;
     }
 
