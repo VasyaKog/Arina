@@ -1470,6 +1470,9 @@ SQL;
         $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)));
         $main_cell = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),
             'font'  => array('bold'  => true, 'size'  => 14,));
+        $all_alignment = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
+            'font'  => array('name'=>'Calibri', 'size'  => 11,));
         $day_cell = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),'font' => array('size'  => 12));
         $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($thin_all);
         $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($bold_out);
@@ -1478,6 +1481,7 @@ SQL;
         $sheet->getStyle('D3:'.'D'.$row)->applyFromArray($bold_out);
         $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).'4')->applyFromArray($bold_out);
         $sheet->getStyle('E4:'.$this->getNameFromNumber($days+3).'4')->applyFromArray($bold_out);
+        $sheet->getStyle('B3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($all_alignment);
         $sheet->getStyle($this->getNameFromNumber($days+4).'3:'.$this->getNameFromNumber($days+4).$row)->applyFromArray($bold_out);
         $sheet->getStyle($this->getNameFromNumber($days+5).'3:'.$this->getNameFromNumber($days+5).$row)->applyFromArray($bold_out);
         $sheet->mergeCells("B1:".$this->getNameFromNumber($days+5)."1");
@@ -1522,7 +1526,7 @@ SQL;
             $sheet->setCellValue($col."11", WorkSubject::getNameSubject($item->subject));
             $sheet->getStyle($col. "10:".$col. "11")->getAlignment()->setTextRotation(90);
             foreach ($data as $record) {
-                if (($record->load->group_id == $item->group) && ($record->load->wp_subject_id == $item->subject)) {
+                if (($record->load->group_id == $item->group) and ($record->load->wp_subject_id == $item->subject)) {
                     $m = intval(substr($record->date, 5, 2));
                     if ($m < 9)
                         $b = 15;
@@ -1548,7 +1552,7 @@ SQL;
         $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)),
             'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
-            'font'  => array('name'=>'Times New Roman', 'size'  => 10,));
+            'font'  => array('name'=>'Calibri', 'size'  => 11,));
         $teacher_style = array('alignment' => array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
             'font'  => array('name'=>'Calibri', 'size'  => 11,));
         $sheet->getStyle("B9:O29")->applyFromArray($bold_out);
@@ -1580,7 +1584,8 @@ SQL;
             $sheet->setCellValue("C".$row,JournalRecordType::getTypeTitle($item->type_id));
             $sheet->setCellValue("D".$row,$item->description);
             $sheet->setCellValue("E".$row,$item->home_work);
-            $sheet->setCellValue("F".$row,$item->date);
+            $date = date('d.m.y', strtotime($item->date));
+            $sheet->setCellValue("F".$row,$date);
             $row++;
         }
         $row--;
