@@ -73,21 +73,16 @@ class ExcelMaker extends CComponent
      * @param $name
      * @throws CException
      */
-    public function getDocument($data, $list,$name)
+    public function getDocument($data, $name, $doc_name=null)
     {
         $methodName = 'make' . ucfirst($name);
         if (method_exists($this, $methodName)) {
             $objPHPExcel = $this->$methodName($data);
-            if($list=="employee_Card") {
-                $id = Yii::app()->session['curent_id_employee'];
-                unset(Yii::app()->session['curent_id_employee']);
-                $employee = Employee::model()->findByPk($id);
-                $docName = $employee->last_name . $employee->first_name . $employee->middle_name . date("d.m.Y G-i", time());
-            }else{
-                    if($list=="employee_list") {
-                        $docName = "Список працівників" . date("d.m.Y G-i", time());
-                    }
-                }
+
+            if($doc_name==null){$docName = $name . date("d.m.Y G-i", time());}else {
+                $docName = $doc_name . date("d.m.Y G-i", time());
+            }
+
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="' . $docName . '.xls"');
             header('Cache-Control: max-age=0');
