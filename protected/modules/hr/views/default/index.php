@@ -8,7 +8,6 @@ $this->breadcrumbs = array(
     Yii::t('employee', 'Employees') => array('index'),
 );
 
-        Yii::app()->session['arr_id'] = $model->search()->getData();
 $this->menu = array(
     array(
         'type' => BoosterHelper::TYPE_PRIMARY,
@@ -87,6 +86,8 @@ $this->widget(BoosterHelper::GRID_VIEW, array(
         ),
     ),
 ));
+Yii::app()->session['arr_id'] = $model->search()->getData();
+
 ?>
 
 

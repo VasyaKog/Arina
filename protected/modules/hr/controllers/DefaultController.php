@@ -14,17 +14,14 @@ class DefaultController extends Controller
     {
         /**@var $excel ExcelMaker */
         $excel = Yii::app()->getComponent('excel');
-        $excel->getDocument(NULL, 'employeesList');
-
-
-        (count(Yii::app()->session['arr_id']));
+        $excel->getDocument(NULL, 'employee_list','employeesList');
     }
 
     public function actionExcelCard($id)
     {
         $excel = Yii::app()->getComponent('excel');
         Yii::app()->session['curent_id_employee'] = $id;
-        $excel->getDocument(NULL,'employeeCard');   
+        $excel->getDocument(NULL,'employee_Card','employeeCard');
 
     }
 
