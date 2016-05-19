@@ -11,7 +11,7 @@ Yii::import('modules.studyPlan.models.*');
  * <pre>
  * $excel = Yii::app()->getComponent('excel');
  * $object = new SomeObjectForDocument
- * $excel->getDocument($object, 'aliasOfDocument');
+ * $excel->getDocument($object, 'type', 'aliasOfDocument');
  * </pre>
  * @author Dmytro Karpovych <ZAYEC77@gmail.com>
  */
@@ -22,7 +22,6 @@ class ExcelMaker extends CComponent
      * @var string alias of path to directory with templates
      */
     public $templatesPath = 'public.files.templates';
-    public $tmp_id;
 
     /**
      * Load PHPExcel
@@ -77,12 +76,16 @@ class ExcelMaker extends CComponent
      * @param $name
      * @throws CException
      */
-    public function getDocument($data, $name)
+    public function getDocument($data, $name, $doc_name=null)
     {
         $methodName = 'make' . ucfirst($name);
         if (method_exists($this, $methodName)) {
             $objPHPExcel = $this->$methodName($data);
-            $docName = "$name " . date("d.m.Y G-i", time());
+
+            if($doc_name==null){$docName = $name . date("d.m.Y G-i", time());}else {
+                $docName = $doc_name . date("d.m.Y G-i", time());
+            }
+
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="' . $docName . '.xls"');
             header('Cache-Control: max-age=0');
@@ -103,9 +106,9 @@ class ExcelMaker extends CComponent
         $sql = <<<SQL
 SELECT
     `tim`.`id`,
+    `tim`.`study_year_id`,
     `tim`.`semester`,
     `tim`.`para`,
-    `tim`.`study_year_id`,
     `tim`.`day`,
     `tim`.`group_id`,
     `tim`.`subject_id`,
@@ -1385,14 +1388,13 @@ SQL;
     public function makeEmployeeCard()
     {
         $id = Yii::app()->session['curent_id_employee'];
-        unset(Yii::app()->session['curent_id_employee']);
         $employee=Employee::model()->findByPk($id);
-        $objPHPExcel = $this->loadTemplate('fe.xls');
+        $objPHPExcel = $this->loadTemplate('personal_card.xls');
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
         $sheet->setCellValue("A2",'Хмельницький політехнічний коледж НУ"ЛП"');
 
         //curent_time
-        $sheet->setCellValue("A13", yii::app()->dateFormatter->format('dd - MMMM - yyyy', date('dd - MMMM - yyyy')));
+        $sheet->setCellValue("A13", yii::app()->dateFormatter->format('dd - MM - yyyy', date('dd - MMMM - yyyy')));
 
         //gender
         if($employee->gender==1){ $gender = 'жіноча'; }else{$gender='чоловіча';}
@@ -1468,9 +1470,9 @@ SQL;
 
 
         //postgraduete training
-        if($employee->postgraduate_training==1){$sheet->setCellValue("CI37","X");}
-        if($employee->postgraduate_training==2){$sheet->setCellValue("DJ37","X");}
-        if($employee->postgraduate_training==3){$sheet->setCellValue("EG37","X");}
+        if($employee->postgraduate_training==1){$sheet->setCellValue("CL37","X");}
+        if($employee->postgraduate_training==2){$sheet->setCellValue("DM37","X");}
+        if($employee->postgraduate_training==3){$sheet->setCellValue("EJ37","X");}
         $postgraduate_trainings = $employee->postgraduate_trainings;
         $rows=41;
         $col=0;
@@ -1497,7 +1499,7 @@ SQL;
                     $column=0;
                     $sheet->setCellValue("A".$rows,$arr[0]);
                     $sheet->setCellValue("BT".$rows,$arr[1]);
-                    $sheet->setCellValue("EL".$rows,$arr[2]);    
+                    $sheet->setCellValue("EQ".$rows,$arr[2]);
                     $sheet->setCellValue("FV".$rows,$arr[3]);
                     $rows++;
                 }
@@ -1539,6 +1541,8 @@ SQL;
         }
         $sheet->setCellValue("CX63", substr($employee->passport,0,4));
         $sheet->setCellValue("DL63", substr($employee->passport,4,strlen($employee->passport)));
+        $sheet->setCellValue("FL64", yii::app()->dateFormatter->format('dd - MM - yyyy', $employee->passport_issued_date));
+
 
         //dismissal
         $sheet->setCellValue("AA48", yii::app()->dateFormatter->format('dd', $employee->dismissal_date) );
@@ -1607,12 +1611,24 @@ SQL;
         $sheet->setCellValue("L69", $employee->military_composition);
         $sheet->setCellValue("AD70", $employee->military_rank);
         $sheet->setCellValue("BD71", $employee->military_accounting_speciality_number);
-        if($employee->military_suitability==0){
-            if($employee->gender==1){ $military_suitability="Не придатна"; }else{$military_suitability="Не придатний";}
-        }else{
-            if($employee->gender==1){ $military_suitability="Придатна"; }else{$military_suitability="Придатний";}
+        if(!($employee->military_accounting_group==NULL && $employee->military_accounting_group==NULL && $employee->military_rank==NULL))
+        {
+            if ($employee->military_suitability == 0) {
+                if ($employee->gender == 1) {
+                    $military_suitability = "Не придатна";
+                } else {
+                    $military_suitability = "Не придатний";
+                }
+            } else {
+                if ($employee->gender == 1) {
+                    $military_suitability = "Придатна";
+                } else {
+                    $military_suitability = "Придатний";
+                }
+            }
+            $sheet->setCellValue("FV66", $military_suitability);
+
         }
-        $sheet->setCellValue("FV66", $military_suitability);
         if(strlen($employee->military_accounting_category)>32)
         {
             $sheet->setCellValue("GL67", substr($employee->military_district_office_registration_name,0,32)."-");
@@ -1727,25 +1743,50 @@ SQL;
         $objPHPExcel = $this->loadTemplate('teachers_list.xls');
 
         $sheet = $objPHPExcel->setActiveSheetIndex(0);
-
-        $employees = Employee::model()->with(array('position' => array('together' => true)))->findAll();
-
-        $i = 9;
+        $i = 7;
         /** @var $employee Employee */
+        $style = array(
+            'borders'=>array(
+                'allborders'=>array(
+                    'style'=>PHPExcel_Style_Border::BORDER_THIN
+                    ),
+                ),
+        );
+        /**
+         * @var $teachers Teacher[]
+         */
+        $teachers=YII::app()->session['arr_id'];
 
-        for($k=0; $k<count(YII::app()->session['arr_id']); $k++)
+        function cmp($a,$b){
+            return strcmp($a->getFullName(),$b->getFullName());
+        }
+        usort($teachers,'cmp');
+
+        foreach($teachers as $teacher)
         {
-            $sheet->setCellValue("A$i", $i-8);
-            $sheet->setCellValue("B$i", YII::app()->session['arr_id'][$k]->getFullName());
-            $sheet->setCellValue("C$i", (isset(YII::app()->session['arr_id'][$k]->position))?YII::app()->session['arr_id'][$k]->position->title:'');
+
+            $sheet->setCellValue("A$i", ($i-6)+'.');
+            $sheet->setCellValue("B$i", $teacher->getFullName());
+            $sheet->setCellValue("C$i", (isset($teacher->position))?$teacher->position->title:'');
+            $sheet->getStyle('A'.$i)->applyFromArray($style);
+            $sheet->getStyle('B'.$i)->applyFromArray($style);
+            $sheet->getStyle('C'.$i)->applyFromArray($style);
             $i++;
+            $sheet->getStyle("A$i:C$i")->applyFromArray(self::getBorderStyle());
         }
 
-        $i += 2;
-        $sheet->setCellValue("A$i", "Директор інституту, декан факультету, завідувач відділення ______________ ______________");
-        $sheet->setCellValue("E$i", "     (прізвище та ініціали)");
-        return $objPHPExcel;
-    }
+        $i += 1;
+
+        $sheet->mergeCells('A'.$i.':'.'B'.$i);
+        $sheet->mergeCells('A'.($i+2).':'.'B'.($i+2));
+        $sheet->getStyle('A'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('A'.($i+2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('A'.($i+2))->getFont()->setSize(8);
+
+        $sheet->setCellValue("A$i", "Директор коледжу");
+        $sheet->setCellValue("C$i", "В. В. Овчарук");
+        $sheet->setCellValue("A".($i+2), "Виконавець: О.Б. Покотило");
+
 
     function getNameFromNumber($num) {
         $numeric = $num % 26;

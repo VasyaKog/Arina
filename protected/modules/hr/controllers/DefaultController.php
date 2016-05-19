@@ -23,17 +23,16 @@ class DefaultController extends Controller
         }
         /**@var $excel ExcelMaker */
         $excel = Yii::app()->getComponent('excel');
-        $excel->getDocument(NULL, 'employeesList');
-
-
-        (count(Yii::app()->session['arr_id']));
+        $doc_name = 'Список працівників';
+        $excel->getDocument(NULL,'employeesList', $doc_name);
     }
 
     public function actionExcelCard($id)
     {
         $excel = Yii::app()->getComponent('excel');
-        Yii::app()->session['curent_id_employee'] = $id;
-        $excel->getDocument(NULL,'employeeCard');   
+        $employee = Employee::model()->findByPk($id);
+        $name = $employee->last_name .' '. $employee->first_name .' '. $employee->middle_name.' ';
+        $excel->getDocument(NULL,'employeeCard',$name);
 
     }
 

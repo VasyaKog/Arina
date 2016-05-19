@@ -2,10 +2,10 @@
 return array(
     'components' => array(
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=khpk',
+            'connectionString' => 'mysql:host=127.0.0.1:3306;dbname=khpk',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => 'svenacer1ABC',
+            'password' => '',
             'charset' => 'utf8',
         ),
     ),

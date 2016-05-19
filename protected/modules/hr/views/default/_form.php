@@ -131,6 +131,10 @@
 
                 <?php echo $form->textFieldRow($model, 'passport_issued_by', array('size' => 40, 'maxlength' => '40')); ?>
 
+                <?php echo $form->dateFieldRow($model, 'passport_issued_date', array()); ?>
+
+
+
             </div>
             <div class="span3">
                 <div class="panel panel-primary">

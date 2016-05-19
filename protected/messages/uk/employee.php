@@ -43,6 +43,7 @@ return array(
     'Place of registration' => 'Місце проживання за державною реєстрацією',
     'Passport' => 'Паспорт (серія, номер)',
     'Passport issued by' => 'Паспорт (ким виданий)',
+    'Passport Issued Date'=> 'Паспорт (дата видачі)',
     'Military accounting group' => 'Група військового обліку',
     'Military accounting category' => 'Категорія військового обліку',
     'Military composition' => 'Військовий склад',

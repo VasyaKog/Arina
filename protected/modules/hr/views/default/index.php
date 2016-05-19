@@ -87,6 +87,8 @@ $this->widget(BoosterHelper::GRID_VIEW, array(
         ),
     ),
 ));
+Yii::app()->session['arr_id'] = $model->search()->getData();
+
 ?>
 
 
