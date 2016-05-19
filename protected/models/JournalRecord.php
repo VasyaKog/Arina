@@ -53,7 +53,7 @@ class JournalRecord extends CActiveRecord
 		return array(
 			//array('type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'required'),
 			array('type_id','check_all'),
-			array('type_id, load_id, numer_in_day,audience, hours', 'numerical', 'integerOnly'=>true),
+			array('type_id, load_id,audience_id numer_in_day,, hours', 'numerical', 'integerOnly'=>true),
 			array('description, home_work', 'length', 'max'=>255),
 			array('teacher_id', 'length', 'max'=>10),
 			// The following rule is used by search().

@@ -30,7 +30,7 @@
 			'system_id',
 			EvaluationSystem::getListAll('id','title'),
 			array(
-				'empty'=>Yii::t('journal','Select EvaluationSystem'),
+				'empty'=>$model->journal_record->load->planSubject->subject->,
 				'ajax'=>array(
 					'type'=>'POST',
 					'url'=>$this->createUrl('changeMarkList'),

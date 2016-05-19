@@ -1950,14 +1950,5 @@ SQL;
         return $objPHPExcel;
     }
 
-    protected function makeGroupHoursList($data){
-        /**
-         * @var JournalRecord $data
-         */
-        $objPHPExcel = $this->loadTemplate('report_group.xls');
-        $sheet = $sheet = $objPHPExcel->setActiveSheetIndex(0);
-        $i=8;
-
-        return $objPHPExcel;
-    }
+  
 }

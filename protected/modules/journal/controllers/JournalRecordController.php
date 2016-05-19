@@ -61,7 +61,7 @@ class JournalRecordController extends Controller
 					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
 					if ($model->teacher_id == Yii::app()->user->identityId) {
 						$access = true;
-					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
 						$access = true;
 					}
 				}
@@ -78,7 +78,7 @@ class JournalRecordController extends Controller
 				}
 				if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
 					$student=Student::model()->findByPk(Yii::app()->user->identityId);
-					if(in_array($model->load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($model->journal_record->load))){
+					if(in_array($model->load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($model->load))){
 						$access=true;
 						$t=false;
 					} else {
@@ -92,7 +92,7 @@ class JournalRecordController extends Controller
 					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
 					if ($model->teacher_id == Yii::app()->user->identityId) {
 						$access = true;
-					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
 						$access = true;
 					}
 				}
@@ -150,7 +150,7 @@ class JournalRecordController extends Controller
 					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
 					if ($model->teacher_id == Yii::app()->user->identityId) {
 						$access = true;
-					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
 						$access = true;
 					}
 				}
@@ -170,7 +170,7 @@ class JournalRecordController extends Controller
 					$teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
 					if ($model->teacher_id == Yii::app()->user->identityId) {
 						$access = true;
-					} elseif(in_array($model->group_id,$teacher->getGroupListArray())) {
+					} elseif(in_array($model->load->group_id,$teacher->getGroupListArray())) {
 						$access = true;
 					}
 				}
