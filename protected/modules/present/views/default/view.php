@@ -9,6 +9,10 @@
 /* @var $id int */
 /* @var $t boolean*/
 /* @var $month string*/
+$this->breadcrumbs = array(
+    Yii::t('present', 'Present')=>array('/present/'),
+    Yii::t('present', 'Page of Present'),
+);
 
 $this->widget('present.widgets.PagePresent', array(
     'load_id' => $id,

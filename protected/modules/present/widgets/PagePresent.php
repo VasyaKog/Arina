@@ -73,19 +73,15 @@ class PagePresent extends CWidget
             array_push($this->rows, $item->getLink());
         }
 
-        $recordsall=JournalRecord::model()->findAll(array('order'=>'date'));
+        $recordsall=JournalRecord::model()->findAll(array('order'=>'date,numer_in_day'));
 
-        //1$this->records = JournalRecord::model()->findAll();
         foreach ($recordsall as $record) {
-            $record->date = date("n",strtotime($record->date));
-
-            if ($record->date == $this->month) {
+            if (date("n",strtotime($record->date)) == $this->month) {
                 array_push($this->records,$record);
             }
         }
 
                 foreach ($this->records as $item) {
-
                     array_push($this->list, $item->date);
                 }
 
@@ -122,8 +118,8 @@ class PagePresent extends CWidget
                      */
 
                     foreach ($this->records as $study) {
-                        if (Mark::model()->getLink($study->id, $student->id)) {
-                            array_push($this->map[$i], Mark::model()->getLink($study->id, $student->id));
+                        if (Mark::model()->getLinkPr($study->id, $student->id)) {
+                            array_push($this->map[$i], Mark::model()->getLinkPr($study->id, $student->id));
                         } elseif (!in_array($this->load_id, $student->getListArray($study->date))) {
                             array_push($this->map[$i], 'Відраховано');
                         } else {
@@ -134,8 +130,6 @@ class PagePresent extends CWidget
                     $i++;
                 }
             }
-        //}
-    //}
 
     public function run(){
         $this->render('pagePresent', array(
