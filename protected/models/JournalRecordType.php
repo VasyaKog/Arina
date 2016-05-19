@@ -122,4 +122,12 @@ class JournalRecordType extends ActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function getTypeTitle($id){
+		/**
+		 * @var $item JournalRecordType
+		 */
+		$item = JournalRecordType::model()->findByPk(array('id'=>$id));
+		return $item->title;
+	}
 }

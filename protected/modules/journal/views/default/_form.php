@@ -14,7 +14,7 @@
             'ajax'=> array(
                 'type'=>'POST',
                 'url'=>$this->createUrl('default/changeGroupList'),
-                'update'=> '#JournalViewer_groupId',
+                 'update'=> '#JournalViewer_groupId',
             ))
     );
     echo $form->dropDownListRow(
