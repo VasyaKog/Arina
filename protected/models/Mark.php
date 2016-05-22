@@ -155,6 +155,23 @@ class Mark extends CActiveRecord
 			return false;
 		}
 	}
+
+	public static function getLinkPr($record_id,$student_id) {
+		/**
+		 * $mark Mark
+		 **/
+		$mark=Mark::model()->findByAttributes(array('student_id'=>$student_id,'journal_record_id'=>$record_id));
+		if(!empty($mark)){
+			$string='';
+			if($mark->present==1) $string=$string.Yii::t('journal','NP').'/';
+			$string=substr($string,0,-1);
+			return CHtml::link($string,array('np/views/'.$mark->id));
+		}
+		else {
+			return false;
+		}
+	}
+	
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
@@ -207,6 +224,7 @@ class Mark extends CActiveRecord
 		$criteria->compare('retake_ticket_numb',$this->retake_ticket_numb);
 		$criteria->compare('system_id',$this->system_id,true);
 		$criteria->compare('student_id',$this->student_id,true);
+		$criteria->compare('comment',$this->comment);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
