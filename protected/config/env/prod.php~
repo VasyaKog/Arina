@@ -1,11 +1,11 @@
-<?php
+    <?php
 return array(
     'components' => array(
         'db' => array(
             'connectionString' => 'mysql:host=localhost;dbname=khpk',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => 'khpk',
+            //'password' => 'khpk',
             'charset' => 'utf8',
         ),
     ),

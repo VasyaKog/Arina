@@ -25,9 +25,23 @@ if (isset(Yii::app()->user->identityType)) {
                 else if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
                     echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', студент<br>';
                 }
+                else if (Yii::app()->user->identityType == User::TYPE_PREFECT) {
+                    echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', староста<br>';
+                }
                 else if (Yii::app()->user->identityType == User::TYPE_SUPER) {
                      echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
                     echo 'Адміністратор<br>';
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_DEPHEAD) {
+                     $department = Department::model()->findByAttributes(array('head_id'=>Yii::app()->user->identityId));
+                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    echo 'Завідувач відділенням '.CHtml::link($department->title, 'department/' . $department->id) . '<br>';
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_CYCHEAD) {
+                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', викладач<br>';
+                      $cyccomm = CyclicCommission::model()->findByAttributes(array('head_id'=>Yii::app()->user->identityId));
+           
+                    echo 'Голова циклової комісії '. CHtml::link($cyccomm->title, 'cyclicCommission/' . $cyccomm->id) . '<br>';
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
                     echo 'Інспектор кадрів<br>';
@@ -83,7 +97,8 @@ if (isset(Yii::app()->user->identityType)) {
              */
             $student = Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId));
             $groups=$student->getGroupListLinks();
-            var_dump($groups);
+            
+            echo 'Група: <br> '.CHtml::link($groups, 'group/'.$groups).'<br>';
         }
     }
 ?>

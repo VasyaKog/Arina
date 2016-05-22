@@ -16,7 +16,7 @@ class MainController extends Controller
 
     public function actionCreate()
     {
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -31,7 +31,7 @@ class MainController extends Controller
     public function actionDelete($id)
     {
 
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -114,7 +114,7 @@ class MainController extends Controller
     public function actionUpdate($id)
     {
 
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+       if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -146,7 +146,7 @@ class MainController extends Controller
 
     public function actionGenerate($id)
     {
-         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -156,7 +156,7 @@ class MainController extends Controller
 
     public function actionProject($id)
     {
-         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -177,7 +177,7 @@ class MainController extends Controller
 
     public function actionEdit($id)
     {
-         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -199,10 +199,6 @@ class MainController extends Controller
 
     public function actionDoc($id)
     {
-         if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
-        {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-        }
         /** @var StudyYear $year */
         $year = StudyYear::model()->loadContent($id);
         $model = new LoadDocGenerateModel();

@@ -4,13 +4,19 @@
  * Localization file uk/user
  */
 return array(
+	'Users' => 'Користувачі',
     'Guest' => 'Гість',
-    'Username' => "Ім'я",
+    'Username' => "Логін",
     'Password' => 'Пароль',
     'Email' => 'Поштова скринька',
     'Role' => 'Активність',
     'Identity ID' => 'Ініціали користувача',
     'Identity Type' => 'Тип користувача',
-    'role'=>'Активність',
+    'role'=>'Статус',
+    'Mycabinet' => 'Особистий кабінет',
+  
+
+
+    
  
 );

@@ -12,20 +12,27 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <?php echo $form->errorSummary($model); ?>
 
-<?php echo $form->textFieldRow($model, 'username', array('class' => 'span5', 'maxlength' => 255)); ?>
+<?php if (!Yii::app()->user->checkAccess('admin')) {
 
-<?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span5', 'maxlength' => 255)); ?>
+echo $form->textFieldRow($model, 'username', array('class' => 'span5', 'maxlength' => 255,'readonly'=> 'true'));
+
+
+
+ echo $form->passwordFieldRow($model, 'password', array('class' => 'span5', 'maxlength' => 255)); }?>
 
 
 
 <?php
 if (Yii::app()->user->checkAccess('admin')) {
+  echo $form->textFieldRow($model, 'username', array('class' => 'span5', 'maxlength' => 255)); 
+  echo $form->passwordFieldRow($model, 'password', array('class' => 'span5', 'maxlength' => 255));
     //echo $form->textFieldRow($model, 'role', array('class' => 'span5'));
 
       //echo $form->dropDownListRow($model, 'identity_type', $arr_role, array('id' => 'type-select'));
 $list= Yii::app()->db->createCommand('select r.id from `AuthAssignment` a, `roles` r where a.itemname=r.name and a.userid=:id')->bindValue('id',$model->id)->queryAll();
 
 $index = 0;
+
 if (!empty($list))
 {
 	$index = $list[0]['id'];
@@ -42,7 +49,7 @@ echo $form->dropDownListRow($model, 'identity_type', RolesModel::getList(), arra
                                 employee.hide();
                                 student.hide();
                             function typeSelectChange() {
-                                if (typeSelect.val() === '2') {
+                                if (typeSelect.val() === '1' || (typeSelect.val() === '2')) {
                                 	employee.hide()
                                   employee.detach();
                                   student.appendTo('section');
@@ -65,15 +72,15 @@ echo $form->dropDownListRow($model, 'identity_type', RolesModel::getList(), arra
                    <section name="outputlist"></section>
                   
                 <div id="student" class="hide">
-                      <?php echo $form->dropDownListRow($model, 'identity_id', Student::getList('id', 'fullname'));  ?>
+                      <?php echo $form->dropDownListRow($model, 'identity_id', Student::getLists(),array('id' => 'type-select'));  ?>
                  </div>
                  <div id="employee" class="hide">
-                      <?php echo $form->dropDownListRow($model, 'identity_id', Employee::getList('id', 'fullname'));  ?>
+                      <?php echo $form->dropDownListRow($model, 'identity_id', Employee::getList(),array('id' => 'type-select'));  ?>
                  </div>
       
     
-<?php } 
-echo $form->dropDownListRow($model, 'role', Active::getList(), array('id' => 'type-select', 'options' => array( $index =>array('selected'=>true))));?>
+<?php  
+echo $form->dropDownListRow($model, 'role', Active::getList(),array('id' => 'type-select')); }?>
   
             
 

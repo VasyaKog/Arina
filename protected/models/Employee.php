@@ -117,6 +117,7 @@ class Employee extends ActiveRecord
             'last_name' => Yii::t('employee', 'Last name'),
             'first_name' => Yii::t('employee', 'First name'),
             'middle_name' => Yii::t('employee', 'Middle name'),
+            'fullname'=> Yii::t('employee', 'Full name'),
             'short_name' => Yii::t('employee', 'Short name'),
             'gender' => Yii::t('employee', 'Gender'),
             'cyclic_commission_id' => Yii::t('employee', 'Cyclic commission'),

@@ -10,7 +10,7 @@ class PositionController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::app()->user->checkAccess('student'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -88,7 +88,7 @@ class PositionController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::app()->user->checkAccess('student'))
+        if(!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

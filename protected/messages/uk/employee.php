@@ -20,6 +20,7 @@ return array(
     'First name' => 'Ім’я',
     'Middle name' => 'По батькові',
     'Short name' => 'Ім’я скорочено',
+
     'Full name title' => 'Прізвище, ім’я, по батькові',
     'Gender' => 'Стать',
     'Cyclic commission id' => 'Циклова комісія',
@@ -93,4 +94,5 @@ return array(
     'Experience days' => 'Стаж (днів)',
     'Get list in excel'=>'Генерувати список в Excel',
     'Create personal card' => 'Створити особову картку працівника',
+    'Full name'=>'Ініціали',
 );

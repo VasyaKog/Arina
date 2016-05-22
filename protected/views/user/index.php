@@ -1,5 +1,12 @@
 <?php
-$this->breadcrumbs = array(
+
+if (!Yii::app()->user->checkAccess('admin')) {
+$this->redirect(array('user/update/'.Yii::app()->user->id));
+} 
+
+else $this->redirect(array('admin'));
+
+/*$this->breadcrumbs = array(
     'Користувачі',
 );
 
@@ -14,4 +21,4 @@ $this->menu = array(
 <?php $this->widget('bootstrap.widgets.TbListView', array(
     'dataProvider' => $dataProvider,
     'itemView' => '_view',
-)); ?>
+));*/ ?>

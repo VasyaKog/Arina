@@ -35,5 +35,6 @@ return array(
     'Surname and initials' => 'Прізвище та ініціали',
     'Open'=>'Відкрити',
     'Day, month'=>'Рік, день, місяць',
+    'fullname' => 'Повне ім’я',
 );
 
