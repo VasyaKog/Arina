@@ -14,5 +14,5 @@ $this->breadcrumbs = array(
     <h1><?php echo Yii::t('present', 'Generate excel stat'); ?></h1>
 
 <?php
-$this->renderPartial('_form', array('model' => $model, 'reportType' => $reportType));
+$this->renderPartial('_form', array('model' => $model));
 ?>

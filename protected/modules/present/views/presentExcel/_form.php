@@ -18,9 +18,9 @@
         array('empty'=>Yii::t('present','Select Report Type'))
     );
 
-    if ($reportType == 1) $url = 'present/excelGroup';
-    else if ($reportType == 2) $url = 'present/excelDepartment';
-    else if ($reportType == 3) $url = 'present/excelGeneral';
+    if ($model->reportType == 1) $url = 'present/excelGroup';
+    else if ($model->reportType == 2) $url = 'present/excelDepartment';
+    else if ($model->reportType == 3) $url = 'present/excelGeneral';
     else $url = 'present/presentExcel';
     ?>
 

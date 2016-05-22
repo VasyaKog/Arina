@@ -10,16 +10,14 @@ class PresentExcelController extends Controller
 {
     public function actionIndex()
     {
-        $model = new presentExcel();
+        $model = new PresentViewer();
 
         if(isset($_POST['PresentViewer']['reportType'])){
             $this->actionViews($_POST['PresentViewer']['reportType']);
             return;
         }
-        $reportType = $_POST['PresentViewer']['reportType'];
         $this->render('index', array(
             'model' => $model,
-            'reportType' => $reportType,
         ));
     }
 
