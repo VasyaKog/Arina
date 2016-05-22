@@ -25,9 +25,23 @@ if (isset(Yii::app()->user->identityType)) {
                 else if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
                     echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', студент<br>';
                 }
+                else if (Yii::app()->user->identityType == User::TYPE_PREFECT) {
+                    echo Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', староста<br>';
+                }
                 else if (Yii::app()->user->identityType == User::TYPE_SUPER) {
                      echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
                     echo 'Адміністратор<br>';
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_DEPHEAD) {
+                     $department = Department::model()->findByAttributes(array('head_id'=>Yii::app()->user->identityId));
+                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . '<br>';
+                    echo 'Завідувач відділенням '.CHtml::link($department->title, 'department/' . $department->id) . '<br>';
+                }
+                else if (Yii::app()->user->identityType == User::TYPE_CYCHEAD) {
+                     echo Employee::model()->findByAttributes(array('id'=>Yii::app()->user->identityId))->getFullName() . ', викладач<br>';
+                      $cyccomm = CyclicCommission::model()->findByAttributes(array('head_id'=>Yii::app()->user->identityId));
+           
+                    echo 'Голова циклової комісії '. CHtml::link($cyccomm->title, 'cyclicCommission/' . $cyccomm->id) . '<br>';
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
                     echo 'Інспектор кадрів<br>';
@@ -57,16 +71,6 @@ if (isset(Yii::app()->user->identityType)) {
     if (!Yii::app()->user->isGuest) {
         $user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
         echo 'Користувач ' . CHtml::link($user->username, 'user/update/' . $user->id) . '<br>';
-        if (Yii::app()->user->checkAccess('dephead')) {
-            $department = Department::model()->findByAttributes(array('head_id'=>Yii::app()->user->identityId));
-            if (isset($department))
-                echo 'Відділення ' . CHtml::link($department->title, 'department/' . $department->id) . '<br>';
-        }
-        if (Yii::app()->user->checkAccess('cychead')) {
-            $cyccomm = CyclicCommission::model()->findByAttributes(array('head_id'=>Yii::app()->user->identityId));
-            if (isset($cyccomm))
-                echo 'Циклова комісія ' . CHtml::link($cyccomm->title, 'cyclicCommission/' . $cyccomm->id) . '<br>';
-        }
         if (Yii::app()->user->checkAccess('curator')) {
             $group = Group::model()->findByAttributes(array('curator_id'=>Yii::app()->user->identityId));
             if (isset($group))
@@ -79,9 +83,8 @@ if (isset(Yii::app()->user->identityType)) {
         }
         else if (Yii::app()->user->checkAccess('student')) {
             $student = Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId));
-            $group = Group::model()->findByAttributes(array('id'=>$student->group_id));
-            if (isset($student))
-                echo 'Група ' . CHtml::link($group->title, 'group/' . $group->id) . '<br>';
+            $groups=$student->getGroupListLinks();
+            echo 'Група:<br> '.CHtml::link($groups, 'group/'.$groups).'<br>';
         }
     }
 ?>

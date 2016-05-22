@@ -101,4 +101,8 @@ return array(
     'Main Settings' =>'Головні налаштування',
     'Settings benefits' =>'Налаштування пільг',
     'Teacher'=>'Викладач',
+    'Teaching' =>'Навчання',
+    'Curators'=>'Куратори',
+    'Migrations'=>'Міграції студентів'
 );
+

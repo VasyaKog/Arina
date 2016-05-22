@@ -23,6 +23,11 @@ class RolesModel extends ActiveRecord
     {
         return CHtml::listData(self::model()->findAll(array('order' => 'id')), 'id', 'title');
     }
+    public static function getListForm()
+    {
+        return CHtml::listData(self::model()->findAll(array('order' => 'id')), 'id', 'title');
+    }
+
 
     public static function getListNames()
     {
@@ -49,6 +54,7 @@ class RolesModel extends ActiveRecord
             'id' => Yii::t('role', 'ID'),            
             'name' => Yii::t('role', 'Name'),
             'title' => Yii::t('role', 'Title'),
+
         );
     }
 
@@ -62,4 +68,17 @@ class RolesModel extends ActiveRecord
     {
         return parent::model($className);
     }
+    public function search()
+    {
+        $criteria = new CDbCriteria;
+
+        $criteria->compare('id', $this->id);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('title', $this->title, true);        
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
 }

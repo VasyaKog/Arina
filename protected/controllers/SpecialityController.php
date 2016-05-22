@@ -49,7 +49,7 @@ class SpecialityController extends Controller
         
         $model = Speciality::model()->loadContent($id);
 
-        if(!Yii::app()->user->checkAccess('admin'))
+        if(!Yii::app()->user->checkAccess('admin')!Yii::app()->user->checkAccess('dephead'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

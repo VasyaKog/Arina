@@ -47,6 +47,14 @@ class Active extends ActiveRecord
             ),
         ));
     }
+    public function attributeLabels()
+    {
+        return array(
+            'name' => Yii::t('active', 'name'),            
+            
+        
+        );
+    }
 
     
 

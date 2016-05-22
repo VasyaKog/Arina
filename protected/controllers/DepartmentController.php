@@ -38,7 +38,7 @@ class DepartmentController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::app()->user->checkAccess('student'))
+        if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -98,13 +98,6 @@ class DepartmentController extends Controller
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
         $model = $this->loadModel($id);
-
-        if(!Yii::app()->user->checkAccess('manageDepartment',
-            array(
-                'id' => $model->head_id,
-                'type' => User::TYPE_TEACHER,
-            )
-        ))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -150,7 +143,7 @@ class DepartmentController extends Controller
      */
     public function actionIndex()
     {
-         if(Yii::app()->user->checkAccess('student'))
+        if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

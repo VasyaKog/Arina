@@ -16,7 +16,7 @@ class WorkController extends Controller
 
     public function actionCreate()
     {
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -65,7 +65,7 @@ class WorkController extends Controller
     {
         
         $model = WorkPlan::model()->loadContent($id);
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+       if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -91,7 +91,7 @@ class WorkController extends Controller
 
     public function actionDelete($id)
     {
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -111,7 +111,7 @@ class WorkController extends Controller
 
     public function actionAddSubject($id)
     {
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+       if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -129,7 +129,7 @@ class WorkController extends Controller
 
     public function actionEditSubject($id)
     {
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -149,7 +149,7 @@ class WorkController extends Controller
 
     public function actionDeleteSubject($id)
     {
-        if (!Yii::app()->user->checkAccess('dephead')&&!Yii::app()->user->checkAccess('admin'))
+        if (!Yii::app()->user->checkAccess('admin'))
         {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }

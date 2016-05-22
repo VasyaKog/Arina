@@ -10,6 +10,10 @@ class MainController extends Controller
 
 	public function actionView($id)
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
        
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
