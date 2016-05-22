@@ -6,49 +6,32 @@
  * Time: 10:07
  */
 /* @var $model PresentViewer */
-/* @var $this ExcelController */
+/* @var $this PresentExcelController */
 ?>
 <div id="present-form">
     <?php
     $form = $this->beginWidget(BoosterHelper::FORM);
     echo $form->dropDownListRow(
         $model,
-        'studyYearId',
-        StudyYear::getList(),
-        array(
-            'empty'=>Yii::t('present','Select Study Year'),
-            'ajax'=> array(
-                'type'=>'POST',
-                'url'=>$this->createUrl('default/changeGroupList'),
-                'update'=> '#PresentViewer_groupId',
-            ))
+        'reportType',
+        PresentViewer::getReportType(),
+        array('empty'=>Yii::t('present','Select Report Type'))
     );
-    echo $form->dropDownListRow(
-        $model,
-        'groupId',
-        array(),
-        array(
-            'empty'=>Yii::t('present','Select Study Year'),
-            'ajax'=> array(
-                'type'=>'POST',
-                'url'=>$this->createUrl('default/changeMonthList'),
-                'update'=> '#PresentViewer_studyMonthId',
-            ))
-    );
-    echo $form->dropDownListRow(
-        $model,
-        'studyMonthId',
-        array(),
-        array('empty' => Yii::t('present','Select Study Month')));
+
+    if ($reportType == 1) $url = 'present/excelGroup';
+    else if ($reportType == 2) $url = 'present/excelDepartment';
+    else if ($reportType == 3) $url = 'present/excelGeneral';
+    else $url = 'present/presentExcel';
     ?>
+
 
     <div class="row buttons">
         <?php $this->widget(
             'bootstrap.widgets.TbButton',
             array(
-                'buttonType' => 'submit',
+                'url' => array('/'.$url),
                 'type' => 'primary',
-                'label' => Yii::t('terms','Create'),
+                'label' => Yii::t('present','Select'),
             )); ?>
 
     </div><?

@@ -160,6 +160,7 @@ class Mark extends CActiveRecord
 		$criteria->compare('retake_ticket_numb',$this->retake_ticket_numb);
 		$criteria->compare('system_id',$this->system_id,true);
 		$criteria->compare('student_id',$this->student_id,true);
+		$criteria->compare('comment',$this->comment);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

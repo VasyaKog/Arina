@@ -1,52 +1,29 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Arhangel
+ * Date: 21.05.2016
+ * Time: 17:30
+ */
 
-class DefaultController extends Controller
+class PresentExcelController extends Controller
 {
-    public function actionExcelList()
-    {
-        if(!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('director')&&!Yii::app()->user->checkAccess('zastupnik')&&!Yii::app()->user->checkAccess('dephead'))
-        {
-            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
-        }
-        /**@var $excel ExcelMaker */
-        $excel = Yii::app()->getComponent('excel');
-        $excel->getDocument(NULL, 'employeesList');
-    }
-
     public function actionIndex()
     {
-        $model = new PresentViewer();
+        $model = new presentExcel();
 
-        if(isset($_POST['PresentViewer']['studyYearId'])&&
-            isset($_POST['PresentViewer']['groupId'])&&
-            isset($_POST['PresentViewer']['studyMonthId'])){
-            
-                $this->actionViews($_POST['PresentViewer']['studyYearId'],
-                    $_POST['PresentViewer']['groupId'],
-                    $_POST['PresentViewer']['studyMonthId']);
+        if(isset($_POST['PresentViewer']['reportType'])){
+            $this->actionViews($_POST['PresentViewer']['reportType']);
             return;
         }
+        $reportType = $_POST['PresentViewer']['reportType'];
         $this->render('index', array(
             'model' => $model,
+            'reportType' => $reportType,
         ));
     }
-    
-    public function actionChangeGroupList()
-    {
-        $selectedYear = $_POST['PresentViewer']['studyYearId'];
-        var_dump($selectedYear);
-        if ($selectedYear == 0) {
-            echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select Study Year'), true);
-            return;
-        }
-        $data = Group::getGroupsByYearId($selectedYear);
-        echo CHtml::tag('option', array('value' => 0), Yii::t('present', 'Select group'), true);
-        foreach ($data as $item) {
-            echo CHtml::tag('option', array('value' => $item->id), $item->title, true);
-        }
-    }
-    
-    public function actionViews($study_year_id,$group_id,$study_month_id)
+
+    public function actionViews($reportType)
     {
         $t=false;
         $access=true;
@@ -58,7 +35,7 @@ class DefaultController extends Controller
         $load=Load::model()->findByAttributes(array('study_year_id' => $study_year_id,'group_id' => $group_id));
         $teacher_id=Load::model()->findByPk($load->teacher_id);
         /**
-        * @var $student Student
+         * @var $student Student
          */
         $student=null;
         if (isset(Yii::app()->user->identityType)) {
@@ -113,7 +90,7 @@ class DefaultController extends Controller
                     }
                 }
                 else if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
-                   $access=true;
+                    $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
                     if ($teacher_id == Yii::app()->user->identityId) {
                         $access = true;
@@ -145,7 +122,6 @@ class DefaultController extends Controller
             't'=>$t,
             'student_id_view'=>$student,
             'id' => $load->id,
-            'month' => $study_month_id,
         ));
     }
 }

@@ -6,6 +6,7 @@
  * Time: 10:04
  */
 $this->breadcrumbs = array(
+    Yii::t('present','Present')=>array('/present/'),
     Yii::t('present', 'Generate excel stat'),
 );
 ?>
@@ -13,5 +14,5 @@ $this->breadcrumbs = array(
     <h1><?php echo Yii::t('present', 'Generate excel stat'); ?></h1>
 
 <?php
-$this->renderPartial('_form', array('model' => $model));
+$this->renderPartial('_form', array('model' => $model, 'reportType' => $reportType));
 ?>
