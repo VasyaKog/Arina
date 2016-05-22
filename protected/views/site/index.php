@@ -84,7 +84,8 @@ if (isset(Yii::app()->user->identityType)) {
         else if (Yii::app()->user->checkAccess('student')) {
             $student = Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId));
             $groups=$student->getGroupListLinks();
-            echo 'Група:<br> '.CHtml::link($groups, 'group/'.$groups).'<br>';
+            
+            echo 'Група: <br> '.CHtml::link($groups, 'group/'.$groups).'<br>';
         }
     }
 ?>
