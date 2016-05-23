@@ -78,7 +78,7 @@ class User extends ActiveRecord
         //var_dump($this);
         return (($this->identity_type==1) || ($this->identity_type==2))?$this->student->getFullName():$this->employee->getFullName();
        }
-    
+   
 
     /**
      * @return array validation rules for model attributes.
@@ -142,12 +142,17 @@ class User extends ActiveRecord
     {
         $criteria = new CDbCriteria; 
         $criteria->compare('id', $this->id);
-        $criteria->compare('username', $this->username, true);
-        //$criteria->compare('password', $this->password, true);
-        //$criteria->compare('email', $this->email, true);
-        //$criteria->compare('title', $model->user, true);
-        //$criteria->compare('', $this->roles->title);       
-       // $criteria->compare('identity_type', $this->identity_type);        
+        $criteria->compare('username', $this->username);
+        $criteria->compare('identity_type', $this->identity_type);
+        $criteria->compare('identity_id', $this->identity_id);
+        $criteria->compare('role', $this->role);
+        //$criteria->compare('', $this->roles->title); 
+        //$criteria->join = 'inner join `roles` ON `user`.`identity_type`=`roles`.`id`';  
+       // $criteria->condition='identity_type=:it'; 
+        //$criteria->params=array(':it' => $this->identity_type);   
+        
+
+        //var_dump($this);        
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,            
         ));      
