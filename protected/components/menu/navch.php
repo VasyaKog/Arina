@@ -19,6 +19,11 @@ $menu = array(
              array('label' => Yii::t('base', 'Groups'), 'url' => array('/group')),)),  
     array('label' => Yii::t('base', 'Study plans'), 'url' => array('/studyPlan')),
     array('label' => Yii::t('base', 'Load'), 'url' => array('/load')),
+    array('label' => Yii::t('report', 'Reports'), 'items' => array(
+        array('label' => Yii::t('report', 'Hours teacher report'), 'url' => array('/reporthours/teacher')),
+        array('label' => Yii::t('report', 'Hours subject report'), 'url' => array('/reporthours/subject')),
+        array('label' => Yii::t('report', 'Hours group report'), 'url' => array('/reporthours/group')),
+    )),
     array('label' => Yii::t('base', 'Journal'), 'url' => array('/journal')),
     array('label' => Yii::t('base', 'Schedule'), 'items' => array(
         array('label' => Yii::t('base', 'Schedule'), 'url' => array('/schedule')),

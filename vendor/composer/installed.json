@@ -1,5 +1,100 @@
 [
     {
+        "name": "clevertech/yii-booster",
+        "version": "3.0.1.x-dev",
+        "version_normalized": "3.0.1.9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/clevertech/YiiBooster.git",
+            "reference": "e7e7025482cb86a7bc68779724f2df5923acc39c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/clevertech/YiiBooster/zipball/e7e7025482cb86a7bc68779724f2df5923acc39c",
+            "reference": "e7e7025482cb86a7bc68779724f2df5923acc39c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "require-dev": {
+            "ardem/yii-coding-standard": "dev-master",
+            "mayflower/php-codebrowser": "1.*",
+            "ncuesta/pinocchio": "dev-master",
+            "phploc/phploc": "2.*",
+            "phpunit/phpunit": "3.7.*",
+            "sebastian/phpcpd": "2.*",
+            "squizlabs/php_codesniffer": "1.*",
+            "yiisoft/yii": "1.1.14"
+        },
+        "time": "2014-07-24 14:39:27",
+        "type": "library",
+        "installation-source": "source",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-2-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Saphronov Mark",
+                "email": "hijarian@gmail.com",
+                "homepage": "http://about.me/hijarian"
+            },
+            {
+                "name": "Ruslan Fadeev"
+            },
+            {
+                "name": "Antonio Ramirez Cobos",
+                "email": "amigo.cobos@gmail.com",
+                "homepage": "http://www.ramirezcobos.com"
+            }
+        ],
+        "description": "Widget toolkit for Yii framework",
+        "homepage": "http://yiibooster.clevertech.biz/",
+        "keywords": [
+            "bootstrap",
+            "yii"
+        ]
+    },
+    {
+        "name": "phpexcel/phpexcel",
+        "version": "v1.7.7",
+        "version_normalized": "1.7.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ddeboer/phpexcel.git",
+            "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ddeboer/phpexcel/zipball/de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
+            "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">5.2.0"
+        },
+        "time": "2012-09-04 18:29:37",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "PHPExcel": "Classes"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GNU"
+        ],
+        "description": "PHPExcel - OpenXML - Create Excel2007 documents in PHP - Spreadsheet engine",
+        "homepage": "http://phpexcel.codeplex.com",
+        "keywords": [
+            "excel",
+            "xls"
+        ],
+        "abandoned": "phpoffice/phpexcel"
+    },
+    {
         "name": "phpword/phpword",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -164,100 +259,5 @@
             "extension",
             "yii"
         ]
-    },
-    {
-        "name": "clevertech/yii-booster",
-        "version": "3.0.1.x-dev",
-        "version_normalized": "3.0.1.9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/clevertech/YiiBooster.git",
-            "reference": "e7e7025482cb86a7bc68779724f2df5923acc39c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/clevertech/YiiBooster/zipball/e7e7025482cb86a7bc68779724f2df5923acc39c",
-            "reference": "e7e7025482cb86a7bc68779724f2df5923acc39c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0"
-        },
-        "require-dev": {
-            "ardem/yii-coding-standard": "dev-master",
-            "mayflower/php-codebrowser": "1.*",
-            "ncuesta/pinocchio": "dev-master",
-            "phploc/phploc": "2.*",
-            "phpunit/phpunit": "3.7.*",
-            "sebastian/phpcpd": "2.*",
-            "squizlabs/php_codesniffer": "1.*",
-            "yiisoft/yii": "1.1.14"
-        },
-        "time": "2014-07-24 14:39:27",
-        "type": "library",
-        "installation-source": "source",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-2-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Saphronov Mark",
-                "email": "hijarian@gmail.com",
-                "homepage": "http://about.me/hijarian"
-            },
-            {
-                "name": "Ruslan Fadeev"
-            },
-            {
-                "name": "Antonio Ramirez Cobos",
-                "email": "amigo.cobos@gmail.com",
-                "homepage": "http://www.ramirezcobos.com"
-            }
-        ],
-        "description": "Widget toolkit for Yii framework",
-        "homepage": "http://yiibooster.clevertech.biz/",
-        "keywords": [
-            "bootstrap",
-            "yii"
-        ]
-    },
-    {
-        "name": "phpexcel/phpexcel",
-        "version": "v1.7.7",
-        "version_normalized": "1.7.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ddeboer/phpexcel.git",
-            "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ddeboer/phpexcel/zipball/de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
-            "reference": "de9c8871a87ce9be354d35f5e966dd65a0c7c6d2",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">5.2.0"
-        },
-        "time": "2012-09-04 18:29:37",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "PHPExcel": "Classes"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GNU"
-        ],
-        "description": "PHPExcel - OpenXML - Create Excel2007 documents in PHP - Spreadsheet engine",
-        "homepage": "http://phpexcel.codeplex.com",
-        "keywords": [
-            "excel",
-            "xls"
-        ],
-        "abandoned": "phpoffice/phpexcel"
     }
 ]

@@ -1746,48 +1746,49 @@ SQL;
         $i = 7;
         /** @var $employee Employee */
         $style = array(
-            'borders'=>array(
-                'allborders'=>array(
-                    'style'=>PHPExcel_Style_Border::BORDER_THIN
-                    ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
                 ),
+            ),
         );
         /**
          * @var $teachers Teacher[]
          */
-        $teachers=YII::app()->session['arr_id'];
+        $teachers = YII::app()->session['arr_id'];
 
-        function cmp($a,$b){
-            return strcmp($a->getFullName(),$b->getFullName());
-        }
-        usort($teachers,'cmp');
-
-        foreach($teachers as $teacher)
+        function cmp($a, $b)
         {
+            return strcmp($a->getFullName(), $b->getFullName());
+        }
 
-            $sheet->setCellValue("A$i", ($i-6)+'.');
+        usort($teachers, 'cmp');
+
+        foreach ($teachers as $teacher) {
+
+            $sheet->setCellValue("A$i", ($i - 6) + '.');
             $sheet->setCellValue("B$i", $teacher->getFullName());
-            $sheet->setCellValue("C$i", (isset($teacher->position))?$teacher->position->title:'');
-            $sheet->getStyle('A'.$i)->applyFromArray($style);
-            $sheet->getStyle('B'.$i)->applyFromArray($style);
-            $sheet->getStyle('C'.$i)->applyFromArray($style);
+            $sheet->setCellValue("C$i", (isset($teacher->position)) ? $teacher->position->title : '');
+            $sheet->getStyle('A' . $i)->applyFromArray($style);
+            $sheet->getStyle('B' . $i)->applyFromArray($style);
+            $sheet->getStyle('C' . $i)->applyFromArray($style);
             $i++;
             $sheet->getStyle("A$i:C$i")->applyFromArray(self::getBorderStyle());
         }
 
         $i += 1;
 
-        $sheet->mergeCells('A'.$i.':'.'B'.$i);
-        $sheet->mergeCells('A'.($i+2).':'.'B'.($i+2));
-        $sheet->getStyle('A'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-        $sheet->getStyle('A'.($i+2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-        $sheet->getStyle('A'.($i+2))->getFont()->setSize(8);
+        $sheet->mergeCells('A' . $i . ':' . 'B' . $i);
+        $sheet->mergeCells('A' . ($i + 2) . ':' . 'B' . ($i + 2));
+        $sheet->getStyle('A' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('A' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('A' . ($i + 2))->getFont()->setSize(8);
 
         $sheet->setCellValue("A$i", "Директор коледжу");
         $sheet->setCellValue("C$i", "В. В. Овчарук");
-        $sheet->setCellValue("A".($i+2), "Виконавець: О.Б. Покотило");
+        $sheet->setCellValue("A" . ($i + 2), "Виконавець: О.Б. Покотило");
 
-
+    }
     function getNameFromNumber($num) {
         $numeric = $num % 26;
         $letter = chr(65 + $numeric);
@@ -1798,6 +1799,7 @@ SQL;
             return $letter;
         }
     }
+
 
     protected function makeGroupHoursList($data){
         /**
@@ -1843,6 +1845,7 @@ SQL;
                     $sheet->setCellValue($this->getNameFromNumber($day+3)."$row",$t+$record->hours);
                 }
             }
+            $sheet->setCellValue($this->getNameFromNumber($days+4).$row,"=SUM(E".$row.":".$this->getNameFromNumber($days+3).$row.")");
             $row++;
         }
         $row--;
@@ -1967,6 +1970,7 @@ SQL;
             $sheet->setCellValue("E".$row,$item->home_work);
             $date = date('d.m.y', strtotime($item->date));
             $sheet->setCellValue("F".$row,$date);
+            $sheet->setCellValue("G".$row,$item->numer_in_day);
             $row++;
         }
         $row--;
@@ -1981,13 +1985,14 @@ SQL;
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,),
             'font'  => array('name'=>'Calibri', 'size'  => 12,'bold'=>true));
         $bold_out = array('borders' => array('outline' => array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)));
-        $sheet->getStyle("B8:F".$row)->applyFromArray($thin_all);
-        $sheet->getStyle("B7:F".$row)->applyFromArray($bold_out);
+        $sheet->getStyle("B8:G".$row)->applyFromArray($thin_all);
+        $sheet->getStyle("B7:G".$row)->applyFromArray($bold_out);
         $sheet->getStyle("C7:E".$row)->applyFromArray($bold_out);
         $sheet->getStyle("D7:D".$row)->applyFromArray($bold_out);
-        $sheet->getStyle("B7:F7")->applyFromArray($bold_out);
-        $sheet->getStyle("B7:F7")->applyFromArray($header_style);
-        $sheet->getStyle("B8:F".$row)->getAlignment()->setWrapText(true);
+        $sheet->getStyle("G7:G".$row)->applyFromArray($bold_out);
+        $sheet->getStyle("B7:G7")->applyFromArray($bold_out);
+        $sheet->getStyle("B7:G7")->applyFromArray($header_style);
+        $sheet->getStyle("B8:G".$row)->getAlignment()->setWrapText(true);
         return $objPHPExcel;
     }
 

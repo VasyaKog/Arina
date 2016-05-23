@@ -23,6 +23,11 @@ $menu = array(
     array('label' => Yii::t('base', 'Schedule'), 'url' => array('/site/schedule')),        
     array('label'=>Yii::t('base', 'Curators'), 'url' => array('/curatorGroup')),
     array('label'=>Yii::t('base', 'Migrations'), 'url' => array('/studentGroup')),)),
+    array('label' => Yii::t('report', 'Reports'), 'items' => array(
+        array('label' => Yii::t('report', 'Hours teacher report'), 'url' => array('/reporthours/teacher')),
+        array('label' => Yii::t('report', 'Hours subject report'), 'url' => array('/reporthours/subject')),
+        array('label' => Yii::t('report', 'Hours group report'), 'url' => array('/reporthours/group')),
+    )),
     array('label' => Yii::t('base', 'Human resources'), 'items' => array(
         array('label' => Yii::t('employee', 'Employees'), 'url' => array('/hr')),
         array('label' => Yii::t('base', 'Students'), 'url' => array('/student')),)),
