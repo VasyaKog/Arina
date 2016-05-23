@@ -33,10 +33,16 @@ class UserController extends Controller
 
             $list= Yii::app()->db->createCommand('select * from `user` a where a.username=:name')->bindValue('name',$model->username)->queryAll();
 
-            if ($model->validate() && $model->login() && $list[0]['role']!=0) {
+            if ($model->validate() && $model->login() && $list[0]['role']!=1) {
                 Yii::app()->request->redirect(Yii::app()->homeUrl);
             }
+
+            if ($model->validate() && $model->login() && $list[0]['role']!=0) {
+                Yii::app()->user->logout();
+                    throw new CHttpException(403, Yii::t('yii', 'Your account is baned.'));
+            }
         }
+                
 
         $this->render(
             'login',
@@ -115,8 +121,7 @@ class UserController extends Controller
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
-            $i_t = $_POST['User']['identity_type'];
-         
+            $i_t = $_POST['User']['identity_type'];  
             $model->identity_type=$i_t;
             if ($model->save()){
                 
@@ -136,29 +141,36 @@ class UserController extends Controller
      * @throws CHttpException
      */
     public function actionUpdate($id)
-    {
-       if (!Yii::app()->user->checkAccess('admin')) {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-        }
+    {    
         /** @var User $model */
         $model = $this->loadModel($id);
-        $model->password = '';
-        //$this->performAjaxValidation('user-form', $model);
+        $model->password = '';     
 
+    
+        if ($model->id!=Yii::app()->user->id && !Yii::app()->user->checkAccess('admin')) {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
+        //$this->performAjaxValidation('user-form', $model);
         $arr_role = RolesModel::getListNames();
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
-            $i_t = $_POST['User']['identity_type'];
-            $model->identity_type=$i_t;
+           
+           
+           
             if ($model->save()){
 
+                if (Yii::app()->user->checkAccess('admin')) { 
+                     $i_t = $_POST['User']['identity_type'];
+                    $model->identity_type=$i_t;
                  Yii::app()->db->createCommand("UPDATE `AuthAssignment` SET `itemname`= '".$arr_role[$i_t]."' WHERE `userid`='".$model->id."'")->query();
+             }
                 
                 Yii::app()->getUser()->setFlash('success','Дані були успішно змінені');
                 $this->redirect(array('update', 'id' => $model->id));
             }
         }
+    
 
         $this->render('update', array(
             'model' => $model,
@@ -188,13 +200,10 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::app()->user->checkAccess('admin')) {
-            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-        }
         $dataProvider = new CActiveDataProvider('User');
         $this->render('index', array(
             'dataProvider' => $dataProvider,
-        ));
+        ));        
     }
 
     /**

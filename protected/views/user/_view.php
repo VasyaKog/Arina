@@ -1,3 +1,18 @@
+<?
+/*
+
+ <b><?php echo CHtml::encode($data->getAttributeLabel('password')); ?>:</b>
+    <?php echo CHtml::encode($data->password); ?>
+    <br/>
+
+    <b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
+    <?php echo CHtml::encode($data->email); ?>
+    <br/>
+
+*/
+
+?>
+
 <div class="view">
      
      <?php $arr_role = RolesModel::getListNames(); ?>
@@ -10,13 +25,11 @@
     <?php echo CHtml::encode($data->username); //?>
     <br/>
 
-    <b><?php echo CHtml::encode($data->getAttributeLabel('password')); ?>:</b>
-    <?php echo CHtml::encode($data->password); ?>
-    <br/>
-
-    <b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
+      <b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
     <?php echo CHtml::encode($data->email); ?>
     <br/>
+
+   
 
     <b><?php echo CHtml::encode($data->getAttributeLabel('Тип користувача')); ?>:</b>
     <?php echo CHtml::encode($data->role) ?>

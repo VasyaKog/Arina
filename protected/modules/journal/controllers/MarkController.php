@@ -21,20 +21,58 @@ class MarkController extends Controller
     }
 
     public function actionCreate($student_id,$journal_record_id){
+
         /**
          * $model Mark
          **/
         $model = new Mark();
         $model->student_id=$student_id;
         $model->journal_record_id=$journal_record_id;
-        $journal_record = $model->journal_record;
+        $access = false;
+        if (isset(Yii::app()->user->identityType)) {
+            if (isset(Yii::app()->user->identityId)) {
+                if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+                    $teacher = Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+                    /**
+                     * @var $teacher Teacher
+                     */
+                    $teacher = Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    }
+                }
+
+            }
+        }
+        if(!$access)
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $type=$model->journal_record->types;
+        $this->ajaxValidation('mark-form', $model);
         if(isset($_POST['Mark'])){
             $model->attributes=$_POST['Mark'];
-            if(isset($model->value_id))
-                $model->date=date('Y-m-d');
-            if(isset($model->retake_value_id))
-                $model->retake_date=date('Y-m-d');
+            if(isset($model->value_id)){
+                    if(is_null($model->date)){
+                        if($model->value_id!=0)
+                        {
+                        $model->date=date('Y-m-d');
+                        }
+                    }
+            }
+            if(isset($model->retake_value_id)){
+                if(is_null($model->retake_date)){
+                    if($model->retake_value_id!=0)
+                    {
+                        $model->retake_date=date('Y-m-d');
+                    }
+                }
+            }
             if($model->save()) {
                 /**
                  * $journal_record JournalRecord
@@ -50,10 +88,89 @@ class MarkController extends Controller
     }
 
     public function actionViews($id){
+        
+
         /**
          * @var $model Mark
          */
+
         $model=Mark::model()->findByPk($id);
+        $access=false;
+        if (isset(Yii::app()->user->identityType)) {
+            if (isset(Yii::app()->user->identityId)) {
+                if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+                    $access=true;
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    } elseif(in_array($model->journal_record->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+                    /**
+                     * @var $teacher Teacher
+                     */
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    } elseif(in_array($model->journal_record->load->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
+                    $student=Student::model()->findByPk(Yii::app()->user->identityId);
+                    if(in_array($model->journal_record->load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($model->journal_record->load))){
+                        $access=true;
+                        $t=false;
+                    } else {
+                        /** @var $group Group*/
+                        $group=Group::model()->findByPk($model->journal_record->load->group_id);
+                        if($student->id==$group->monitor_id) $access=true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+                    $access=true;
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    } elseif(in_array($model->journal_record->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+                    $access=true;
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    } elseif(in_array($model->journal_record->load->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+                    $access=true;
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_recor->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    } elseif(in_array($model->journal_record->load->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+                    $access=true;
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    } elseif(in_array($model->journal_record->load->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                    }
+                }
+            }
+        }
+        if(!$access)
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
         $type=$model->journal_record->types;
         $this->render('view',
             array(
@@ -69,9 +186,48 @@ class MarkController extends Controller
 
         $model=Mark::model()->findByPk($id);   
         $type=$model->journal_record->types;
+        $access = false;
+        if (isset(Yii::app()->user->identityType)) {
+            if (isset(Yii::app()->user->identityId)) {
+                if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+                    $teacher = Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+                    if ($model->journal_record->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    }
+                }
+
+            }
+        }
+        if(!$access)
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
+        $this->ajaxValidation('mark-form', $model);
         if(isset($_POST['Mark']))
         {
+
             $model->attributes=$_POST['Mark'];
+            if(isset($model->value_id)){
+                if(is_null($model->date)){
+                    if($model->value_id!=0)
+                    {
+                        $model->date=date('Y-m-d');
+                    }
+                }
+            }
+            if(isset($model->retake_value_id)){
+                if(is_null($model->retake_date)){
+                    if($model->retake_value_id!=0)
+                    {
+                        $model->retake_date=date('Y-m-d');
+                    }
+                }
+            }
             if($model->save())
                 $this->redirect('../views/'.$model->id);
         }
@@ -80,5 +236,38 @@ class MarkController extends Controller
                 'model'=>$model,
                 'type'=>$type,
             ));
+    }
+
+    public  function actionDelete($id){
+        /**
+         * @var $model Mark
+         */
+
+        $model=Mark::model()->findByPk($id);
+        $access = false;
+        if (isset(Yii::app()->user->identityType)) {
+            if (isset(Yii::app()->user->identityId)) {
+                if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+                    $teacher = Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    }
+                }
+                if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
+                    /**
+                     * @var $teacher Teacher
+                     */
+                    $teacher = Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($model->journal_record->load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                    }
+                }
+
+            }
+        }
+        if(!$access)
+        {
+            throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
+        }
     }
 }

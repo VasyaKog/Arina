@@ -25,13 +25,20 @@ class User extends ActiveRecord
     const ROLE_DEPARTMENT_HEAD = 6;
     const ROLE_ROOT = 7;
 
-    const TYPE_SUPER = 0;
-    const TYPE_TEACHER = 1;
-    const TYPE_STUDENT = 2;
-    const TYPE_INSPECTOR = 3;
-    const TYPE_NAVCH = 4;
-    const TYPE_ZASTUPNIK = 5;
-    const TYPE_DIRECTOR = 6;
+    const TYPE_STUDENT = 1;
+    const TYPE_PREFECT = 2;
+    const TYPE_TEACHER = 3;
+    const TYPE_CYCHEAD = 4;
+    const TYPE_INSPECTOR = 5;
+    const TYPE_NAVCH = 6;
+    const TYPE_DEPHEAD = 7;
+    const TYPE_ZASTUPNIK = 8;
+    const TYPE_DIRECTOR = 9;
+    const TYPE_SUPER = 10;
+
+
+
+    
 
     /**
      * @return string the associated database table name
@@ -67,6 +74,12 @@ class User extends ActiveRecord
         );
     }
 
+    public function getName(){
+        //var_dump($this);
+        return (($this->identity_type==1) || ($this->identity_type==2))?$this->student->getFullName():$this->employee->getFullName();
+       }
+   
+
     /**
      * @return array validation rules for model attributes.
      */
@@ -90,9 +103,10 @@ class User extends ActiveRecord
     {
         return array(
             'employee' => array(self::BELONGS_TO, 'Employee', 'identity_id'),
-            'roles' => array(self::BELONGS_TO, 'RolesModel', 'identity_type'),
+            'roles' => array(self::BELONGS_TO, 'RolesModel', 'identity_type'),            
+            'active' => array(self::BELONGS_TO, 'Active', 'role'),
+            'student' => array(self::BELONGS_TO, 'Student', 'identity_id'),
             
-        'active' => array(self::BELONGS_TO, 'Active', 'role'),
             );
     }
 
@@ -126,19 +140,22 @@ class User extends ActiveRecord
      */
     public function search()
     {
-        $criteria = new CDbCriteria;
-
+        $criteria = new CDbCriteria; 
         $criteria->compare('id', $this->id);
-        $criteria->compare('username', $this->username, true);
-        //$criteria->compare('password', $this->password, true);
-        $criteria->compare('email', $this->email, true);
-        $criteria->compare('role', $this->role);
-        //$criteria->compare('asd', $this->employee->last_name, true);
+        $criteria->compare('username', $this->username);
         $criteria->compare('identity_type', $this->identity_type);
+        $criteria->compare('identity_id', $this->identity_id);
+        $criteria->compare('role', $this->role);
+        //$criteria->compare('', $this->roles->title); 
+        //$criteria->join = 'inner join `roles` ON `user`.`identity_type`=`roles`.`id`';  
+       // $criteria->condition='identity_type=:it'; 
+        //$criteria->params=array(':it' => $this->identity_type);   
+        
 
+        //var_dump($this);        
         return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+            'criteria' => $criteria,            
+        ));      
     }
 
     /**

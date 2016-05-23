@@ -8,12 +8,12 @@
 <div class="form">
 
 <?php $form=$this->beginWidget(BoosterHelper::FORM, array(
-	'id'=>'mark-_form-form',
+	'id'=>'mark-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// See class documentation of CActiveForm for details on this,
 	// you need to use the performAjaxValidation()-method described there.
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -25,12 +25,12 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->dropDownListRow(
+		<?php  echo $form->dropDownListRow(
 			$model,
 			'system_id',
 			EvaluationSystem::getListAll('id','title'),
 			array(
-				'empty'=>Yii::t('journal','Select EvaluationSystem'),
+				'empty'=>$model->journal_record->load->planSubject->subject->,
 				'ajax'=>array(
 					'type'=>'POST',
 					'url'=>$this->createUrl('changeMarkList'),
@@ -47,7 +47,7 @@
 	<div class="row">
 		<?php if($type->ticket) echo $form->textFieldRow($model,'retake_ticket_numb'); ?>
 	</div>
-
+	<?php if(!isset($model->value_id)) {?>
 	<div class="row">
 		<?php echo $form->dropDownListRow(
 			$model,
@@ -63,10 +63,46 @@
 			)
 		); ?>
 	</div>
-
+	<? } else { ?>
 	<div class="row">
-		<?php echo $form->dropDownListRow($model,'retake_value_id',array('0'=>Yii::t('journal','Select mark'))); ?>
+		<?php echo $form->dropDownListRow(
+			$model,
+			'value_id',
+			Evaluation::getListBySystemId($model->system_id),
+			array(
+				'empty'=>Yii::t('journal','Select EvaluationSystem'),
+				'ajax'=>array(
+					'type'=>'POST',
+					'url'=>$this->createUrl('changeMarkList'),
+					'update'=> '#Mark_retake_value_id',
+				),
+			)
+		); ?>
 	</div>
+	<?}?>
+	<?php if(!isset($model->retake_value_id)) {?>
+		<div class="row">
+			<?php echo $form->dropDownListRow(
+				$model,
+				'retake_value_id',
+				array(),
+				array(
+					'empty'=>Yii::t('journal','Select EvaluationSystem'),
+				)
+			); ?>
+		</div>
+	<? } else { ?>
+		<div class="row">
+			<?php echo $form->dropDownListRow(
+				$model,
+				'retake_value_id',
+				Evaluation::getListBySystemId($model->system_id),
+				array(
+					'empty'=>Yii::t('journal','Select EvaluationSystem'),
+				)
+			); ?>
+		</div>
+	<?}?>
 
 	<div class="row">
 		<?php echo $form->textFieldRow($model,'comment'); ?>

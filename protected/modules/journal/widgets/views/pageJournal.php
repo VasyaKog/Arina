@@ -43,6 +43,11 @@ if($t) $k =0; else $k=1;
     #center{
         text-align: center;
     }
+
+    table{
+        display: block;
+        overflow: auto;
+    }
 </style>
 <h3><?php echo Yii::t('subject','Subject').': '.$subject.'  '.Yii::t('teacher','Teacher').': '.$teacherName;?></h3>
 <table class="journal graph table items table-striped table-condensed table-bordered table-hover">
@@ -59,7 +64,7 @@ if($t) $k =0; else $k=1;
         <td class="oc record" align="center"><?php echo $key?></td>
     <?
     }
-    if($t){echo '<td class="record">'.CHtml::link(Yii::t('terms','create'),array('journalRecord/create/'.$load_id)).'</td>';}
+    if($t){echo '<td class="record">'.CHtml::link(Yii::t('journal','Create JournalRecord'),array('journalRecord/create/'.$load_id)).'</td>';}
     ?>
     </tr>
         <?
@@ -90,6 +95,7 @@ if($t) $k =0; else $k=1;
     if($t)echo '<td></td>';
     ?>
     </tr>
+
     <?
 
 $i++;

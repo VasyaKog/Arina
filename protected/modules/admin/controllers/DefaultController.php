@@ -7,12 +7,19 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-        
+        if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $this->render('index');
     }
 
     public function actionRun($args = '')
     {
+        if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $console = new WebConsole();
         $console->init();
         $result = $console->run(explode(' ', trim($args)));
@@ -22,6 +29,10 @@ class DefaultController extends Controller
 
     public function actionConfirm($args)
     {
+        if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         Yii::app()->session['console-confirm'] = true;
         $this->actionRun($args);
     }
@@ -33,6 +44,7 @@ class DefaultController extends Controller
      */
     public function accessRules()
     {
+        
         return array(
             array('allow',
                 'users' => array('*'),

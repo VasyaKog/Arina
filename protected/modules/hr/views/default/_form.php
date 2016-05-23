@@ -18,25 +18,9 @@
         <?php if ($model->isNewRecord): ?>
             <div class="row">
                 <div class="span12">
-                    <?php echo $form->dropDownListRow($model, 'type', Employee::getTypes(), array('empty' => 'Виберіть тип працівника', 'id' => 'type-select')); ?>
-                    <script>
-                        jQuery(function () {
-                            var typeSelect = $('#type-select'),
-                                teacherFields = $('#teacher-fields');
-                            function typeSelectChange() {
-                                if (typeSelect.val() === '1') {
-                                    teacherFields.show();
-                                } else {
-                                    teacherFields.hide();
-                                }
-                            }
-
-                            typeSelectChange();
-                            typeSelect.change(typeSelectChange);
-                        });
-                    </script>
-                </div>
-                <div id="teacher-fields" class="hide">
+        
+                    </div>
+                <div id="teacher-fields">
                     <div class="span3">
                         <?php echo $form->textFieldRow($model->user, 'username') ?>
                     </div>
@@ -53,7 +37,7 @@
                 <?php echo $form->checkBoxRow($model, 'participates_in_study_process', array('id' => 'participates_in_study_process')); ?>
 
 
-                <div id="cyclic_commission">
+                <div id="cyclic_commission" >
                     <?php echo $form->dropDownListRow($model, 'cyclic_commission_id', CyclicCommission::getList(), array('empty' => Yii::t('teacher', 'Select cycle commission'))); ?>
                     <script>
                         $('#cyclic_commission').hide();
@@ -131,6 +115,10 @@
 
                 <?php echo $form->textFieldRow($model, 'passport_issued_by', array('size' => 40, 'maxlength' => '40')); ?>
 
+                <?php echo $form->dateFieldRow($model, 'passport_issued_date', array()); ?>
+
+
+
             </div>
             <div class="span3">
                 <div class="panel panel-primary">
@@ -143,7 +131,7 @@
 
                         <?php echo $form->textFieldRow($model, 'military_accounting_group', array('size' => 40, 'maxlength' => '40')); ?>
 
-                        <?php echo $form->textFieldRow($model, 'military_accounting_category', array('size' => 40, 'maxlength' => '40')); ?>
+                        <?php echo $form->textFieldRow($model, 'military_accounting_category', array('size' => 60, 'maxlength' => '60')); ?>
 
                         <?php echo $form->textFieldRow($model, 'military_composition', array('size' => 40, 'maxlength' => '40')); ?>
 

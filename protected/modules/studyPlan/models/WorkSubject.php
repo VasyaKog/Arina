@@ -218,8 +218,8 @@
         /**
          * @var $item1 Subject
          **/
-        $item1=Subject::model()->findByPk($item->subject_id);
-        return $item1->title;
+        $item1=Subject::model()->findByPk(isset($item->subject_id) ? $item->subject_id:null);
+        return isset($item1->title) ? $item1->title:null;
     }
 
 } 

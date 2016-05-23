@@ -114,11 +114,25 @@ class DefaultController extends Controller
          */
         $load=Load::model()->findByPk($id);
         /**
-        * @var $student Student
+        * @var $student_view Student
          */
-        $student=null;
+        $student_view=null;
         if (isset(Yii::app()->user->identityType)) {
             if (isset(Yii::app()->user->identityId)) {
+                if (Yii::app()->user->identityType == User::TYPE_SUPER) {
+                    $access=true;
+                    /**
+                     * @var $teacher Teacher
+                     */
+                    $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
+                    if ($load->teacher_id == Yii::app()->user->identityId) {
+                        $access = true;
+                        $t = true;
+                    } elseif(in_array($load->group_id,$teacher->getGroupListArray())) {
+                        $access = true;
+                        $t = false;
+                    }
+                }
                 if (Yii::app()->user->identityType == User::TYPE_TEACHER) {
                     /**
                      * @var $teacher Teacher
@@ -132,21 +146,22 @@ class DefaultController extends Controller
                         $t = false;
                     }
                 }
-                else if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
+                if (Yii::app()->user->identityType == User::TYPE_STUDENT) {
                     $student=Student::model()->findByPk(Yii::app()->user->identityId);
+
                     if(in_array($load->group_id,$student->getGroupListArray())&&in_array($student->id,JournalStudents::getAllStudentsInArray($load))){
                         $access=true;
                         $t=false;
+                        /** @var $group Group*/
+                        $group=Group::model()->findByPk($load->group_id);
+                        if($student->id!=$group->monitor_id) $student_view=$student;
                     } else {
                         /** @var $group Group*/
                         $group=Group::model()->findByPk($load->group_id);
                         if($student->id==$group->monitor_id) $access=true;
                     }
                 }
-                else if (Yii::app()->user->identityType == User::TYPE_SUPER) {
-                    $access=true;
-                }
-                else if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
+                if (Yii::app()->user->identityType == User::TYPE_INSPECTOR) {
                     $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
                     if ($load->teacher_id == Yii::app()->user->identityId) {
@@ -157,7 +172,7 @@ class DefaultController extends Controller
                         $t = false;
                     }
                 }
-                else if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
+                if (Yii::app()->user->identityType == User::TYPE_NAVCH) {
                     $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
                     if ($load->teacher_id == Yii::app()->user->identityId) {
@@ -168,7 +183,7 @@ class DefaultController extends Controller
                         $t = false;
                     }
                 }
-                else if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
+                if (Yii::app()->user->identityType == User::TYPE_ZASTUPNIK) {
                    $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
                     if ($load->teacher_id == Yii::app()->user->identityId) {
@@ -179,7 +194,7 @@ class DefaultController extends Controller
                         $t = false;
                     }
                 }
-                else if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
+                if (Yii::app()->user->identityType == User::TYPE_DIRECTOR) {
                     $access=true;
                     $teacher=Teacher::model()->findByPk(Yii::app()->user->identityId);
                     if ($load->teacher_id == Yii::app()->user->identityId) {
@@ -198,7 +213,7 @@ class DefaultController extends Controller
         }
         $this->render('view', array(
             't'=>$t,
-            'student_id_view'=>$student,
+            'student'=>$student_view,
             'id' => $id,
         ));
     }

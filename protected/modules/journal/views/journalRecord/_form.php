@@ -12,7 +12,7 @@
 	// controller action is handling ajax validation correctly.
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>false,
+	 'enableAjaxValidation'=>true,
 )); ?>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -23,7 +23,7 @@
 			'type_id',
 			JournalRecordType::getListAll('id','title'),
 			array(
-				'empty'=>Yii::t('journal','Select')
+				'empty'=>Yii::t('journal','Select JournalRecordType')
 			)); ?>
 	</div>
 
@@ -36,18 +36,28 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->dropDownListRow($model,
+			'audience_id',
+			Audience::getListAll('id','number'),
+			array(
+				'empty'=> Yii::t('journal','Select audience'),
+			)
+		); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->textFieldRow($model,'hours',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->dropDownListRow($model,
 			'numer_in_day',array('1'=>'1','2'=>'2','3'=>'3','4'=>'4'),array(
-			'empty'=>Yii::t('journal','Select'),
+			'empty'=>Yii::t('journal','Select number in day'),
 		)); ?>
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('base','Create') : Yii::t('base','Save')); ?>
+		<?php echo CHtml::SubmitButton($model->isNewRecord ? Yii::t('base','Create') : Yii::t('base','Save')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

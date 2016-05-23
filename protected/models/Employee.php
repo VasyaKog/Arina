@@ -34,6 +34,7 @@
  * @property string $place_of_registration
  * @property string $passport
  * @property string $passport_issued_by
+ * @property string $passport_issued_date
  * @property string $military_accounting_group
  * @property string $military_accounting_category
  * @property string $military_composition
@@ -76,9 +77,9 @@ class Employee extends ActiveRecord
         // will receive user inputs.
         return array(
             array('position_id, participates_in_study_process, gender, cyclic_commission_id, education, postgraduate_training, dismissal_reason, military_suitability, type', 'numerical', 'integerOnly' => true),
-            array('last_name, first_name, middle_name, short_name, nationality, last_job, last_job_position, pension_data, family_status, place_of_residence, place_of_registration, passport, passport_issued_by, military_accounting_group, military_accounting_category, military_composition, military_rank, military_accounting_speciality_number, military_district_office_registration_name, military_district_office_residence_name', 'length', 'max' => 255),
+            array('last_name, first_name, middle_name, short_name, nationality, last_job, last_job_position, pension_data, family_status, place_of_residence, place_of_registration, passport, passport_issued_by, passport_issued_date, military_accounting_group, military_accounting_category, military_composition, military_rank, military_accounting_speciality_number, military_district_office_registration_name, military_district_office_residence_name', 'length', 'max' => 255),
             array('start_date, birth_date, educations_list, postgraduate_trainings, experience_years, experience_months, experience_days, dismissal_date, family_data, professional_education, appointments_and_transfers, vacations', 'safe'),
-            array('id, position_id, participates_in_study_process, start_date, last_name, first_name, middle_name, short_name, gender, cyclic_commission_id, birth_date, nationality, education, educations_list, postgraduate_training, postgraduate_trainings, last_job, last_job_position, experience_start, experience_end, dismissal_reason, dismissal_date, pension_data, family_status, family_data, place_of_residence, place_of_registration, passport, passport_issued_by, military_accounting_group, military_accounting_category, military_composition, military_rank, military_accounting_speciality_number, military_suitability, military_district_office_registration_name, military_district_office_residence_name, professional_education, appointments_and_transfers, vacations', 'safe', 'on' => 'search'),
+            array('id, position_id, participates_in_study_process, start_date, last_name, first_name, middle_name, short_name, gender, cyclic_commission_id, birth_date, nationality, education, educations_list, postgraduate_training, postgraduate_trainings, last_job, last_job_position, experience_start, experience_end, dismissal_reason, dismissal_date, pension_data, family_status, family_data, place_of_residence, place_of_registration, passport, passport_issued_by, passport_issued_date,military_accounting_group, military_accounting_category, military_composition, military_rank, military_accounting_speciality_number, military_suitability, military_district_office_registration_name, military_district_office_residence_name, professional_education, appointments_and_transfers, vacations', 'safe', 'on' => 'search'),
         );
     }
 
@@ -116,6 +117,7 @@ class Employee extends ActiveRecord
             'last_name' => Yii::t('employee', 'Last name'),
             'first_name' => Yii::t('employee', 'First name'),
             'middle_name' => Yii::t('employee', 'Middle name'),
+            'fullname'=> Yii::t('employee', 'Full name'),
             'short_name' => Yii::t('employee', 'Short name'),
             'gender' => Yii::t('employee', 'Gender'),
             'cyclic_commission_id' => Yii::t('employee', 'Cyclic commission'),
@@ -139,6 +141,7 @@ class Employee extends ActiveRecord
             'place_of_registration' => Yii::t('employee', 'Place of registration'),
             'passport' => Yii::t('employee', 'Passport'),
             'passport_issued_by' => Yii::t('employee', 'Passport issued by'),
+            'passport_issued_date' => Yii::t('employee','Passport Issued Date'),
             'military_accounting_group' => Yii::t('employee', 'Military accounting group'),
             'military_accounting_category' => Yii::t('employee', 'Military accounting category'),
             'military_composition' => Yii::t('employee', 'Military composition'),
@@ -202,6 +205,7 @@ class Employee extends ActiveRecord
         $criteria->compare('place_of_registration', $this->place_of_registration, true);
         $criteria->compare('passport', $this->passport, true);
         $criteria->compare('passport_issued_by', $this->passport_issued_by, true);
+        $criteria->compare('passport_issued_date', $this->passport_issued_date, true);
         $criteria->compare('military_accounting_group', $this->military_accounting_group, true);
         $criteria->compare('military_accounting_category', $this->military_accounting_category, true);
         $criteria->compare('military_composition', $this->military_composition, true);
@@ -217,9 +221,11 @@ class Employee extends ActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => 20,
+                'pageSize' => 80,
             ),
+
         ));
+
     }
 
     public static function getList()

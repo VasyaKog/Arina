@@ -61,6 +61,12 @@ class Audience extends ActiveRecord
         return 'audience';
     }
 
+    public static function getNumber($id){
+        $model=Audience::model()->findByPk($id);
+        if(!is_null($model)) return $model->number;
+        else return null;
+    }
+
     /**
      * @return array validation rules for model attributes.
      */

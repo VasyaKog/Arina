@@ -1,5 +1,4 @@
-<?php
-Yii::import('application.behaviors.dateField.*');
+<?php Yii::import('application.behaviors.dateField.*');
 
 /**
  * This is the model class for table "student".
@@ -172,6 +171,18 @@ class Student extends ActiveRecord implements IDateContainable
         return $list;
     }
 
+    public static function getLists(){
+        $list = array();
+        /**
+         * @var $listAll Student[]
+         */
+        $listAll=self::model()->findAll();
+        foreach($listAll as $item){
+            $list[$item->id]=$item->getFullName();
+        }
+        return $list;
+    }
+
     public function getGroupHistory(){
         /**
          * @var $listRecord StudentGroup[]
@@ -285,8 +296,12 @@ class Student extends ActiveRecord implements IDateContainable
             'exemptions' => array(self::MANY_MANY, 'Exemption', 'student_has_exemption(student_id, exemption_id)'),
             'student_group' => array(self::HAS_MANY,'StudentGroup','student_id'),
             'srudent_journal'=>array(self::HAS_MANY,'JournalStudents','student_id'),
+            'user' => array(self::HAS_MANY, 'User', 'identity_id'),
         );
     }
+
+
+    
 
     /**
      * @return array customized attribute labels (name=>label)
@@ -451,6 +466,8 @@ class Student extends ActiveRecord implements IDateContainable
             return false;
         }
     }
+    
+
 
 
     public function getDateFields()

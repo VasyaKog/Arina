@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @author VasyaKog
+ */
 /**
  * This is the model class for table "journal_record".
  *
@@ -7,16 +9,20 @@
  * @property integer $id
  * @property integer $type_id
  * @property string $date
+ * @property integer $numer_in_day
  * @property string $description
  * @property string $home_work
  * @property integer $load_id
  * @property string $teacher_id
  * @property integer $hours
+ * @property integer $audience_id
  *
  * @property Mark[] $marks
  * @property Teacher $teacher
  * @property $types JournalRecordType
  * @property $load Load
+ * @property $audience Audience
+ * 
  */
 class JournalRecord extends CActiveRecord
 {
@@ -30,12 +36,17 @@ class JournalRecord extends CActiveRecord
 
 	public function getName(){
 
-		if($this->types->date==1) return date("d",strtotime($this->date)).'<br>'.date("m",strtotime($this->date)); else return $this->types->title;
+		if($this->types->date==1) return '<u>'.date("d",strtotime($this->date)).'</u><br>'.date("m",strtotime($this->date)); else return $this->types->title;
    	}
 
 	public function getLink()
 	{
 		return CHtml::link($this->getName(),array('/journal/journalRecord/views/'.$this->id));
+	}
+
+	public function getNumber()
+	{
+		return $this->numer_in_day;
 	}
 
 	/**
@@ -47,7 +58,8 @@ class JournalRecord extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('type_id, date, description, home_work, load_id, teacher_id, n_pp, numer_in_day', 'required'),
-			array('type_id, load_id, numer_in_day, hours', 'numerical', 'integerOnly'=>true),
+			array('type_id','check_all'),
+			array('type_id, load_id,audience_id numer_in_day,, hours', 'numerical', 'integerOnly'=>true),
 			array('description, home_work', 'length', 'max'=>255),
 			array('teacher_id', 'length', 'max'=>10),
 			// The following rule is used by search().
@@ -56,6 +68,51 @@ class JournalRecord extends CActiveRecord
 		);
 	}
 
+
+	public function check_all(){
+		if(isset($this->types)){
+			if($this->type_id==0) $this->addError('type_id', Yii::t('journal', 'Select EvaluationSystem'));
+		} else $this->addError('type_id', Yii::t('journal', 'Select JournalRecordType'));
+		if(isset($this->types->description)){
+			if($this->types->description==1) {
+				if (empty($this->description)) {
+					$this->addError('description', Yii::t('journal', 'Description') . ' ' . Yii::t('journal', 'is required'));
+				}
+			}
+		}
+		if(isset($this->types->homework)){
+			if($this->types->description==1) {
+				if (empty($this->home_work)) {
+					$this->addError('home_work', Yii::t('journal', 'Home task') . ' ' . Yii::t('journal', 'is required'));
+				}
+			}
+		}
+		/**
+		 * @var $records JournalRecord[]
+		 */
+		$records=JournalRecord::model()->findAllByAttributes(array('load_id'=>$this->load_id));
+		$countHours=0;
+		foreach($records as $record){
+			if($record->load_id==$this->type_id){
+				$countHours+=$record->hours;
+			}
+		}
+		$springSemester = $this->load->course * 2;
+		$flag=true;
+		if($this->type_id==2){
+			if(($countHours+$this->hours)<=($this->load->getClasses($springSemester-1)+$this->load->getClasses($springSemester-1))){
+				$flag=false;
+			}
+		}
+		if ($flag==false){
+			$this->addError('',Yii::t('journal','For this type lectures no credit hours'));
+		}
+//		if($this->hours>0){
+//			if($this->audience_id==0){
+//				$this->addError('',Yii::t('journal','Record that has hours must has audience'));
+//			}
+//		}
+	}
 	/**
 	 * @return array relational rules.
 	 */
@@ -68,6 +125,7 @@ class JournalRecord extends CActiveRecord
 			'marks'=>array(self::HAS_MANY,'Mark','journal_record_id'),
 			'teacher'=>array(self::BELONGS_TO,'Teacher','teacher_id'),
 			'load'=>array(self::BELONGS_TO,'Load','load_id'),
+			'audience'=>array(self::BELONGS_TO,'Audience','audience_id'),
 		);
 	}
 
@@ -86,6 +144,7 @@ class JournalRecord extends CActiveRecord
 			'teacher_id' => Yii::t('base','Teacher'),
 			'numer_in_day' => Yii::t('journal','Nubmer In Day'),
 			'hours'=>Yii::t('journal','Hours count'),
+			'audience_id'=>Yii::t('audience', 'Audience'),
 		);
 	}
 

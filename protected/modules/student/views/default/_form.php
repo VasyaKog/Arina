@@ -17,9 +17,13 @@
     <?php echo $form->errorSummary($model); ?>
    <div class="row">
     <div class="span3">
+        
+       
         <?php echo $form->textFieldRow($model, 'code', array('size' => 12, 'maxlength' => 12)); ?>
       
         <?php echo $form->checkBoxListRow($model, 'exemptions', CHtml::listData(Exemption::model()->findAll(), 'id', 'title'), array('placeholder' => '  ')) ?>
+
+
 
         <?php echo $form->textFieldRow($model, 'last_name', array('size' => 40, 'maxlength' => 40)); ?>
 

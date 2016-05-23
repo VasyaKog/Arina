@@ -19,10 +19,13 @@ $this->menu = array(
     'data' => $model,
     'attributes' => array(
         'id',
-        'username',
-        'password',
+        'username',        
         'email',
-        'role',
-        'identity_id',
-    ),
-)); ?>
+        'roles.title',
+        array(
+            'name'=>'Ініціали користувача',
+            'value'=> $model->getName(),
+            ),
+       
+        'active.name')    
+        )); ?>

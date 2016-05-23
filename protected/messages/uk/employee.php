@@ -20,6 +20,7 @@ return array(
     'First name' => 'Ім’я',
     'Middle name' => 'По батькові',
     'Short name' => 'Ім’я скорочено',
+
     'Full name title' => 'Прізвище, ім’я, по батькові',
     'Gender' => 'Стать',
     'Cyclic commission id' => 'Циклова комісія',
@@ -43,6 +44,7 @@ return array(
     'Place of registration' => 'Місце проживання за державною реєстрацією',
     'Passport' => 'Паспорт (серія, номер)',
     'Passport issued by' => 'Паспорт (ким виданий)',
+    'Passport Issued Date'=> 'Паспорт (дата видачі)',
     'Military accounting group' => 'Група військового обліку',
     'Military accounting category' => 'Категорія військового обліку',
     'Military composition' => 'Військовий склад',
@@ -91,4 +93,6 @@ return array(
     'Experience months' => 'Стаж (місяців)',
     'Experience days' => 'Стаж (днів)',
     'Get list in excel'=>'Генерувати список в Excel',
+    'Create personal card' => 'Створити особову картку працівника',
+    'Full name'=>'Ініціали',
 );

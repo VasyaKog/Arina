@@ -38,33 +38,25 @@ return false;
     )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('bootstrap.widgets.TbGridView', array(
-    'id' => 'user-grid',
-    'dataProvider' => $model->search(),
-    'filter' => $model,
+<?php 
+     $this->widget('bootstrap.widgets.TbGridView', array(
+    'id' => 'user-grid',    
+    'dataProvider' => $model->search(), 
+     
+    //'filter'=>$model,
     'columns' => array(
         'id',
         'username',        
-        'email', 
+        'email',
+        'roles.title',
         array(
-            'name' => 'roles.title',
-            'value' => 'CHtml::link($data->roles["title"], array("view", "id"=>$data->id))',
-            'type' => 'raw'
-        ),         
-        array(
-            'name' => 'employee.last_name',
-            'value' => 'CHtml::link($data->employee->fullname, array("view", "id"=>$data->id))',
-            'type' => 'raw'
-        ),     
-        
-
-        array(
-            'name' => 'active.name',
-            'value' => 'CHtml::link($data->active["name"], array("view", "id"=>$data->id))',
-            'type' => 'raw'
-        ),   
+            'header'=>'Ініціали користувача',
+            'value'=> '$data->getName()',
+            ),       
+        'active.name',
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
         ),
     ),
-)); ?>
+));
+?>

@@ -13,7 +13,7 @@ class TeacherController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::app()->user->checkAccess('student'))
+        if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -57,7 +57,7 @@ class TeacherController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::app()->user->checkAccess('student'))
+       if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -82,7 +82,7 @@ class TeacherController extends Controller
      */
     public function actionCreate()
     {
-        if (!Yii::app()->user->checkAccess('manageTeacher')&&!Yii::app()->user->checkAccess('admin')
+        if (!Yii::app()->user->checkAccess('inspector')&&!Yii::app()->user->checkAccess('admin')
         ) {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
@@ -94,7 +94,7 @@ class TeacherController extends Controller
             $model->attributes = $_POST['Teacher'];
             $model->short_name = $model->getNameWithInitials();
 
-            if (!Yii::app()->user->checkAccess('manageTeacher',
+           /* if (!Yii::app()->user->checkAccess('manageTeacher',
                 array(
                     'id' => $model->cyclicCommission->head_id,
                     'type' => User::TYPE_TEACHER,
@@ -102,7 +102,7 @@ class TeacherController extends Controller
             )
             ) {
                 throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
-            }
+            }*/
 
             if ($model->save()) {
                 $this->redirect(array('group/index'));
@@ -142,8 +142,8 @@ class TeacherController extends Controller
                 'id' => $model->cyclicCommission->head_id,
                 'type' => User::TYPE_TEACHER,
             )
-        )&&!Yii::app()->user->checkAccess('admin')
-        ) {
+        )&&!Yii::app()->user->checkAccess('admin')&&!Yii::app()->user->checkAccess('inspector'))
+        {
             throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
         }
         $this->redirect(array('hr/default/update', 'id' => $id));
@@ -171,7 +171,8 @@ class TeacherController extends Controller
      */
     public function actionListByCycle($id)
     {   
-        if(Yii::app()->user->checkAccess('student'))
+        
+       if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

@@ -25,6 +25,10 @@ class DefaultController extends Controller
 	 */
 	public function actionView($id)
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
         $model = $this->loadModel($id);
         $another_user_name = $model->master_user;   // name of another master user
         if (!empty($another_user_name))             // if it is here...
@@ -49,6 +53,10 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 		$model=new FileShare;
 
 		if(isset($_POST['FileShare']))
@@ -71,6 +79,10 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 		$model=$this->loadModel($id);
 
 		if(isset($_POST['FileShare']))
@@ -109,6 +121,10 @@ class DefaultController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -121,6 +137,10 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 		$dataProvider = new CActiveDataProvider('FileShare');
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
@@ -129,7 +149,12 @@ class DefaultController extends Controller
 	 * Manages all models.
 	 */
 	public function actionAdmin()
+
 	{
+		 if (!Yii::app()->user->checkAccess('admin'))
+        {
+            throw new CHttpException(403, Yii::t('yii', 'You are not authorized to perform this action.'));
+        }
 		$model=new FileShare('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['FileShare']))
@@ -149,6 +174,7 @@ class DefaultController extends Controller
 	 */
 	public function loadModel($id)
 	{
+		
 		$model=FileShare::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');

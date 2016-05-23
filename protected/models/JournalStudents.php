@@ -100,6 +100,7 @@ class JournalStudents extends CActiveRecord
 		foreach($studentsid as $item){
 			array_push($students,Student::model()->findByPk($item));
 		}
+
 		return $students;
 	}
 	public static function getAllStudentsInArray($load){
@@ -114,7 +115,8 @@ class JournalStudents extends CActiveRecord
 		foreach($records as $record) {
 			if(!in_array($record->student_id,$studentsid)) array_push($studentsid, $record->student_id);
 		}
-		return $students;
+		
+		return $studentsid;
 	}
 	public function search()
 	{

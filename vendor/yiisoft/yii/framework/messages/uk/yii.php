@@ -210,6 +210,7 @@ return array (
   'View file "{file}" does not exist.' => 'Файл представлення "{file}" не існує.',
   'Yii application can only be created once.' => 'Додаток Yii може бути створено тільки один раз.',
   'You are not authorized to perform this action.' => 'У вас недостатньо прав для виконання зазначеної дії.',
+  'Your account is baned.' => 'Ваш користувач заблокований.',
   'Your request is invalid.' => 'Невірний запит.',
   '{attribute} "{value}" has already been taken.' => 'Значення "{value}" атрибуту {attribute} вже зайняте.',
   '{attribute} "{value}" is invalid.' => 'Значення "{value}" атрибуту {attribute} невірне.',

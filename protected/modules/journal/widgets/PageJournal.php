@@ -19,7 +19,7 @@ class PageJournal extends CWidget
     /**
      * @var $students Student[]
      */
-    public $students;
+    public $students=array();
     public $rows=array();
     /**
      * @var $records JournalRecord[]
@@ -31,7 +31,10 @@ class PageJournal extends CWidget
      */
     public $teacher;
     public $teacherName;
-
+    /**
+     * @var $student Student
+     */
+    public $student_view=null;
     public $t=true;
 
     /**
@@ -39,15 +42,16 @@ class PageJournal extends CWidget
      * @param $b Student
      * @return int
      */
-    function cmp($a, $b)
-    {
-        return strcmp($a->getFullName(), $b->getFullName());
-    }
+
 
     public function init(){
         $this->load=Load::model()->findByPk($this->load_id);
         $group =Group::model()->findByPk($this->load->group_id);
-        $this->students=JournalStudents::getAllStudentsInList($this->load);
+        if(isset($this->student_view)){
+            array_push($this->students,Student::model()->findByPk($this->student_view->id));
+        } else {
+            $this->students = JournalStudents::getAllStudentsInList($this->load);
+        }
         $this->teacher=Teacher::model()->findByPk($this->load->teacher_id);
         if(!isset($this->teacher)) {
             $this->teacherName=Yii::t('base','Not selected');
@@ -59,11 +63,23 @@ class PageJournal extends CWidget
         /*
              * @var $item Student
         */
-
-        foreach ($this->students as $item){
-            array_push($this->rows,$item->getLink());
+        /**
+         * @param $a Student
+         * @param $b Student
+         * @return int
+         */
+        function cmp($a, $b)
+        {
+            return strcmp($a->getFullName(), $b->getFullName());
         }
-        $this->records=JournalRecord::model()->findAllByAttributes(array('load_id'=> $this->load_id));
+        usort($this->students,'cmp');
+            foreach ($this->students as $item) {
+                array_push($this->rows, $item->getLink());
+            }
+
+
+        
+        $this->records=JournalRecord::model()->findAllByAttributes(array('load_id'=> $this->load_id),array("order"=>"date"));
         foreach($this->records as $item){
             array_push($this->list,$item->getLink());
         }
@@ -84,7 +100,7 @@ class PageJournal extends CWidget
                 } elseif(!in_array($this->load_id,$student->getListArray($study->date))){
                     array_push($this->map[$i], 'Відраховано');
                 } elseif ($this->t) {
-                    array_push($this->map[$i], CHtml::link(Yii::t('journal','Create'),array("/journal/mark/create/","student_id"=>$student->id,"journal_record_id"=>$study->id)));
+                    array_push($this->map[$i], CHtml::link(Yii::t('journal','Create mark'),array("/journal/mark/create/","student_id"=>$student->id,"journal_record_id"=>$study->id)));
                 } else {
                     array_push($this->map[$i], '');
                 }

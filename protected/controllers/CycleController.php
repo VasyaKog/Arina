@@ -10,7 +10,7 @@ class CycleController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::app()->user->checkAccess('student'))
+        if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }
@@ -92,7 +92,7 @@ class CycleController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::app()->user->checkAccess('student'))
+        if(Yii::app()->user->checkAccess('student')&&Yii::app()->user->checkAccess('prefect'))
         {
             throw new CHttpException(403, Yii::t('yii','You are not authorized to perform this action.'));
         }

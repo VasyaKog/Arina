@@ -69,6 +69,21 @@ class Evaluation extends CActiveRecord
 		return $mark->title;
 	}
 
+	public static function getListBySystemId($id){
+		/**
+		 * @var $arrayAll Evaluation[]
+		 */
+		/**
+		 * @var $list array[];
+		 */
+		$list=array();
+		$arrayAll=self::model()->findAllByAttributes(array('system_id'=>$id));
+		foreach ($arrayAll as $key){
+			$list[$key->id]=$key->title;
+		}
+		return $list;
+	}
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
