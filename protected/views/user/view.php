@@ -20,7 +20,7 @@ $this->menu = array(
     'attributes' => array(
         'id',
         'username',        
-        //'email',
+        'email',
         'roles.title',
         array(
             'name'=>'Ініціали користувача',

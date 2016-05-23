@@ -43,11 +43,11 @@ return false;
     'id' => 'user-grid',    
     'dataProvider' => $model->search(), 
      
-    'filter'=>$model,
+    //'filter'=>$model,
     'columns' => array(
         'id',
         'username',        
-         //'email',
+        'email',
         'roles.title',
         array(
             'header'=>'Ініціали користувача',

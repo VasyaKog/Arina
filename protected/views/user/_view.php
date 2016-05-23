@@ -25,6 +25,10 @@
     <?php echo CHtml::encode($data->username); //?>
     <br/>
 
+      <b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
+    <?php echo CHtml::encode($data->email); ?>
+    <br/>
+
    
 
     <b><?php echo CHtml::encode($data->getAttributeLabel('Тип користувача')); ?>:</b>

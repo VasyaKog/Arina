@@ -23,6 +23,7 @@ class RolesModel extends ActiveRecord
     {
         return CHtml::listData(self::model()->findAll(array('order' => 'id')), 'id', 'title');
     }
+    
     public static function getListForm()
     {
         return CHtml::listData(self::model()->findAll(array('order' => 'id')), 'id', 'title');

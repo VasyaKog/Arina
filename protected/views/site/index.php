@@ -87,9 +87,10 @@ if (isset(Yii::app()->user->identityType)) {
                 echo 'Група ' . CHtml::link($group->title, 'group/' . $group->id) . '<br>';
         }
         if (Yii::app()->user->checkAccess('prefect')) {
-            $group = Group::model()->findByAttributes(array('monitor_id'=>Yii::app()->user->identityId));
-            if (isset($group))
-                echo 'Група ' . CHtml::link($group->title, 'group/' . $group->id) . '<br>';
+           $student = Student::model()->findByAttributes(array('id'=>Yii::app()->user->identityId));
+            $groups=$student->getGroupListLinks();
+            
+            echo 'Група: <br> '.CHtml::link($groups, 'group/'.$groups).'<br>';
         }
         else if (Yii::app()->user->checkAccess('student')) {
             /**
